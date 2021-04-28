@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:id="@+id/item_buyall"
+    android:padding="5dp"
+    android:weightSum="11">
+
+    <TextView
+        android:layout_margin="1dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:fontFamily="@font/maple"
+        android:id="@+id/item_buycategory"
+        android:gravity="center"
+        android:text="음식"
+        android:textColor="@color/match2"
+        android:textSize="15dp" />
+
+    <TextView
+        android:layout_margin="1dp"
+        android:layout_width="0dp"
+        android:id="@+id/item_buyname"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:fontFamily="@font/maple"
+        android:gravity="center"
+        android:text="고기"
+        android:textColor="@color/match2"
+        android:textSize="15dp" />
+
+    <TextView
+        android:layout_margin="1dp"
+        android:layout_width="0dp"
+        android:id="@+id/item_buycount"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:fontFamily="@font/maple"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="@color/match2"
+        android:textSize="15dp" />
+
+    <TextView
+        android:layout_margin="1dp"
+        android:id="@+id/item_buyprice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:fontFamily="@font/maple"
+        android:gravity="center"
+        android:text="50,000"
+        android:textColor="@color/match2"
+        android:textSize="15dp" />
+
+    <TextView
+        android:layout_margin="1dp"
+        android:id="@+id/item_buytotal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:fontFamily="@font/maple"
+        android:gravity="center"
+        android:text="100,000"
+        android:textColor="@color/match2"
+        android:textSize="15dp" />
+
+
+</LinearLayout>

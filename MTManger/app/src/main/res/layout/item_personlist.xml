@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/item_personall"
+    android:layout_marginTop="5dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:weightSum="8">
+
+
+
+    <TextView
+        android:layout_margin="1dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:fontFamily="@font/maple"
+        android:id="@+id/item_personname"
+        android:gravity="center"
+        android:text="정원희"
+        android:textColor="@color/match2"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_margin="1dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:fontFamily="@font/maple"
+        android:id="@+id/item_personfee"
+        android:gravity="center"
+        android:text="300,000"
+        android:textColor="@color/match2"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:layout_margin="1dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="2">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_phone_24"
+            android:fontFamily="@font/maple"
+            android:gravity="center"
+            android:id="@+id/item_personphone" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
