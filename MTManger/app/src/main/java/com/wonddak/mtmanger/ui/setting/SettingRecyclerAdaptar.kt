@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.setting
 
 import android.content.Context
 
@@ -9,13 +9,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.wonddak.mtmanger.AddDialog
 import com.wonddak.mtmanger.databinding.ItemCategoryBinding
 
 import com.wonddak.mtmanger.room.AppDatabase
 
 import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

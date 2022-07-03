@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.people
 
 import android.content.Context
 import android.content.Intent
@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.wonddak.mtmanger.AddDialog
 import com.wonddak.mtmanger.databinding.ItemPersonlistBinding
 import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

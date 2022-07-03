@@ -24,9 +24,13 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
 
-        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".SplashActivity"
+            android:exported="true"
             android:taskAffinity=".FLAG_ACTIVITY_NO_HISTORY">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

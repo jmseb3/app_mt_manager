@@ -1,8 +1,12 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.wonddak.mtmanger.ui.buy.BuyFragment
+import com.wonddak.mtmanger.ui.main.MainFragment
+import com.wonddak.mtmanger.ui.people.PersonFragment
+import com.wonddak.mtmanger.ui.plan.PlanFragment
 
 class PagerAdapter(
     fm: FragmentManager

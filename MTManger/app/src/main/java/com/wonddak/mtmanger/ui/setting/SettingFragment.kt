@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.setting
 
 import android.content.Context
 import android.content.Intent
@@ -15,9 +15,12 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.bumptech.glide.Glide
+import com.wonddak.mtmanger.BillingModule
+import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.FragmentSettingBinding
 import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

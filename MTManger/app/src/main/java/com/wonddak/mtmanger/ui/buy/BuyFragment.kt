@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.buy
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.wonddak.mtmanger.AddDialog
+import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.FragmentBuyBinding
-import com.wonddak.mtmanger.databinding.FragmentPersonBinding
 import com.wonddak.mtmanger.room.AppDatabase
+import com.wonddak.mtmanger.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

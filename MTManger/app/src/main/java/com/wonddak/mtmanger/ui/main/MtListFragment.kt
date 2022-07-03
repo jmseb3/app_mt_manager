@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.main
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wonddak.mtmanger.databinding.FragmentMtListBinding
 import com.wonddak.mtmanger.room.AppDatabase
+import com.wonddak.mtmanger.ui.MainActivity
 
 class MtListFragment : Fragment() {
     internal var mainActivity: MainActivity? = null

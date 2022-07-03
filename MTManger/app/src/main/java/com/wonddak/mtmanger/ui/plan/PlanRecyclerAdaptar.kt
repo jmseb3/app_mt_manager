@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.plan
 
 import android.Manifest
 import android.content.Context
@@ -13,9 +13,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.wonddak.mtmanger.AddDialog
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.ItemPlanBinding
 import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -63,7 +66,7 @@ class PlanRecyclerAdaptar(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         "image/*"
                     )
-                    activity.startActivityForResult(intent, 105)
+                    activity.startActivityForResult(intent, Const.request.imgSelect)
                 } else {
                     ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE),2)
                 }

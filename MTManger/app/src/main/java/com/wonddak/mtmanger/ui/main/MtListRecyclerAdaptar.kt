@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui.main
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.wonddak.mtmanger.databinding.ItemMtlistBinding
 import com.wonddak.mtmanger.room.MtData
+import com.wonddak.mtmanger.ui.MainActivity
 
 
 class MtListRecyclerAdaptar(

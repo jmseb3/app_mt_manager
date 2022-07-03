@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
 import com.wonddak.mtmanger.databinding.*
 import com.wonddak.mtmanger.room.*
+import com.wonddak.mtmanger.ui.MainActivity
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*

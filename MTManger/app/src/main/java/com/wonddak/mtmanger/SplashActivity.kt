@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.wonddak.mtmanger.databinding.ActivitySplashBinding
+import com.wonddak.mtmanger.ui.MainActivity
 
 class SplashActivity : AppCompatActivity() {
 

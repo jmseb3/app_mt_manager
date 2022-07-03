@@ -1,40 +1,37 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.ui
 
-import android.Manifest
-import android.R.attr.name
-import android.R.id
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
-import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
+import com.wonddak.mtmanger.*
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.ActivityMainBinding
+import com.wonddak.mtmanger.repository.MTRepository
 import com.wonddak.mtmanger.room.AppDatabase
-import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.ui.buy.BuyFragment
+import com.wonddak.mtmanger.ui.main.MainFragment
+import com.wonddak.mtmanger.ui.people.PersonFragment
+import com.wonddak.mtmanger.ui.plan.PlanFragment
+import com.wonddak.mtmanger.ui.setting.SettingFragment
+import com.wonddak.mtmanger.viewModel.MTViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,6 +52,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bm: BillingModule
 
+    private lateinit var viewModel : MTViewModel
+    private lateinit var repository : MTRepository
+
 
     private var isPurchasedRemoveAds = false
         set(value) {
@@ -67,7 +67,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val prefs: SharedPreferences = applicationContext.getSharedPreferences("mainMT", 0)
+
+        repository = MTRepository(this)
+
+        viewModel = ViewModelProvider(this,object : ViewModelProvider.Factory{
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return if (modelClass.isAssignableFrom(MTViewModel::class.java)) {
+                    MTViewModel(repository) as T
+                } else {
+                    throw IllegalArgumentException()
+                }
+            }
+        })[MTViewModel::class.java]
+
+        viewModel.getMtId()
+        Log.i("JWH",viewModel.mainMtId.value.toString())
+
 
         bm = BillingModule(this, lifecycleScope, object : BillingModule.Callback {
             override fun onBillingModulesIsReady() {
@@ -257,7 +272,7 @@ class MainActivity : AppCompatActivity() {
         val editor = prefs.edit()
         val mainmtid: Int = prefs.getInt("id", 0)
 
-        if (requestCode == 105 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == Const.request.imgSelect && resultCode == RESULT_OK && data != null) {
             val uri = data.data
             val iddatas = prefs.getInt("key", 0)
             GlobalScope.launch(Dispatchers.IO) {

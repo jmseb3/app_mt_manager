@@ -15,7 +15,7 @@ class BillingModule(
     private val callback: Callback
 ) {
     // '소비'되어야 하는 sku 들을 적어줍니다.
-    private val consumableSkus = setOf(null)
+    private val consumableSkus = setOf<String?>(null)
 
     // 구매관련 업데이트 수신
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
