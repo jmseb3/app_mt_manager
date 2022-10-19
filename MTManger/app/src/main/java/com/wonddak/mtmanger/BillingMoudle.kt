@@ -14,8 +14,10 @@ class BillingModule(
     private val lifeCycleScope: LifecycleCoroutineScope,
     private val callback: Callback
 ) {
-    // '소비'되어야 하는 sku 들을 적어줍니다.
-    private val consumableSkus = setOf<String?>(null)
+
+    companion object{
+        const val REMOVE_ADS = "remove_ad_inapp"
+    }
 
     // 구매관련 업데이트 수신
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
@@ -125,7 +127,7 @@ class BillingModule(
     ) {
         billingClient.queryPurchases(BillingClient.SkuType.INAPP).purchasesList?.let { purchaseList ->
             for (purchase in purchaseList) {
-                if (purchase.sku == sku && purchase.isPurchaseConfirmed()) {
+                if (!purchase.skus.contains(sku) && purchase.isPurchaseConfirmed()) {
                     return resultBlock(true)
                 }
             }
@@ -155,21 +157,6 @@ class BillingModule(
      */
     private fun confirmPurchase(purchase: Purchase) {
         when {
-            consumableSkus.contains(purchase.sku) -> {
-                // 소비성 구매는 consume을 해주어야합니다.
-                val consumeParams = ConsumeParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
-                    .build()
-
-                lifeCycleScope.launch(Dispatchers.IO) {
-                    val result = billingClient.consumePurchase(consumeParams)
-                    withContext(Dispatchers.Main) {
-                        if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                            callback.onSuccess(purchase)
-                        }
-                    }
-                }
-            }
             purchase.purchaseState == Purchase.PurchaseState.PURCHASED && !purchase.isAcknowledged -> {
                 // 구매는 완료되었으나 확인이 되어있지 않다면 구매 확인 처리를 합니다.
                 val ackPurchaseParams = AcknowledgePurchaseParams.newBuilder()

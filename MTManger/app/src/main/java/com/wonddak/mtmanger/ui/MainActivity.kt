@@ -22,6 +22,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.wonddak.mtmanger.*
+import com.wonddak.mtmanger.BillingModule.Companion.REMOVE_ADS
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.ActivityMainBinding
 import com.wonddak.mtmanger.repository.MTRepository
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
         bm = BillingModule(this, lifecycleScope, object : BillingModule.Callback {
             override fun onBillingModulesIsReady() {
-                bm.checkPurchased(SettingFragment.Sku.REMOVE_ADS) {
+                bm.checkPurchased(REMOVE_ADS) {
                     isPurchasedRemoveAds = it
                     Log.d("datas", "isPurchasedRemoveAds:" + it)
                 }
