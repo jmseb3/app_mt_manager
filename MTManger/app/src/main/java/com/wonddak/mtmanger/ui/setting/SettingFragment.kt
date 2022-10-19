@@ -16,6 +16,7 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.bumptech.glide.Glide
 import com.wonddak.mtmanger.BillingModule
+import com.wonddak.mtmanger.BillingModule.Companion.REMOVE_ADS
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.FragmentSettingBinding
 import com.wonddak.mtmanger.room.AppDatabase
@@ -44,10 +45,6 @@ class SettingFragment : Fragment() {
             updateRemoveAdsView()
         }
 
-
-    object Sku {
-        const val REMOVE_ADS = "remove_ad_inapp"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -113,11 +110,11 @@ class SettingFragment : Fragment() {
             override fun onBillingModulesIsReady() {
                 bm.querySkuDetail(
                     BillingClient.SkuType.INAPP,
-                    Sku.REMOVE_ADS,
+                    REMOVE_ADS,
                 ) { skuDetails ->
                     mSkuDetails = skuDetails
                 }
-                bm.checkPurchased(Sku.REMOVE_ADS) {
+                bm.checkPurchased(REMOVE_ADS) {
                     isPurchasedRemoveAds = it
                     Log.d("datas", "isPurchasedRemoveAds:" + it)
                 }
@@ -125,10 +122,8 @@ class SettingFragment : Fragment() {
             }
 
             override fun onSuccess(purchase: Purchase) {
-                when (purchase.sku) {
-                    Sku.REMOVE_ADS -> {
-                        isPurchasedRemoveAds = true
-                    }
+                if(purchase.skus.contains(REMOVE_ADS)){
+                    isPurchasedRemoveAds = true
                 }
             }
 
@@ -170,7 +165,7 @@ class SettingFragment : Fragment() {
     private fun setClickListeners() {
         with(binding) { // 광고 제거 구매 버튼 클릭
             buyNoAdd.setOnClickListener {
-                mSkuDetails.find { it.sku == Sku.REMOVE_ADS }
+                mSkuDetails.find { it.sku == REMOVE_ADS }
                     ?.let { skuDetail -> bm.purchase(skuDetail) } ?: also {
                     Toast.makeText(requireContext(), "상품을 찾을 수 없습니다.", Toast.LENGTH_LONG).show()
                 }
