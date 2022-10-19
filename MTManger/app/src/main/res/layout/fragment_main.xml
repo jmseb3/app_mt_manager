@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        tools:visibility="visible"
         android:orientation="vertical"
         android:visibility="invisible">
 
@@ -25,6 +26,9 @@
 
         <Button
             android:id="@+id/mtdataadd"
+            android:fontFamily="@font/maple"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_layout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MT 떠나기" />
@@ -36,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        tools:visibility="gone"
         android:visibility="visible">
 
         <LinearLayout
