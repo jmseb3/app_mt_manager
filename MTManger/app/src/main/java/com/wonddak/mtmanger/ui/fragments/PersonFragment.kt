@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.people
+package com.wonddak.mtmanger.ui.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -15,6 +15,7 @@ import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.FragmentPersonBinding
 import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.ui.MainActivity
+import com.wonddak.mtmanger.ui.adapter.PersonRecyclerAdaptar
 import java.text.DecimalFormat
 
 class PersonFragment : Fragment() {

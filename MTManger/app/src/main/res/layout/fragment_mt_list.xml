@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/match1"
-    tools:context=".ui.main.MtListFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="MT 리스트"
-        android:textSize="30dp"
-        android:textColor="@color/match2"
-        android:fontFamily="@font/maple"
-        android:gravity="center"/>
+    <data>
+
+    </data>
+
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:background="@drawable/btn_layout2">
+        android:background="@color/match1"
+        tools:context=".ui.fragments.MtListFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MT 리스트"
+            android:textSize="30dp"
+            android:textColor="@color/match2"
+            android:fontFamily="@font/maple"
+            android:gravity="center" />
 
-            android:id="@+id/mtlistrecycler"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_mtlist" />
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_layout2">
+
+            <androidx.recyclerview.widget.RecyclerView
+
+                android:id="@+id/mtlistrecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_mtlist" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-
-
-</LinearLayout>
+</layout>

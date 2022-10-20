@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/match1"
-    tools:context=".ui.buy.BuyFragment">
+    tools:context=".ui.fragments.BuyFragment">
 
     <LinearLayout
         android:id="@+id/maintitle"

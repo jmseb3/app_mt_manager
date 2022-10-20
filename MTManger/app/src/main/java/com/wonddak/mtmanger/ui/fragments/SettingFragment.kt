@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.setting
+package com.wonddak.mtmanger.ui.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -22,6 +22,7 @@ import com.wonddak.mtmanger.databinding.FragmentSettingBinding
 import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.room.categoryList
 import com.wonddak.mtmanger.ui.MainActivity
+import com.wonddak.mtmanger.ui.adapter.SettingRecyclerAdaptar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

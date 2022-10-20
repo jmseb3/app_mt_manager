@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.people
+package com.wonddak.mtmanger.ui.adapter
 
 import android.content.Context
 import android.content.Intent

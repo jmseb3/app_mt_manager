@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/match1"
     android:orientation="vertical"
-    tools:context=".ui.people.PersonFragment">
+    tools:context=".ui.fragments.PersonFragment">
 
     <LinearLayout
         android:id="@+id/maintitle"

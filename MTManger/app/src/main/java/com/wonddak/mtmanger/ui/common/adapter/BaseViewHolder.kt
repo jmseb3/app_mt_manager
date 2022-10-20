@@ -1,4 +1,4 @@
-package com.wonddak.foodrecipe.ui.common.adapter
+package com.wonddak.mtmanger.ui.common.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

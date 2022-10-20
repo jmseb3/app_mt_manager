@@ -1,220 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/match2"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:background="@color/match2"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/maple"
-            android:id="@+id/mtdialogtitle"
-            android:text="MT 정보 추가"
-            android:textAlignment="center"
-            android:textColor="@color/match1"
-            android:textSize="30dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mtdialogtitle"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:fontFamily="@font/maple"
+                android:text="MT 정보 추가"
+                android:textAlignment="center"
+                android:textColor="@color/match1"
+                android:textSize="30dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:weightSum="6">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="MT 제목"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
 
-                    android:textColor="@color/match1"
-                    android:textSize="20dp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="MT 제목"
 
-                <EditText
-                    android:id="@+id/addmtdata_title"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:hint="제목을 입력해주세요"
-                    android:fontFamily="@font/maple"
-                    android:imeOptions="actionNext"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/match1" />
+                        android:textColor="@color/match1"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/addmtdata_title"
+                        android:layout_width="0dp"
+                        android:selectAllOnFocus="true"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:hint="제목을 입력해주세요"
+                        android:fontFamily="@font/maple"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/match1" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:focusableInTouchMode="false"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="MT 시작일"
+                        android:textColor="@color/match1"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/addmtdata_start"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:enabled="false"
+                        android:hint="날짜를 선택해주세요"
+                        android:fontFamily="@font/maple"
+                        android:textColor="@color/match1" />
+
+                    <Button
+                        android:padding="5dp"
+                        android:id="@+id/addmtdata_start_select"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_layout"
+                        android:fontFamily="@font/maple"
+                        android:text="설정"
+                        android:textColor="@color/match1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="MT 종료일"
+                        android:textColor="@color/match1"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/addmtdata_end"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:hint="날짜를 선택해주세요"
+                        android:layout_weight="3"
+                        android:enabled="false"
+                        android:focusableInTouchMode="false"
+                        android:fontFamily="@font/maple"
+                        android:textColor="@color/match1" />
+
+                    <Button
+                        android:padding="5dp"
+                        android:id="@+id/addmtdata_end_select"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_layout"
+                        android:fontFamily="@font/maple"
+                        android:text="설정"
+                        android:textColor="@color/match1" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="MT 회비"
+                        android:textColor="@color/match1"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:id="@+id/addmtdata_fee"
+                        android:layout_width="0dp"
+                        android:hint="회비를 선택해주세요"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:digits="0123456789"
+                        android:fontFamily="@font/maple"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true"
+                        android:textColor="@color/match1" />
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:weightSum="6">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:focusableInTouchMode="false"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="MT 시작일"
-                    android:textColor="@color/match1"
-                    android:textSize="20dp" />
-
-                <EditText
-                    android:id="@+id/addmtdata_start"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:enabled="false"
-                    android:hint="날짜를 선택해주세요"
-                    android:fontFamily="@font/maple"
-                    android:textColor="@color/match1" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <Button
-                    android:padding="5dp"
-                    android:id="@+id/addmtdata_start_select"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_margin="10dp"
                     android:background="@drawable/btn_layout"
-                    android:fontFamily="@font/maple"
-                    android:text="설정"
-                    android:textColor="@color/match1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:weightSum="6">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="MT 종료일"
                     android:textColor="@color/match1"
-                    android:textSize="20dp" />
-
-                <EditText
-                    android:id="@+id/addmtdata_end"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:hint="날짜를 선택해주세요"
-                    android:layout_weight="3"
-                    android:enabled="false"
-                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/maple"
-                    android:textColor="@color/match1" />
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:id="@+id/ok"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="추가" />
 
                 <Button
-                    android:padding="5dp"
-                    android:id="@+id/addmtdata_end_select"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_margin="10dp"
                     android:background="@drawable/btn_layout"
-                    android:fontFamily="@font/maple"
-                    android:text="설정"
-                    android:textColor="@color/match1" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:weightSum="6">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="MT 회비"
                     android:textColor="@color/match1"
-                    android:textSize="20dp" />
-
-                <EditText
-                    android:id="@+id/addmtdata_fee"
-                    android:layout_width="0dp"
-                    android:hint="회비를 선택해주세요"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:digits="0123456789"
                     android:fontFamily="@font/maple"
-                    android:imeOptions="actionDone"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textColor="@color/match1" />
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:id="@+id/cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="취소" />
 
 
             </LinearLayout>
 
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_margin="10dp"
-                android:background="@drawable/btn_layout"
-                android:textColor="@color/match1"
-                android:fontFamily="@font/maple"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:id="@+id/ok"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:text="추가" />
-
-            <Button
-                android:layout_margin="10dp"
-                android:background="@drawable/btn_layout"
-                android:textColor="@color/match1"
-                android:fontFamily="@font/maple"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:id="@+id/cancel"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:text="취소" />
-
-
-        </LinearLayout>
-
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>

@@ -9,7 +9,7 @@ interface MtDataDao {
 //    mtdata 관련
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMtData(mtData: MtData)
+    fun insertMtData(mtData: MtData) :Long
 
     @Delete
     fun deleteMtData(mtData: MtData)

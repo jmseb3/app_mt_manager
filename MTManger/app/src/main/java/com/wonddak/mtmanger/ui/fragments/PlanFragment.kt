@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.plan
+package com.wonddak.mtmanger.ui.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,6 +12,7 @@ import com.wonddak.mtmanger.databinding.FragmentPlanBinding
 import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.room.Plan
 import com.wonddak.mtmanger.ui.MainActivity
+import com.wonddak.mtmanger.ui.adapter.PlanRecyclerAdaptar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.wonddak.foodrecipe.ui.common.fragment
+package com.wonddak.mtmanger.ui.common.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

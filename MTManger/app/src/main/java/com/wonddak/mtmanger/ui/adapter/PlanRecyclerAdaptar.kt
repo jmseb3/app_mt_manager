@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.plan
+package com.wonddak.mtmanger.ui.adapter
 
 import android.Manifest
 import android.content.Context

@@ -10,10 +10,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import com.android.billingclient.api.Purchase
@@ -25,19 +24,17 @@ import com.wonddak.mtmanger.*
 import com.wonddak.mtmanger.BillingModule.Companion.REMOVE_ADS
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.ActivityMainBinding
-import com.wonddak.mtmanger.repository.MTRepository
 import com.wonddak.mtmanger.room.AppDatabase
-import com.wonddak.mtmanger.ui.buy.BuyFragment
-import com.wonddak.mtmanger.ui.main.MainFragment
-import com.wonddak.mtmanger.ui.people.PersonFragment
-import com.wonddak.mtmanger.ui.plan.PlanFragment
-import com.wonddak.mtmanger.ui.setting.SettingFragment
+import com.wonddak.mtmanger.ui.fragments.*
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val fragmentOne by lazy { MainFragment() }
@@ -53,37 +50,34 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bm: BillingModule
 
-    private lateinit var viewModel : MTViewModel
-    private lateinit var repository : MTRepository
-
-
+    @Inject
+    lateinit var preferences: SharedPreferences
     private var isPurchasedRemoveAds = false
         set(value) {
             field = value
             updateRemoveAdsView()
         }
 
+    private val mtViewModel : MTViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val mainmtid: Int = preferences.getInt("id", 0)
+        mtViewModel.setMtId(mainmtid)
 
-        repository = MTRepository(this)
-
-        viewModel = ViewModelProvider(this,object : ViewModelProvider.Factory{
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return if (modelClass.isAssignableFrom(MTViewModel::class.java)) {
-                    MTViewModel(repository) as T
+        lifecycleScope.launchWhenCreated {
+            mtViewModel.bottomMenuStatus.collect{
+                if(it){
+                    mBottomNavigationView.visibility = View.VISIBLE
+                    supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                 } else {
-                    throw IllegalArgumentException()
+                    mBottomNavigationView.visibility = View.GONE
+                    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                 }
             }
-        })[MTViewModel::class.java]
-
-        viewModel.getMtId()
-        Log.i("JWH",viewModel.mainMtId.value.toString())
-
+        }
 
         bm = BillingModule(this, lifecycleScope, object : BillingModule.Callback {
             override fun onBillingModulesIsReady() {

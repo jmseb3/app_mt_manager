@@ -3,14 +3,14 @@ package com.wonddak.mtmanger.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.wonddak.mtmanger.ui.buy.BuyFragment
-import com.wonddak.mtmanger.ui.main.MainFragment
-import com.wonddak.mtmanger.ui.people.PersonFragment
-import com.wonddak.mtmanger.ui.plan.PlanFragment
+import com.wonddak.mtmanger.ui.fragments.BuyFragment
+import com.wonddak.mtmanger.ui.fragments.MainFragment
+import com.wonddak.mtmanger.ui.fragments.PersonFragment
+import com.wonddak.mtmanger.ui.fragments.PlanFragment
 
 class PagerAdapter(
     fm: FragmentManager
-):FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+): FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getCount(): Int {
         return 4
     }

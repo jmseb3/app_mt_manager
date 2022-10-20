@@ -1,210 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/match1"
-    android:orientation="vertical"
-    tools:context=".ui.main.MainFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/mtdatastart"
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        tools:visibility="visible"
-        android:orientation="vertical"
-        android:visibility="invisible">
+        android:background="@color/match1"
+        tools:context=".ui.fragments.MainFragment">
 
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mtdatastart"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/maple"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="현재 떠나는 MT가 없어요 추가해주세요"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/mtdataadd"
-            android:fontFamily="@font/maple"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_layout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MT 떠나기" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/mtdatafield"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:visibility="gone"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_layout2"
-            android:padding="5dp">
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <TextView
-                android:id="@+id/mttitle"
+                android:id="@+id/mt_data_start_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/maple"
                 android:gravity="center"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="MT 제목"
-                android:textColor="@color/match2"
-                android:textSize="40dp" />
+                android:text="현재 떠나는 MT가 없어요 추가해주세요"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:id="@+id/mtdataadd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_layout2"
+                android:fontFamily="@font/maple"
+                android:text="MT 떠나기"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mt_data_start_title"
+                app:layout_constraintVertical_bias="0.05" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/mtdatafield"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/btn_layout2"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible"
+            tools:visibility="visible">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:weightSum="3">
-
-                <TextView
-                    android:id="@+id/mtstart"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="00.00"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="부터"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:weightSum="3">
-
-                <TextView
-                    android:id="@+id/mtend"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="00.00"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="까지"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/btn_layout2"
-            android:orientation="vertical">
-
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:weightSum="5">
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_layout2"
+                android:padding="5dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/mttitle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
                     android:fontFamily="@font/maple"
                     android:gravity="center"
-                    android:text="1인당 회비"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="MT 제목"
                     android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-                <TextView
-                    android:id="@+id/mttotoalfee"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="2"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="원"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
+                    android:textSize="40dp" />
 
 
             </LinearLayout>
@@ -212,106 +87,235 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_layout2"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:id="@+id/mtstart"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="00.00"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="부터"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:id="@+id/mtend"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="00.00"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="까지"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_layout2"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="1인당 회비"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:id="@+id/mttotoalfee"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="원"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="참여인원"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:id="@+id/mttotalperson"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="300,000"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/maple"
+                        android:gravity="center"
+                        android:text="명"
+                        android:textColor="@color/match2"
+                        android:textSize="23sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal"
-                android:padding="10dp"
-                android:weightSum="5">
+                android:weightSum="2">
 
-                <TextView
+                <Button
+                    android:id="@+id/mtedit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="참여인원"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-                <TextView
-                    android:id="@+id/mttotalperson"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="300,000"
-                    android:textColor="@color/match2"
-                    android:textSize="23sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/btn_layout2"
                     android:fontFamily="@font/maple"
-                    android:gravity="center"
-                    android:text="명"
+                    android:text="수정"
                     android:textColor="@color/match2"
-                    android:textSize="23sp" />
+                    android:textSize="24dp" />
+
+                <Button
+                    android:id="@+id/mtlists"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_layout2"
+                    android:fontFamily="@font/maple"
+                    android:text="MT 목록"
+                    android:textColor="@color/match2"
+                    android:textSize="24dp" />
 
 
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <Button
-                android:id="@+id/mtedit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_layout2"
-                android:fontFamily="@font/maple"
-                android:text="수정"
-                android:textColor="@color/match2"
-                android:textSize="24dp" />
-
-            <Button
-                android:id="@+id/mtlists"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_layout2"
-                android:fontFamily="@font/maple"
-                android:text="MT 목록"
-                android:textColor="@color/match2"
-                android:textSize="24dp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/newmt"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_layout2"
-                android:fontFamily="@font/maple"
-                android:text="다른 여행 떠나기"
-                android:textColor="@color/match2"
-                android:textSize="24dp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/newmt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_layout2"
+                    android:fontFamily="@font/maple"
+                    android:text="다른 여행 떠나기"
+                    android:textColor="@color/match2"
+                    android:textSize="24dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
 
-
-</RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
