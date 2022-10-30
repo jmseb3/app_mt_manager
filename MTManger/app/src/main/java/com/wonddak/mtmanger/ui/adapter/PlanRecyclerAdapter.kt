@@ -1,30 +1,9 @@
 package com.wonddak.mtmanger.ui.adapter
 
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.wonddak.mtmanger.AddDialog
 import com.wonddak.mtmanger.R
-import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.ItemPlanBinding
-import com.wonddak.mtmanger.room.AppDatabase
-import com.wonddak.mtmanger.room.Person
 import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.ui.MainActivity
 import com.wonddak.mtmanger.ui.common.adapter.BaseDataBindingRecyclerAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class PlanRecyclerAdapter(
     private val planListItemCallback: PlanListItemCallback

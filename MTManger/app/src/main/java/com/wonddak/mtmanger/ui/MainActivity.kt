@@ -1,10 +1,7 @@
 package com.wonddak.mtmanger.ui
 
-import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -15,23 +12,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
-import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.wonddak.mtmanger.*
-import com.wonddak.mtmanger.BillingModule.Companion.REMOVE_ADS
-import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.ActivityMainBinding
-import com.wonddak.mtmanger.room.AppDatabase
 import com.wonddak.mtmanger.ui.fragments.*
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,15 +39,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var mViewPager: ViewPager
     lateinit var mAdView: AdView
 
-    private lateinit var bm: BillingModule
+    @Inject
+    lateinit var billingModule: BillingModule
+
 
     @Inject
     lateinit var preferences: SharedPreferences
-    private var isPurchasedRemoveAds = false
-        set(value) {
-            field = value
-            updateRemoveAdsView()
-        }
 
     private val mtViewModel: MTViewModel by viewModels()
 
@@ -65,7 +53,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val mainmtid: Int = preferences.getInt("id", 0)
+
         mtViewModel.setMtId(mainmtid)
+        lifecycleScope.launchWhenCreated {
+            billingModule.removeAddStatus.collect {
+                mtViewModel.setRemoveAddStatus(it)
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            mtViewModel.removeAdStatus.collect {
+                Log.i("Billing JWH", "Main status $it")
+                if (it) {
+                    mAdView.visibility = View.GONE
+                }
+            }
+        }
 
         lifecycleScope.launchWhenCreated {
             mtViewModel.bottomMenuStatus.collect {
@@ -77,27 +80,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         lifecycleScope.launchWhenCreated {
-            mtViewModel.topBackButtonStatus.collect{
+            mtViewModel.topBackButtonStatus.collect {
                 supportActionBar!!.setDisplayHomeAsUpEnabled(!it)
             }
         }
-
-        bm = BillingModule(this, lifecycleScope, object : BillingModule.Callback {
-            override fun onBillingModulesIsReady() {
-                bm.checkPurchased(REMOVE_ADS) {
-                    isPurchasedRemoveAds = it
-                    Log.d("datas", "isPurchasedRemoveAds:" + it)
-                }
-            }
-
-            override fun onSuccess(purchase: Purchase) {
-
-            }
-
-            override fun onFailure(errorCode: Int) {
-
-            }
-        })
 
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
@@ -132,12 +118,6 @@ class MainActivity : AppCompatActivity() {
         initNavigationBar()
     }
 
-    private fun updateRemoveAdsView() {
-        if (isPurchasedRemoveAds) {
-            mAdView.visibility = View.GONE
-        }
-    }
-
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount == 0) {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
@@ -152,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         } else if (supportFragmentManager.backStackEntryCount == 1) {
             supportFragmentManager.popBackStack()
             binding.mainactivitytitle.text = "MT 매니저"
-            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+            mtViewModel.setTopButtonStatus(false)
         } else {
             supportFragmentManager.popBackStack()
         }
@@ -182,7 +162,7 @@ class MainActivity : AppCompatActivity() {
 
 
                     mBottomNavigationView.visibility = View.GONE
-                    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                    mtViewModel.setTopButtonStatus(false)
                     binding.mainactivitytitle.text = "설정"
                 }
             }
@@ -200,7 +180,7 @@ class MainActivity : AppCompatActivity() {
                     mBottomNavigationView.visibility = View.GONE
                 }
                 binding.mainactivitytitle.text = "MT 매니저"
-                supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                mtViewModel.setTopButtonStatus(true)
             }
 
         }

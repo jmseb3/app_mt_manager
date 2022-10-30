@@ -18,12 +18,15 @@ class MTViewModel @Inject constructor(
     private val mtRepository: MTRepository,
     private val pref: SharedPreferences
 ) : ViewModel() {
-    private var _bottomMenuStatus = MutableStateFlow<Boolean>(true)
+    private var _bottomMenuStatus = MutableStateFlow<Boolean>(false)
     val bottomMenuStatus: StateFlow<Boolean> = _bottomMenuStatus
 
     private var _topBackButtonStatus = MutableStateFlow<Boolean>(true)
     val topBackButtonStatus: StateFlow<Boolean> = _topBackButtonStatus
 
+
+    private var _removeAdStatus = MutableStateFlow<Boolean>(false)
+    val removeAdStatus: StateFlow<Boolean> = _removeAdStatus
 
     val mainMtId: StateFlow<Int>
         get() = _mainMtId
@@ -36,7 +39,7 @@ class MTViewModel @Inject constructor(
         MutableStateFlow(Resource.Loading)
 
 
-    val categoryList: StateFlow<List<categoryList>>
+    val settingCategoryList: StateFlow<List<categoryList>>
         get() = _categoryList
 
     private var _categoryList: MutableStateFlow<List<categoryList>> = MutableStateFlow(emptyList())
@@ -48,6 +51,8 @@ class MTViewModel @Inject constructor(
     private var _buyGoodFoldStatus = MutableStateFlow<Boolean>(false)
     val buyGoodFoldStatus: StateFlow<Boolean> = _buyGoodFoldStatus
 
+    private var _categoryFoldStatus = MutableStateFlow<Boolean>(true)
+    val categoryFoldStatus: StateFlow<Boolean> = _categoryFoldStatus
 
     fun togglePersonFoldStatus() {
         _personFoldStatus.value = !_personFoldStatus.value
@@ -55,6 +60,10 @@ class MTViewModel @Inject constructor(
 
     fun toggleBuyGoodFoldStatus() {
         _buyGoodFoldStatus.value = !_buyGoodFoldStatus.value
+    }
+
+    fun toggleCategoryFoldStatus() {
+        _categoryFoldStatus.value = !_categoryFoldStatus.value
     }
 
     init {
@@ -65,17 +74,17 @@ class MTViewModel @Inject constructor(
 
                     if (mtDataList is Resource.Success) {
                         mtDataList.data?.let { mtData ->
-                            Log.i("JWH","MtData : ${mtData.mtdata}")
+                            Log.i("JWH", "MtData : ${mtData.mtdata}")
                             mtData.personList.forEach {
-                                Log.i("JWH","personList : ${it}")
+                                Log.i("JWH", "personList : ${it}")
 
                             }
                             mtData.buyGoodList.forEach {
-                                Log.i("JWH","BuyList : ${it}")
+                                Log.i("JWH", "BuyList : ${it}")
 
                             }
                             mtData.planList.forEach {
-                                Log.i("JWH","PlanList : ${it}")
+                                Log.i("JWH", "PlanList : ${it}")
 
                             }
                         }
@@ -211,10 +220,12 @@ class MTViewModel @Inject constructor(
     fun addEmptyPlan() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mtRepository.insertPlan(Plan(
-                    null,
-                    mainMtId.value
-                ))
+                mtRepository.insertPlan(
+                    Plan(
+                        null,
+                        mainMtId.value
+                    )
+                )
             }
         }
     }
@@ -243,6 +254,31 @@ class MTViewModel @Inject constructor(
         }
     }
 
+    fun insertCategory(name: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.insertCategory(categoryList(null, name))
+            }
+        }
+    }
+
+    fun updateCategory(categoryId: Int, name: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.insertCategory(categoryList(categoryId, name))
+            }
+        }
+    }
+
+    fun deleteCategoryById(categoryId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.deleteCategoryById(categoryId)
+            }
+        }
+
+    }
+
     fun setBottomMenuStatus(show: Boolean) {
         _bottomMenuStatus.value = show
     }
@@ -253,5 +289,9 @@ class MTViewModel @Inject constructor(
 
     fun setTopButtonStatus(show: Boolean) {
         _topBackButtonStatus.value = show
+    }
+
+    fun setRemoveAddStatus(show: Boolean) {
+        _removeAdStatus.value = show
     }
 }

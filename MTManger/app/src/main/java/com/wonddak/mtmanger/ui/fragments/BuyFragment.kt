@@ -66,7 +66,7 @@ class BuyFragment : BaseDataBindingFragment<FragmentBuyBinding>(R.layout.fragmen
 
                         }
                     },
-                    mtViewModel.categoryList.value,
+                    mtViewModel.settingCategoryList.value,
                     item.count.toString(),
                     item.price.toString(),
                     item.name
@@ -128,7 +128,7 @@ class BuyFragment : BaseDataBindingFragment<FragmentBuyBinding>(R.layout.fragmen
                         )
                     }
                 },
-                mtViewModel.categoryList.value
+                mtViewModel.settingCategoryList.value
             ).show(parentFragmentManager, null)
         }
         binding.btnclearbuy.setOnClickListener {

@@ -1,79 +1,32 @@
 package com.wonddak.mtmanger.ui.adapter
 
-import android.content.Context
-
-import android.content.SharedPreferences
-import android.util.Log
-
-import android.view.LayoutInflater
-import android.view.ViewGroup
-
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.wonddak.mtmanger.AddDialog
+import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.ItemCategoryBinding
-
-import com.wonddak.mtmanger.room.AppDatabase
-
 import com.wonddak.mtmanger.room.categoryList
-import com.wonddak.mtmanger.ui.MainActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.wonddak.mtmanger.ui.common.adapter.BaseDataBindingRecyclerAdapter
 
 
-class SettingRecyclerAdaptar(
-    val itemlist: List<categoryList>,
-    val context: Context,
-    val db: AppDatabase,
-    val editor: SharedPreferences.Editor,
-    val activity: MainActivity
+class SettingRecyclerAdapter(
+    private val settingCallback: SettingCallback
+) :
+    BaseDataBindingRecyclerAdapter<categoryList, ItemCategoryBinding>(R.layout.item_category) {
 
-) : RecyclerView.Adapter<SettingRecyclerAdaptar.ViewHolder>() {
+    interface SettingCallback {
+        fun onClick(item: categoryList)
+        fun onLongClick(item: categoryList)
+    }
 
-    inner class ViewHolder(binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
-        val itemname: TextView = binding.itemCategory
+    override fun onBindItem(binding: ItemCategoryBinding, item: categoryList) {
+        binding.name = item.name
 
-        val prefs: SharedPreferences = context.getSharedPreferences("mainMT", 0)
-        val mainmtid: Int = prefs.getInt("id", 0)
-
-        init {
-            itemname.setOnClickListener {
-                GlobalScope.launch(Dispatchers.IO) {
-                    var nowdata = db.MtDataDao().getCategorydata()[layoutPosition].id
-                    Log.d("datas:",""+nowdata)
-                    GlobalScope.launch(Dispatchers.Main) {
-                        AddDialog(context, db, editor, activity).categoryDialog(nowdata!!)
-                    }
-                }.isCompleted
+        binding.itemCategory.apply {
+            setOnClickListener {
+                settingCallback.onClick(item)
             }
-
-            itemname.setOnLongClickListener {
-                GlobalScope.launch(Dispatchers.IO) {
-                    var nowdata = db.MtDataDao().getCategorydata()[layoutPosition].id
-                    GlobalScope.launch(Dispatchers.Main) {
-                        AddDialog(context, db, editor, activity).DeleteData(mainmtid,nowdata!!,5)
-                    }
-                }.isCompleted
+            setOnLongClickListener {
+                settingCallback.onLongClick(item)
                 return@setOnLongClickListener true
             }
-
-
         }
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemname.text = itemlist[position].name
-    }
-
-    override fun getItemCount(): Int {
-        return itemlist.size
     }
 }

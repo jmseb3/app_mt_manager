@@ -86,6 +86,14 @@ class MTRepository @Inject constructor(
         mtDataDao.deletePlanById(planId)
     }
 
+    suspend fun insertCategory(categoryList: categoryList){
+        mtDataDao.insertCategory(categoryList)
+    }
+
+    suspend fun deleteCategoryById(categoryId:Int) {
+        mtDataDao.deleteCategoryById(categoryId)
+    }
+
     fun getMtTotalList(): LiveData<List<MtData>> {
         return mtDataDao.getMtData()
     }

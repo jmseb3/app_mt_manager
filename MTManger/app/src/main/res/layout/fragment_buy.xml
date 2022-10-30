@@ -342,6 +342,7 @@
             android:layout_height="match_parent"
             android:background="@color/match1"
             android:gravity="center"
+            tools:visibility="gone"
             android:orientation="vertical"
             android:visibility="visible">
 
