@@ -53,15 +53,16 @@
                     <EditText
                         android:id="@+id/addmtdata_title"
                         android:layout_width="0dp"
-                        android:selectAllOnFocus="true"
                         android:layout_height="match_parent"
                         android:layout_weight="4"
-                        android:hint="제목을 입력해주세요"
                         android:fontFamily="@font/maple"
+                        android:hint="제목을 입력해주세요"
                         android:imeOptions="actionNext"
                         android:maxLines="1"
+                        android:selectAllOnFocus="true"
                         android:singleLine="true"
-                        android:textColor="@color/match1" />
+                        android:textColor="@color/match1"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -90,18 +91,19 @@
                         android:layout_height="match_parent"
                         android:layout_weight="3"
                         android:enabled="false"
-                        android:hint="날짜를 선택해주세요"
                         android:fontFamily="@font/maple"
-                        android:textColor="@color/match1" />
+                        android:hint="날짜를 선택해주세요"
+                        android:textColor="@color/match1"
+                        android:textSize="12sp" />
 
                     <Button
-                        android:padding="5dp"
                         android:id="@+id/addmtdata_start_select"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/btn_layout"
                         android:fontFamily="@font/maple"
+                        android:padding="5dp"
                         android:text="설정"
                         android:textColor="@color/match1" />
 
@@ -128,21 +130,22 @@
                         android:id="@+id/addmtdata_end"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:hint="날짜를 선택해주세요"
                         android:layout_weight="3"
                         android:enabled="false"
                         android:focusableInTouchMode="false"
                         android:fontFamily="@font/maple"
-                        android:textColor="@color/match1" />
+                        android:hint="날짜를 선택해주세요"
+                        android:textColor="@color/match1"
+                        android:textSize="12sp" />
 
                     <Button
-                        android:padding="5dp"
                         android:id="@+id/addmtdata_end_select"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/btn_layout"
                         android:fontFamily="@font/maple"
+                        android:padding="5dp"
                         android:text="설정"
                         android:textColor="@color/match1" />
 
@@ -150,9 +153,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="horizontal"
                     android:weightSum="6">
 
@@ -169,13 +172,15 @@
                     <EditText
                         android:id="@+id/addmtdata_fee"
                         android:layout_width="0dp"
-                        android:hint="회비를 선택해주세요"
+                        android:maxLength="8"
                         android:layout_height="match_parent"
                         android:layout_weight="4"
                         android:digits="0123456789"
                         android:fontFamily="@font/maple"
+                        android:hint="회비를 선택해주세요"
                         android:imeOptions="actionDone"
                         android:inputType="number"
+                        android:textSize="12sp"
                         android:maxLines="1"
                         android:selectAllOnFocus="true"
                         android:singleLine="true"
@@ -193,30 +198,30 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_margin="10dp"
-                    android:background="@drawable/btn_layout"
-                    android:textColor="@color/match1"
-                    android:fontFamily="@font/maple"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
                     android:id="@+id/ok"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="추가" />
+                    android:background="@drawable/btn_layout"
+                    android:fontFamily="@font/maple"
+                    android:text="추가"
+                    android:textColor="@color/match1"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
                 <Button
-                    android:layout_margin="10dp"
-                    android:background="@drawable/btn_layout"
-                    android:textColor="@color/match1"
-                    android:fontFamily="@font/maple"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
                     android:id="@+id/cancel"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:text="취소" />
+                    android:background="@drawable/btn_layout"
+                    android:fontFamily="@font/maple"
+                    android:text="취소"
+                    android:textColor="@color/match1"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
 
             </LinearLayout>

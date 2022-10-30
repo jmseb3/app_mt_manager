@@ -3,6 +3,7 @@ package com.wonddak.mtmanger.ui.fragments
 import android.content.SharedPreferences
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Insert
@@ -19,41 +20,40 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MtListFragment : BaseDataBindingFragment<FragmentMtListBinding>(R.layout.fragment_mt_list) {
-    private var adapter: MtListRecyclerAdapter = MtListRecyclerAdapter()
-
-    @Inject
-    lateinit var preferences: SharedPreferences
+    private lateinit var adapter: MtListRecyclerAdapter
 
     override fun initBinding() {
-        val editor = preferences.edit()
-        mtViewModel.getMtTotalLIst().observe(this@MtListFragment) {
-            adapter.insertItems(it)
+        lifecycleScope.launchWhenCreated {
+            mtViewModel.getMtTotalLIst().observe(this@MtListFragment) {
+                adapter.insertItems(it)
+            }
         }
 
+        adapter = MtListRecyclerAdapter(object : MtListRecyclerAdapter.MtListItemCallback {
+            override fun itemClick(mtData: MtData) {
+                showToast(mtData.mtTitle + "MT로 변경했어요")
+
+                mtViewModel.setMtId(mtData.mtDataId!!)
+                parentFragmentManager.beginTransaction()
+                    .remove(this@MtListFragment)
+                    .commitNow()
+
+                mtViewModel.setBottomMenuStatus(true)
+                mtViewModel.setTopButtonStatus(true)
+
+            }
+        })
+
         binding.apply {
-            mtlistrecycler.addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    LinearLayoutManager.VERTICAL
+            mtlistrecycler.apply {
+                addItemDecoration(
+                    DividerItemDecoration(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL
+                    )
                 )
-            )
-            binding.mtlistrecycler.adapter = adapter
-            adapter.setCallBack(object : MtListRecyclerAdapter.MtListItemCallback {
-                override fun itemClick(mtData: MtData) {
-                    showToast(mtData.mtTitle +"MT로 변경했어요")
-
-                    mtViewModel.setMtId(mtData.mtDataId!!)
-                    editor.putInt("id", mtData.mtDataId!!)
-                    editor.commit()
-
-                    parentFragmentManager.beginTransaction()
-                        .remove(this@MtListFragment)
-                        .commitNow()
-
-                    mtViewModel.setBottomMenuStatus(true)
-
-                }
-            })
+                adapter = this@MtListFragment.adapter
+            }
         }
     }
 }

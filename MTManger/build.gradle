@@ -3,7 +3,7 @@ buildscript {
     ext {
         kotlin_version = "1.7.10"
         hilt_version = "2.43.2"
-        billing_version = "4.0.0"
+        billing_version = "5.0.0"
         room_version = "2.4.3"
         glide_version = "4.14.2"
     }

@@ -1,79 +1,220 @@
 package com.wonddak.mtmanger.ui.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-
+import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.FragmentPlanBinding
-import com.wonddak.mtmanger.room.AppDatabase
+import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.ui.MainActivity
-import com.wonddak.mtmanger.ui.adapter.PlanRecyclerAdaptar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.wonddak.mtmanger.ui.adapter.PlanRecyclerAdapter
+import com.wonddak.mtmanger.ui.common.fragment.BaseDataBindingFragment
+import com.wonddak.mtmanger.ui.dialog.DatePicker
+import com.wonddak.mtmanger.ui.dialog.DeleteDialog
+import com.wonddak.mtmanger.ui.dialog.PlanDialog
+import java.text.SimpleDateFormat
 
 
-class PlanFragment : Fragment() {
+class PlanFragment : BaseDataBindingFragment<FragmentPlanBinding>(R.layout.fragment_plan) {
 
-    internal var mainActivity: MainActivity? = null
-    private var adapter: PlanRecyclerAdaptar? = null
-    private lateinit var binding: FragmentPlanBinding
-    var imgid: Int? =null
+    private lateinit var adapter: PlanRecyclerAdapter
 
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var contentLauncher: ActivityResultLauncher<Intent>
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPlanBinding.inflate(inflater, container, false)
+    private var focusId :Int? = null
+    override fun initBinding() {
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            val deniedList: List<String> = result.filter {
+                !it.value
+            }.map {
+                it.key
+            }
 
-        val db = AppDatabase.getInstance(requireContext())
+            when {
+                deniedList.isNotEmpty() -> {
+                    val map = deniedList.groupBy { permission ->
+                        if (shouldShowRequestPermissionRationale(permission)) "DENIED" else "EXPLAINED"
+                    }
+                    map["DENIED"]?.let {
+                        // request denied , request again
+                        // 거부 한 번 했을경우 재요청
+                    }
+                    map["EXPLAINED"]?.let {
+                        // request denied ,send to settings
+                        // 거부 두 번 했을경우 설정
+                    }
+                    Toast.makeText(
+                        requireContext(), "저장소 권한이 필요합니다.\n" +
+                                " 현재 거부상태입니다.", Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> {
+                    Toast.makeText(requireContext(), "저장소 권한을 승인했습니다..", Toast.LENGTH_LONG).show();
+                }
+            }
 
-        val prefs: SharedPreferences = requireContext().getSharedPreferences("mainMT", 0)
-        val editor = prefs.edit()
+        }
 
-        val mainmtid: Int = prefs.getInt("id", 0)
+        contentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { data ->
+            Log.i("JWH",data.toString())
+            val uri = data.data?.dataString
+            Log.i("JWH",uri.toString())
+            focusId?.let {
+                mtViewModel.updatePlanImgSrc(
+                    it,
+                    uri ?: ""
+                )
+                focusId = null
+            }
+
+        }
+        lifecycleScope.launchWhenCreated {
+            mtViewModel.mainMtId.collect { mainmtid ->
+                if (mainmtid == 0) {
+                    binding.mtdatastart.visibility = View.VISIBLE
+                } else {
+                    binding.mtdatastart.visibility = View.INVISIBLE
+                }
+            }
+        }
 
         binding.planAddBtn.setOnClickListener {
-            GlobalScope.launch(Dispatchers.IO) {
-                db.MtDataDao().insertPlan(Plan(null, mainmtid))
-            }.isCompleted
+            mtViewModel.addEmptyPlan()
         }
+        val listener = object : PlanRecyclerAdapter.PlanListItemCallback {
+            override fun itemClick(item: Plan) {
+                PlanDialog.newInstance(
+                    object : PlanDialog.PlanDialogCallback {
+                        override fun onClick(title: String, day: String, text: String) {
+                            mtViewModel.updatePlanById(
+                                item.planId!!,
+                                day,
+                                title,
+                                text
+                            )
+                        }
 
-        if (mainmtid == 0) {
-            binding.mtdatastart.visibility = View.VISIBLE
-        } else {
-            binding.mtdatastart.visibility = View.INVISIBLE
+                        override fun dateBtnClick(editText: EditText) {
+                            DatePicker.show(requireContext()) { _, year, month, day ->
+                                val transFormat = SimpleDateFormat("yyyy.MM.dd")
 
-            db.MtDataDao().getPlan(mainmtid)
-                .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                    adapter = PlanRecyclerAdaptar(it, requireContext(), db, editor, mainActivity!!)
-                    binding.planRecycler.adapter = adapter
-                    val size = it.size
-                    binding.planRecycler.layoutManager!!.scrollToPosition(size)
+                                mtViewModel.nowMtDataList.value.let {
+                                    if (it is Resource.Success) {
+                                        it.data?.mtdata?.let { mtData ->
+                                            val tempDate = "${year}.${month + 1}.${day}"
+                                            val startDate = transFormat.parse(mtData.mtStart)
+                                            val endDate = transFormat.parse(mtData.mtEnd)
+                                            val nowDate = transFormat.parse(tempDate)
 
-                })
+                                            if (nowDate in startDate..endDate) {
+                                                editText.setText(tempDate)
+                                            } else {
+                                                showToast(
+                                                    String.format(
+                                                        getString(R.string.data_dialog_error),
+                                                        startDate,
+                                                        endDate
+                                                    )
+                                                )
+                                            }
+
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                    },
+                    item.nowplantitle,
+                    item.nowday,
+                    item.simpletext
+                ).show(
+                    parentFragmentManager, null
+                )
+            }
+
+            override fun itemLongClick(item: Plan) {
+                DeleteDialog.newInstance(
+                    object : DeleteDialog.DeleteDialogCallback {
+                        override fun onclick() {
+                            mtViewModel.deletePlanById(item.planId!!)
+                        }
+                    }
+                ).show(
+                    parentFragmentManager, null
+                )
+            }
+
+            override fun itemAddPhoto(item: Plan) {
+                val permissions =
+                    listOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                var checkPermission = true
+
+                permissions.forEach { permission ->
+                    val isGranted = ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        permission
+                    )
+                    if (isGranted != PackageManager.PERMISSION_GRANTED) {
+                        checkPermission = false
+                    }
+                }
+                if (checkPermission) {
+                    val intent = Intent(Intent.ACTION_PICK)
+                    focusId = item.planId
+                    intent.setDataAndType(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        "image/*"
+                    )
+
+                    contentLauncher.launch(intent)
+                } else {
+                    permissionLauncher.launch(permissions.toTypedArray())
+                }
+
+            }
+
+            override fun itemImgLongClick(item: Plan) {
+                DeleteDialog.newInstance(
+                    object : DeleteDialog.DeleteDialogCallback {
+                        override fun onclick() {
+                            mtViewModel.updatePlanImgSrc(item.planId!!, "")
+                        }
+                    },
+                    getString(R.string.dialog_delete_image)
+                ).show(
+                    parentFragmentManager, null
+                )
+            }
         }
+        adapter = PlanRecyclerAdapter(listener)
+        binding.planRecycler.adapter = adapter
 
-        return binding.root
+        lifecycleScope.launchWhenCreated {
+            mtViewModel.nowMtDataList.collect {
+                if (it is Resource.Success) {
+                    it.data?.planList?.let { planList ->
+                        adapter.insertItems(planList)
+                        binding.planRecycler.scrollToPosition(planList.size)
+                    }
+
+                }
+            }
+        }
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = activity as MainActivity
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mainActivity = null
-    }
-
-
 
 }

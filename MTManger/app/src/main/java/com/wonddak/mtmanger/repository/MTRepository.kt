@@ -1,13 +1,13 @@
 package com.wonddak.mtmanger.repository
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
-import com.wonddak.mtmanger.core.Const
-import com.wonddak.mtmanger.room.AppDatabase
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.MtDataDao
-import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.model.Resource
+import com.wonddak.mtmanger.room.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -15,16 +15,22 @@ class MTRepository @Inject constructor(
     val mtDataDao: MtDataDao
 ) {
 
-    fun getMtDataById(id: Int): MtData {
-        return mtDataDao.getMtDataById(id)
+    fun getMtDataList(id: Int) = flow {
+        emit(Resource.Loading)
+        mtDataDao.getMtDataList(id).collect {
+            emit(Resource.Success(it))
+        }
+
     }
 
-    fun getPerson(id: Int): LiveData<List<Person>> {
-        return mtDataDao.getPerson(id)
+    fun getCategoryList() = flow {
+        mtDataDao.getCategoryDataList().collect { categoryList ->
+            emit(categoryList)
+            Log.i("JWH","get Categort $categoryList")
+        }
     }
 
-
-    suspend fun checkEndDateById(mtId: Int,tempDate :String) :Boolean{
+    suspend fun checkEndDateById(mtId: Int, tempDate: String): Boolean {
         val transFormat = SimpleDateFormat("yyyy.MM.dd")
 
         val nowDate = mtDataDao.getMtDataById(mtId)
@@ -36,11 +42,51 @@ class MTRepository @Inject constructor(
         return (nowCheckData in mtStartData..mtEndData)
     }
 
-    suspend fun insertMtData(mtData: MtData):Long {
+    suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
     }
 
-    fun getMtTotalList() :LiveData<List<MtData>>{
+    suspend fun insertPerson(person: Person) {
+        mtDataDao.insertPerson(person)
+    }
+
+    suspend fun clearPerson(mtId: Int) {
+        mtDataDao.clearPersons(mtId)
+    }
+
+    suspend fun deletePersonById(personId: Int) {
+        mtDataDao.deletePersonById(personId)
+    }
+
+    suspend fun insertBuyGood(buyGood: BuyGood) {
+        mtDataDao.insertBuyGood(buyGood)
+    }
+
+    suspend fun clearBuyGood(mtId: Int) {
+        mtDataDao.clearBuyGoods(mtId)
+    }
+
+    suspend fun deleteBuyGoodById(buyGoodId: Int) {
+        mtDataDao.deleteBuyGoodById(buyGoodId)
+    }
+
+    suspend fun insertPlan(plan: Plan) {
+        mtDataDao.insertPlan(plan)
+    }
+
+    suspend fun updatePlanImgSrcById(planId: Int, imgSrc: String = "") {
+        mtDataDao.updatePlanbyid(planId, imgSrc)
+    }
+
+    suspend fun updatePlanById(planId: Int, day: String, title: String, text: String) {
+        mtDataDao.updatePlandialogbyid(planId, day, title, text)
+    }
+
+    suspend fun deletePlanById(planId: Int) {
+        mtDataDao.deletePlanById(planId)
+    }
+
+    fun getMtTotalList(): LiveData<List<MtData>> {
         return mtDataDao.getMtData()
     }
 

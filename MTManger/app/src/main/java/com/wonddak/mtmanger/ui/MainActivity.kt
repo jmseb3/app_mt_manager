@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             updateRemoveAdsView()
         }
 
-    private val mtViewModel : MTViewModel by viewModels()
+    private val mtViewModel: MTViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,14 +68,17 @@ class MainActivity : AppCompatActivity() {
         mtViewModel.setMtId(mainmtid)
 
         lifecycleScope.launchWhenCreated {
-            mtViewModel.bottomMenuStatus.collect{
-                if(it){
+            mtViewModel.bottomMenuStatus.collect {
+                if (it) {
                     mBottomNavigationView.visibility = View.VISIBLE
-                    supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                 } else {
                     mBottomNavigationView.visibility = View.GONE
-                    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                 }
+            }
+        }
+        lifecycleScope.launchWhenCreated {
+            mtViewModel.topBackButtonStatus.collect{
+                supportActionBar!!.setDisplayHomeAsUpEnabled(!it)
             }
         }
 
@@ -184,22 +187,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.action_hide_bottom -> {
-                val prefs: SharedPreferences = applicationContext.getSharedPreferences("mainMT", 0)
-                val editor = prefs.edit()
-                val hide = prefs.getBoolean("hide", false)
-                if (!hide) {
-                    editor.putBoolean("hide", true)
-                    editor.commit()
-                    mBottomNavigationView.visibility = View.GONE
-                    invalidateOptionsMenu()
-
-                } else {
-                    editor.putBoolean("hide", false)
-                    editor.commit()
-                    mBottomNavigationView.visibility = View.VISIBLE
-                    invalidateOptionsMenu()
-                }
-
+                mtViewModel.toggleBottomMenuStatus()
+                invalidateOptionsMenu()
             }
             android.R.id.home -> {
                 supportFragmentManager.popBackStack()
@@ -247,7 +236,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun changeFragment(fragment: Fragment) {
+    private fun changeFragment(fragment: Fragment) {
         if (supportFragmentManager.backStackEntryCount > 0) {
             for (i in 0..supportFragmentManager.backStackEntryCount) {
                 supportFragmentManager.popBackStack()
@@ -258,83 +247,6 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragcontainer, fragment)
             .commit()
 
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val db = AppDatabase.getInstance(this)
-        val prefs: SharedPreferences = this.getSharedPreferences("mainMT", 0)
-        val editor = prefs.edit()
-        val mainmtid: Int = prefs.getInt("id", 0)
-
-        if (requestCode == Const.request.imgSelect && resultCode == RESULT_OK && data != null) {
-            val uri = data.data
-            val iddatas = prefs.getInt("key", 0)
-            GlobalScope.launch(Dispatchers.IO) {
-                db.MtDataDao().updatePlanbyid(iddatas, "" + uri)
-            }
-        }
-
-
-        if (requestCode == 1010 && resultCode == RESULT_OK && data != null) {
-            val uri = data.data!!
-            Log.d("datas", "" + uri)
-
-            val cursor = contentResolver.query(
-                uri,
-                arrayOf<String>(
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER
-                ), null, null, null
-            )
-
-            cursor!!.moveToFirst()
-            val name = cursor.getString(0) //0은 이름을 얻어옵니다.
-            val number = cursor.getString(1) //1은 번호를 받아옵니다.
-            Log.d("datas", name + "." + number)
-            cursor.close()
-
-            AddDialog(this, db, editor, this@MainActivity).personDialog(
-                mainmtid,
-                0,
-                1,
-                name,
-                number
-            )
-
-        }
-
-
-    }
-
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "연락처 권한을 승인했습니다..", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(
-                    this, "연락처 권한이 필요합니다.\n" +
-                            " 현재 거부상태입니다.", Toast.LENGTH_LONG
-                ).show();
-            }
-        }
-        if (requestCode == 2) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "저장소 권한을 승인했습니다..", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(
-                    this, "저장소 권한이 필요합니다.\n" +
-                            " 현재 거부상태입니다.", Toast.LENGTH_LONG
-                ).show();
-            }
-        }
     }
 }
 

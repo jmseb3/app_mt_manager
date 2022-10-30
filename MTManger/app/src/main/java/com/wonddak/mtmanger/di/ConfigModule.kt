@@ -16,7 +16,7 @@ class ConfigModule {
 
     @Singleton
     @Provides
-    fun provdieConfig(
+    fun provideConfig(
         @ApplicationContext context: Context
     ) : SharedPreferences = context.getSharedPreferences(Const.pref.name, 0)
 }

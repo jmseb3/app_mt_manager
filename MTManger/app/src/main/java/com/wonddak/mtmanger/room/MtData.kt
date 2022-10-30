@@ -30,17 +30,6 @@ data class Person(
         val paymentFee: Int
 )
 
-data class MtDataAndPerson(
-        @Embedded val mtdata: MtData,
-
-        @Relation(
-                parentColumn = "mtDataId",
-                entityColumn = "mtId"
-        )
-
-        val Personlists: List<Person>
-)
-
 @Entity(
         foreignKeys = [
                 ForeignKey(
@@ -60,16 +49,6 @@ data class BuyGood(
         val price: Int,
 )
 
-data class MtDataAndBuyGood(
-        @Embedded val mtdata: MtData,
-
-        @Relation(
-                parentColumn = "mtDataId",
-                entityColumn = "mtId"
-        )
-
-        val buyGoodList: List<BuyGood>
-)
 
 @Entity(
         foreignKeys = [
@@ -90,18 +69,26 @@ data class Plan(
         val imgsrc: String = ""
 
 )
-
-data class MtDataAndPlan(
+data class MtDataList(
         @Embedded val mtdata: MtData,
+        @Relation(
+                parentColumn = "mtDataId",
+                entityColumn = "mtId"
+        )
+        val personList: List<Person>,
+        @Relation(
+                parentColumn = "mtDataId",
+                entityColumn = "mtId"
+        )
+        val buyGoodList: List<BuyGood>,
 
         @Relation(
                 parentColumn = "mtDataId",
                 entityColumn = "mtId"
         )
+        val planList: List<Plan>
 
-        val buyGoodList: List<BuyGood>
 )
-
 @Entity
 data class categoryList(
         @PrimaryKey(autoGenerate = true)

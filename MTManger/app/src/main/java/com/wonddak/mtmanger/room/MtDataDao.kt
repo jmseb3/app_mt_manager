@@ -2,6 +2,7 @@ package com.wonddak.mtmanger.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MtDataDao {
@@ -40,7 +41,7 @@ interface MtDataDao {
     fun deletePerson(person: Person)
 
     @Query("SELECT * FROM Person where mtId= :mtid")
-    fun getPerson(mtid: Int): LiveData<List<Person>>
+    fun getPerson(mtid: Int): List<Person>
 
     @Query("SELECT * FROM Person")
     fun getPersondata(): List<Person>
@@ -64,11 +65,12 @@ interface MtDataDao {
     @Query("SELECT * FROM BuyGood where mtId= :mtid")
     fun getBuyGood(mtid: Int): LiveData<List<BuyGood>>
 
+    @Query("SELECT * FROM BuyGood where mtId= :mtid")
+    fun getBuyGoodById(mtid: Int): List<BuyGood>
+
     @Query("SELECT * FROM BuyGood")
     fun getBuyGooddata(): List<BuyGood>
 
-    @Query("SELECT * FROM BuyGood WHERE buyGoodId= :buyGoodId")
-    fun getBuyGoodById(buyGoodId: Int): BuyGood
 
     @Query("DELETE FROM BuyGood WHERE buyGoodId = :buyGoodId")
     fun deleteBuyGoodById(buyGoodId: Int)
@@ -80,6 +82,9 @@ interface MtDataDao {
 
     @Query("SELECT * FROM categoryList")
     fun getCategorydata(): List<categoryList>
+
+    @Query("SELECT * FROM categoryList")
+    fun getCategoryDataList(): Flow<List<categoryList>>
 
     @Query("SELECT * FROM categoryList WHERE id=:id")
     fun getCategorydatabyId(id:Int): categoryList
@@ -99,8 +104,10 @@ interface MtDataDao {
 //    계획관련
 
     @Query("SELECT * FROM `Plan` where mtId= :mtid")
-    fun getPlandata(mtid: Int): List<Plan>
+    fun getPlanById(mtid: Int): List<Plan>
 
+    @Query("SELECT * FROM `Plan` where mtId= :mtid")
+    fun getPlandata(mtid: Int): List<Plan>
 
     @Query("SELECT * FROM `Plan` where mtId= :mtid")
     fun getPlan(mtid: Int): LiveData<List<Plan>>
@@ -126,14 +133,6 @@ interface MtDataDao {
 //    트랙잭션
 
     @Transaction
-    @Query("SELECT * FROM MtData")
-    fun getMtDataAndPerson(): List<MtDataAndPerson>
-
-    @Transaction
-    @Query("SELECT * FROM MtData")
-    fun getMtDataAndBuyGood(): List<MtDataAndBuyGood>
-
-    @Transaction
-    @Query("SELECT * FROM MtData")
-    fun getMtDataAndplan(): List<MtDataAndPlan>
+    @Query("SELECT * FROM MtData WHERE mtDataId=:mtid")
+    fun getMtDataList(mtid: Int): Flow<MtDataList>
 }

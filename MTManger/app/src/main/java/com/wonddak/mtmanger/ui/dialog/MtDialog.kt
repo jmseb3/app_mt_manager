@@ -7,6 +7,7 @@ import androidx.annotation.IntDef
 import androidx.fragment.app.activityViewModels
 import com.wonddak.mtmanger.ui.common.dialog.BaseDialog
 import com.wonddak.mtmanger.R
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.DialogAddmtdataBinding
 import com.wonddak.mtmanger.room.MtData
 import com.wonddak.mtmanger.viewModel.MTViewModel
@@ -16,26 +17,24 @@ import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MtDialog : BaseDialog<DialogAddmtdataBinding>(R.layout.dialog_addmtdata) {
+class MtDialog(
+    private val mtDialogOkCallBack : MtDialogOkCallBack
+) : BaseDialog<DialogAddmtdataBinding>(R.layout.dialog_addmtdata) {
 
     companion object {
-        const val Dialog_Title = "dialog_title"
-        const val Dialog_FEE = "dialog_fee"
-        const val Dialog_Start = "dialog_start"
-        const val Dialog_End = "dialog_end"
-
         fun newInstance(
+            callBack : MtDialogOkCallBack,
             title: String? = null,
             fee: Int? = null,
             start: String? = null,
             end: String? = null
         ): MtDialog {
-            return MtDialog().apply {
+            return MtDialog(callBack).apply {
                 arguments = Bundle().apply {
-                    putString(Dialog_Title, title)
-                    putString(Dialog_FEE, fee.toString())
-                    putString(Dialog_Start, start)
-                    putString(Dialog_End, end)
+                    putString(Const.Dialog.Title, title)
+                    putString(Const.Dialog.FEE, fee.toString())
+                    putString(Const.Dialog.Start, start)
+                    putString(Const.Dialog.End, end)
                 }
             }
 
@@ -54,22 +53,16 @@ class MtDialog : BaseDialog<DialogAddmtdataBinding>(R.layout.dialog_addmtdata) {
         )
     }
 
-    private var mtDialogOkCallBack: MtDialogOkCallBack? = null
-
-    fun setMtDialogCallback(callback: MtDialogOkCallBack) {
-        mtDialogOkCallBack = callback
-    }
-
     private var newTitle: String? = null
     private var newFee: String? = null
     private var newStart: String? = null
     private var newEnd: String? = null
     override fun initBinding() {
         arguments?.let {
-            newTitle = it.getString(Dialog_Title)
-            newFee = it.getString(Dialog_Title)
-            newStart = it.getString(Dialog_Start)
-            newEnd = it.getString(Dialog_End)
+            newTitle = it.getString(Const.Dialog.Title)
+            newFee = it.getString(Const.Dialog.FEE)
+            newStart = it.getString(Const.Dialog.Start)
+            newEnd = it.getString(Const.Dialog.End)
         }
         val editor = preferences.edit()
 
@@ -124,7 +117,7 @@ class MtDialog : BaseDialog<DialogAddmtdataBinding>(R.layout.dialog_addmtdata) {
                 if (titleTemp.isEmpty() || startTemp.isEmpty() || endTemp.isEmpty() || feeTemp.isEmpty()) {
                     Toast.makeText(requireContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
                 } else {
-                    mtDialogOkCallBack?.onClick(
+                    mtDialogOkCallBack.onClick(
                         titleTemp,
                         feeTemp.toInt(),
                         startTemp,
