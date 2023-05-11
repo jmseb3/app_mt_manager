@@ -84,17 +84,6 @@ class PlanFragment : BaseDataBindingFragment<FragmentPlanBinding>(R.layout.fragm
                     ).show(
                         parentFragmentManager, null
                     )
-                },
-                itemLongClick = {item ->
-                    DeleteDialog.newInstance(
-                        object : DeleteDialog.DeleteDialogCallback {
-                            override fun onclick() {
-                                mtViewModel.deletePlanById(item.planId!!)
-                            }
-                        }
-                    ).show(
-                        parentFragmentManager, null
-                    )
                 }
             )
         }
