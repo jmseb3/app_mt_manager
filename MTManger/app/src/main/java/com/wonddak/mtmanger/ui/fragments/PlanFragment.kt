@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -28,55 +29,25 @@ class PlanFragment : BaseDataBindingFragment<FragmentPlanBinding>(R.layout.fragm
 
     private lateinit var adapter: PlanRecyclerAdapter
 
-    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var contentLauncher: ActivityResultLauncher<Intent>
-
     private var focusId :Int? = null
     override fun initBinding() {
-        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            val deniedList: List<String> = result.filter {
-                !it.value
-            }.map {
-                it.key
-            }
-
-            when {
-                deniedList.isNotEmpty() -> {
-                    val map = deniedList.groupBy { permission ->
-                        if (shouldShowRequestPermissionRationale(permission)) "DENIED" else "EXPLAINED"
-                    }
-                    map["DENIED"]?.let {
-                        // request denied , request again
-                        // 거부 한 번 했을경우 재요청
-                    }
-                    map["EXPLAINED"]?.let {
-                        // request denied ,send to settings
-                        // 거부 두 번 했을경우 설정
-                    }
-                    Toast.makeText(
-                        requireContext(), "저장소 권한이 필요합니다.\n" +
-                                " 현재 거부상태입니다.", Toast.LENGTH_LONG
-                    ).show()
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                Log.d("PhotoPicker", "Selected URI: $uri")
+                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                requireContext().contentResolver.takePersistableUriPermission(uri, flag)
+                focusId?.let {
+                    mtViewModel.updatePlanImgSrc(
+                        it,
+                        uri.toString()
+                    )
+                    focusId = null
                 }
-                else -> {
-                    Toast.makeText(requireContext(), "저장소 권한을 승인했습니다..", Toast.LENGTH_LONG).show();
-                }
+            } else {
+                Log.d("PhotoPicker", "No media selected")
             }
-
-        }
-
-        contentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { data ->
-            Log.i("JWH",data.toString())
-            val uri = data.data?.dataString
-            Log.i("JWH",uri.toString())
-            focusId?.let {
-                mtViewModel.updatePlanImgSrc(
-                    it,
-                    uri ?: ""
-                )
-                focusId = null
-            }
-
         }
         lifecycleScope.launchWhenCreated {
             mtViewModel.mainMtId.collect { mainmtid ->
@@ -157,35 +128,8 @@ class PlanFragment : BaseDataBindingFragment<FragmentPlanBinding>(R.layout.fragm
             }
 
             override fun itemAddPhoto(item: Plan) {
-                val permissions =
-                    listOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    )
-                var checkPermission = true
-
-                permissions.forEach { permission ->
-                    val isGranted = ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        permission
-                    )
-                    if (isGranted != PackageManager.PERMISSION_GRANTED) {
-                        checkPermission = false
-                    }
-                }
-                if (checkPermission) {
-                    val intent = Intent(Intent.ACTION_PICK)
-                    focusId = item.planId
-                    intent.setDataAndType(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        "image/*"
-                    )
-
-                    contentLauncher.launch(intent)
-                } else {
-                    permissionLauncher.launch(permissions.toTypedArray())
-                }
-
+                focusId = item.planId
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
             override fun itemImgLongClick(item: Plan) {
