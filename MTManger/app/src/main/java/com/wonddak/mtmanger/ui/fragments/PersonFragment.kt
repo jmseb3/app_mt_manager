@@ -40,10 +40,10 @@ class PersonFragment : BaseDataBindingFragment<FragmentPersonBinding>(R.layout.f
     override fun initBinding() {
         val personAddCallback = object : PersonDialog.PersonDialogOkCallBack {
             override fun addPersonFromPhoneData() {
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                     getContentInfo()
                 }else {
-                    permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
                 }
             }
 
