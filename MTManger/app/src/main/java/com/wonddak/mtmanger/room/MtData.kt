@@ -1,6 +1,7 @@
 
 package com.wonddak.mtmanger.room
 
+import android.graphics.Bitmap
 import androidx.room.*
 
 @Entity
@@ -63,11 +64,12 @@ data class BuyGood(
 data class Plan(
         @PrimaryKey(autoGenerate = true) val planId: Int?,
         val mtId: Int,
-        val nowday: String = "날짜를 선택해주세요",
-        val nowplantitle: String = "제목을 입력해주세요",
-        val simpletext: String = "계획을 입력해주세요",
-        val imgsrc: String = ""
-
+        val nowday: String = "",
+        val nowplantitle: String = "",
+        val simpletext: String = "",
+        val imgsrc: String = "",
+        @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+        val imgBytes: ByteArray? = null
 )
 data class MtDataList(
         @Embedded val mtdata: MtData,

@@ -78,6 +78,14 @@ class MTRepository @Inject constructor(
         mtDataDao.updatePlanbyid(planId, imgSrc)
     }
 
+    suspend fun updatePlanImgBytesById(planId: Int, img: ByteArray) {
+        mtDataDao.updateImgBytePlanById(planId, img)
+    }
+
+    suspend fun clearPlanImgById(planId: Int) {
+        mtDataDao.clearPlanImgById(planId)
+    }
+
     suspend fun updatePlanById(planId: Int, day: String, title: String, text: String) {
         mtDataDao.updatePlandialogbyid(planId, day, title, text)
     }

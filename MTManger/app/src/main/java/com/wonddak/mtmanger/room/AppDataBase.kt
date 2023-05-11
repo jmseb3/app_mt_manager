@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [MtData::class, Person::class,BuyGood::class,categoryList::class,Plan::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -33,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "MtDatabaase.db"
                 ).createFromAsset("categoryList.db")
-//                    .addMigrations(MIGRATION_5_6)
+                    .addMigrations(MIGRATION_5_6)
                     .build()
             }
             return INSTANCE as AppDatabase

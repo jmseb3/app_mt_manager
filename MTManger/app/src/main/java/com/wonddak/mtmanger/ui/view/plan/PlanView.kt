@@ -79,7 +79,6 @@ fun PlanListView(
                     it,
                     uri.toString()
                 )
-                focusId = null
             }
             context.contentResolver.openInputStream(uri)?.use { fis ->
                 val byteBuffer = ByteArrayOutputStream()
@@ -90,6 +89,13 @@ fun PlanListView(
                     byteBuffer.write(buffer, 0, len)
                 }
                 Log.i("JWH",byteBuffer.toByteArray().joinToString(" "))
+                focusId?.let {
+                    mtViewModel.updatePlanImgByte(
+                        it,
+                        byteBuffer.toByteArray()
+                    )
+                    focusId = null
+                }
             }
         } else {
             Log.d("PhotoPicker", "No media selected")

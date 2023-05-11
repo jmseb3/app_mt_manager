@@ -237,6 +237,20 @@ class MTViewModel @Inject constructor(
             }
         }
     }
+    fun updatePlanImgByte(planId: Int, imgSrc: ByteArray) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.updatePlanImgBytesById(planId, imgSrc)
+            }
+        }
+    }
+    fun clearPlanImgSrc(planId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.clearPlanImgById(planId)
+            }
+        }
+    }
 
     fun updatePlanById(planId: Int, day: String, title: String, text: String) {
         viewModelScope.launch {
