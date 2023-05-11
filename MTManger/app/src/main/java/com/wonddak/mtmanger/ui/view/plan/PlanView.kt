@@ -1,6 +1,8 @@
 package com.wonddak.mtmanger.ui.view.plan
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -36,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.MtDataList
@@ -45,6 +48,7 @@ import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import java.io.ByteArrayOutputStream
 
 @Composable
 fun PlanListView(
@@ -76,6 +80,16 @@ fun PlanListView(
                     uri.toString()
                 )
                 focusId = null
+            }
+            context.contentResolver.openInputStream(uri)?.use { fis ->
+                val byteBuffer = ByteArrayOutputStream()
+                val bufferSize = 1024
+                val buffer = ByteArray(bufferSize)
+                var len = 0
+                while (fis.read(buffer).also { len = it } != -1) {
+                    byteBuffer.write(buffer, 0, len)
+                }
+                Log.i("JWH",byteBuffer.toByteArray().joinToString(" "))
             }
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -194,7 +208,9 @@ fun PlanCardView(
                 Spacer(modifier = Modifier.height(5.dp))
                 if (plan.imgsrc.isNotEmpty()) {
                     Image(
-                        painter = painterResource(id = R.drawable.appicon),
+                        painter = rememberImagePainter(
+                            data  = Uri.parse(plan.imgsrc)  // or ht
+                        ),
                         contentDescription = "",
                         modifier = Modifier.combinedClickable(
                             onClick = { },
