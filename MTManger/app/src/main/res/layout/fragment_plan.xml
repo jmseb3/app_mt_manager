@@ -34,7 +34,7 @@
             android:background="@drawable/btn_layout2" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.compose.ui.platform.ComposeView
             android:id="@+id/plan_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,8 +43,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_plan" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
