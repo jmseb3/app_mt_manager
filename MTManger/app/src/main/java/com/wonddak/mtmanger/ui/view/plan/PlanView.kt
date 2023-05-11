@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +45,7 @@ import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.MtDataList
 import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.ui.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
@@ -54,7 +56,6 @@ fun PlanListView(
     mtViewModel : MTViewModel,
     itemClick: (item:Plan) -> Unit = {},
     itemLongClick: (item:Plan) -> Unit = {},
-    imgLongClick: (item:Plan) -> Unit = {}
 ) {
     val context = LocalContext.current
     var focusId :Int? by remember {
@@ -62,6 +63,9 @@ fun PlanListView(
     }
     val planResource :Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
 
+    var showDeleteDialog by remember {
+        mutableStateOf(false)
+    }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia() ) {uri ->
         // Callback is invoked after the user selects a media item or closes the
         // photo picker.
@@ -94,14 +98,28 @@ fun PlanListView(
                             focusId = plan.planId
                             picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         },
-                        imgLongClick = {imgLongClick(plan)}
+                        imgLongClick = {
+                            focusId = plan.planId
+                            showDeleteDialog = true
+                        }
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
         }
     }
-
+    if (showDeleteDialog) {
+        DeleteDialog(
+            stringResource(id = R.string.dialog_delete_image),
+            onDismiss =  {
+                showDeleteDialog = false
+            },
+            onDelete =  {
+                mtViewModel.updatePlanImgSrc(focusId!!, "")
+                showDeleteDialog = false
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -134,7 +152,9 @@ fun PlanCardView(
                 .padding(horizontal = 16.dp, vertical = 3.dp)
         ) {
             IconButton(
-                modifier = Modifier.size(36.dp).align(Alignment.TopEnd),
+                modifier = Modifier
+                    .size(36.dp)
+                    .align(Alignment.TopEnd),
                 onClick = addPhoto,
             ) {
                 Icon(

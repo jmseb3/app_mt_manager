@@ -95,18 +95,6 @@ class PlanFragment : BaseDataBindingFragment<FragmentPlanBinding>(R.layout.fragm
                     ).show(
                         parentFragmentManager, null
                     )
-                },
-                imgLongClick = {item ->
-                    DeleteDialog.newInstance(
-                        object : DeleteDialog.DeleteDialogCallback {
-                            override fun onclick() {
-                                mtViewModel.updatePlanImgSrc(item.planId!!, "")
-                            }
-                        },
-                        getString(R.string.dialog_delete_image)
-                    ).show(
-                        parentFragmentManager, null
-                    )
                 }
             )
         }
