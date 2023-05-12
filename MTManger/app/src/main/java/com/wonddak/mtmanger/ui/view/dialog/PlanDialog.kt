@@ -1,13 +1,11 @@
-package com.wonddak.mtmanger.ui.dialog
+package com.wonddak.mtmanger.ui.view.dialog
 
 import android.icu.util.Calendar
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,12 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.ui.theme.match1
-import com.wonddak.mtmanger.ui.theme.match2
-import com.wonddak.mtmanger.ui.view.common.DefaultText
+import com.wonddak.mtmanger.ui.dialog.DatePicker
+import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,92 +47,69 @@ fun PlanDialog(
         mutableStateOf(plan?.simpletext ?: "")
     }
 
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            DefaultText(
-                text = if (plan != null) "계획 수정" else "계획 작성",
-                color = match1,
-                fontSize = 17.sp,
-            )
+    DialogBase(
+        titleText = if (plan != null) "계획 수정" else "계획 작성",
+        confirmText = if (plan != null) "수정" else "추가",
+        onConfirm = {
+            if (title.isEmpty() || date.isEmpty() || planText.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.dialog_error_field),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                onAdd(title, date, planText)
+            }
         },
-        text = {
-            Column {
-                DialogTextField(
-                    value = title,
-                    placeHolder = "제목을 입력해 주세요",
-                    label = "제목"
-                ) {
-                    title = it
-                }
-                DialogTextField(
-                    value = date,
-                    placeHolder = "일자를 선택해 주세요",
-                    label = "일자",
-                    enabled = false,
-                    change = {},
-                    modifier = Modifier
-                        .clickable {
-                            val minDate = Calendar.getInstance()
-                            minDate.set(
-                                startDate.split(".")[0].toInt(),
-                                startDate.split(".")[1].toInt() - 1,
-                                startDate.split(".")[2].toInt()
-                            )
-                            val maxDate = Calendar.getInstance()
-                            maxDate.set(
-                                endDate.split(".")[0].toInt(),
-                                endDate.split(".")[1].toInt() - 1,
-                                endDate.split(".")[2].toInt()
-                            )
-                            DatePicker.show(
-                                context,
-                                minDate.time.time,
-                                maxDate.time.time
-                            ) { _, year, month, day ->
-                                date = "$year.${month + 1}.$day"
-                            }
+        onDismiss = onDismiss
+    ) {
+        Column {
+            DialogTextField(
+                value = title,
+                placeHolder = "제목을 입력해 주세요",
+                label = "제목"
+            ) {
+                title = it
+            }
+            DialogTextField(
+                value = date,
+                placeHolder = "일자를 선택해 주세요",
+                label = "일자",
+                enabled = false,
+                change = {},
+                modifier = Modifier
+                    .clickable {
+                        val minDate = Calendar.getInstance()
+                        minDate.set(
+                            startDate.split(".")[0].toInt(),
+                            startDate.split(".")[1].toInt() - 1,
+                            startDate.split(".")[2].toInt()
+                        )
+                        val maxDate = Calendar.getInstance()
+                        maxDate.set(
+                            endDate.split(".")[0].toInt(),
+                            endDate.split(".")[1].toInt() - 1,
+                            endDate.split(".")[2].toInt()
+                        )
+                        DatePicker.show(
+                            context,
+                            minDate.time.time,
+                            maxDate.time.time
+                        ) { _, year, month, day ->
+                            date = "$year.${month + 1}.$day"
                         }
-                )
-                DialogTextField(
-                    value = planText,
-                    placeHolder = "계획을 입력해 주세요",
-                    label = "계획",
-                    modifier = Modifier.height(TextFieldDefaults.MinHeight * 2)
-                ) {
-                    planText = it
-                }
+                    }
+            )
+            DialogTextField(
+                value = planText,
+                placeHolder = "계획을 입력해 주세요",
+                label = "계획",
+                modifier = Modifier.height(TextFieldDefaults.MinHeight * 2)
+            ) {
+                planText = it
             }
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                if (title.isEmpty() || date.isEmpty() || planText.isEmpty()) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.dialog_error_field),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    onAdd(title, date, planText)
-                }
-            }) {
-                DefaultText(
-                    text = if (plan != null) "수정" else "추가",
-                    color = match1,
-                )
-            }
-
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                DefaultText(
-                    text = "취소",
-                    color = match1,
-                )
-            }
-        },
-        containerColor = match2
-    )
+        }
+    }
 }
 
 @Composable

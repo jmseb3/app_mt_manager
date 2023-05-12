@@ -56,10 +56,10 @@ import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.MtDataList
 import com.wonddak.mtmanger.room.Plan
 import com.wonddak.mtmanger.ui.dialog.DeleteDialog
-import com.wonddak.mtmanger.ui.dialog.PlanDialog
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.dialog.PlanDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import java.io.ByteArrayOutputStream
 
@@ -71,7 +71,9 @@ fun PlanView(
         mutableStateOf(false)
     }
     Column(
-        Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 10.dp, vertical = 5.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
@@ -280,12 +282,14 @@ fun PlanCardView(
                     fontFamily = maple
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                val imageModifier = Modifier.combinedClickable(
-                    onClick = { },
-                    onLongClick = {
-                        showImgDelete = true
-                    },
-                ).fillMaxWidth()
+                val imageModifier = Modifier
+                    .combinedClickable(
+                        onClick = { },
+                        onLongClick = {
+                            showImgDelete = true
+                        },
+                    )
+                    .fillMaxWidth()
                 if (plan.imgBytes != null) {
                     Image(
                         bitmap = BitmapFactory.decodeByteArray(
