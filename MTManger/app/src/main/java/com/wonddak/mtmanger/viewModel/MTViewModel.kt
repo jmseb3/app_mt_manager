@@ -57,18 +57,11 @@ class MTViewModel @Inject constructor(
     private var _personFoldStatus = MutableStateFlow<Boolean>(false)
     val personFoldStatus: StateFlow<Boolean> = _personFoldStatus
 
-    private var _buyGoodFoldStatus = MutableStateFlow<Boolean>(false)
-    val buyGoodFoldStatus: StateFlow<Boolean> = _buyGoodFoldStatus
-
     private var _categoryFoldStatus = MutableStateFlow<Boolean>(true)
     val categoryFoldStatus: StateFlow<Boolean> = _categoryFoldStatus
 
     fun togglePersonFoldStatus() {
         _personFoldStatus.value = !_personFoldStatus.value
-    }
-
-    fun toggleBuyGoodFoldStatus() {
-        _buyGoodFoldStatus.value = !_buyGoodFoldStatus.value
     }
 
     fun toggleCategoryFoldStatus() {

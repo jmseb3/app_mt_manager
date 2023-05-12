@@ -102,7 +102,7 @@ fun PlanView(
                 .wrapContentHeight()
                 .fillMaxWidth(),
             onClick = { showPlanDialog = true },
-            border = BorderStroke(1.dp, match2)
+            border = BorderStroke(2.dp, match2)
         ) {
             Text(
                 text = "계획 추가하기",

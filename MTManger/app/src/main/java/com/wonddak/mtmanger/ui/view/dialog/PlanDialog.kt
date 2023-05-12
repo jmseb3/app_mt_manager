@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -18,26 +16,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.common.DefaultText
+import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanDialog(
     startDate: String,
     endDate: String,
-    plan:Plan?,
+    plan: Plan?,
     onAdd: (
         title: String,
         day: String,
         text: String
-    ) -> Unit = { _, _, _ ->},
+    ) -> Unit = { _, _, _ -> },
     onDismiss: () -> Unit = {}
 ) {
 
@@ -45,51 +43,38 @@ fun PlanDialog(
         mutableStateOf(plan?.nowplantitle ?: "")
     }
     var date by remember {
-        mutableStateOf(plan?.nowday?: "")
+        mutableStateOf(plan?.nowday ?: "")
     }
     val context = LocalContext.current
 
     var planText by remember {
-        mutableStateOf(plan?.simpletext?: "")
+        mutableStateOf(plan?.simpletext ?: "")
     }
-    val color = TextFieldDefaults.outlinedTextFieldColors(
-        focusedBorderColor = match1,
-        textColor = match1,
-        disabledBorderColor = match1,
-        disabledTextColor = match1,
-        cursorColor = match1
-    )
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
+            DefaultText(
                 text = if (plan != null) "계획 수정" else "계획 작성",
                 color = match1,
-                fontFamily = maple,
                 fontSize = 17.sp,
-                textAlign = TextAlign.Center
             )
         },
         text = {
             Column {
-                OutlinedTextField(
+                DialogTextField(
                     value = title,
-                    onValueChange = { title = it },
-                    placeholder = {
-                        Text(text = "제목을 입력해 주세요")
-                    },
-                    label = {
-                        Text(
-                            text = "제목",
-                            color = match1,
-                            fontFamily = maple
-                        )
-                    },
-                    colors = color
-                )
-                OutlinedTextField(
+                    placeHolder = "제목을 입력해 주세요",
+                    label = "제목"
+                ) {
+                    title = it
+                }
+                DialogTextField(
                     value = date,
-                    onValueChange = {},
+                    placeHolder = "일자를 선택해 주세요",
+                    label = "일자",
+                    enabled = false,
+                    change = {},
                     modifier = Modifier
                         .clickable {
                             val minDate = Calendar.getInstance()
@@ -111,36 +96,16 @@ fun PlanDialog(
                             ) { _, year, month, day ->
                                 date = "$year.${month + 1}.$day"
                             }
-                        },
-                    enabled = false,
-                    placeholder = {
-                        Text(text = "일자를 선택해 주세요")
-                    },
-                    label = {
-                        Text(
-                            text = "일자",
-                            color = match1,
-                            fontFamily = maple
-                        )
-                    },
-                    colors = color
+                        }
                 )
-                OutlinedTextField(
-                    modifier = Modifier.height(TextFieldDefaults.MinHeight * 2),
+                DialogTextField(
                     value = planText,
-                    onValueChange = { planText = it },
-                    placeholder = {
-                        Text(text = "계획을 입력해 주세요")
-                    },
-                    label = {
-                        Text(
-                            text = "계획",
-                            color = match1,
-                            fontFamily = maple
-                        )
-                    },
-                    colors = color
-                )
+                    placeHolder = "계획을 입력해 주세요",
+                    label = "계획",
+                    modifier = Modifier.height(TextFieldDefaults.MinHeight * 2)
+                ) {
+                    planText = it
+                }
             }
         },
         confirmButton = {
@@ -152,23 +117,21 @@ fun PlanDialog(
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    onAdd(title,date,planText)
+                    onAdd(title, date, planText)
                 }
             }) {
-                Text(
-                    if (plan != null) "수정" else "추가",
+                DefaultText(
+                    text = if (plan != null) "수정" else "추가",
                     color = match1,
-                    fontFamily = maple
                 )
             }
 
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(
-                    "취소",
+                DefaultText(
+                    text = "취소",
                     color = match1,
-                    fontFamily = maple
                 )
             }
         },
@@ -179,5 +142,5 @@ fun PlanDialog(
 @Composable
 @Preview
 fun PlanDialogPreView() {
-    PlanDialog("2023.05.12", "2023.05.14", Plan(0,0))
+    PlanDialog("2023.05.12", "2023.05.14", Plan(0, 0))
 }
