@@ -7,10 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.repository.MTRepository
-import com.wonddak.mtmanger.room.*
+import com.wonddak.mtmanger.room.BuyGood
+import com.wonddak.mtmanger.room.MtData
+import com.wonddak.mtmanger.room.MtDataList
+import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.categoryList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -216,14 +225,16 @@ class MTViewModel @Inject constructor(
             }
         }
     }
-
-    fun addEmptyPlan() {
+    fun addPlan(title: String,day: String,text: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mtRepository.insertPlan(
                     Plan(
                         null,
-                        mainMtId.value
+                        mainMtId.value,
+                        nowday =  day,
+                        nowplantitle = title,
+                        simpletext = text
                     )
                 )
             }
