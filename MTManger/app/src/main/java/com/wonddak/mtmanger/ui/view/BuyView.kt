@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -113,7 +114,9 @@ fun BuyGoodPanel(
     }
     if (resource is Resource.Success) {
         val mtData = (resource as Resource.Success<MtDataList>).data!!
-        Column() {
+        Column(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight()
+        ) {
             Spacer(modifier = Modifier.height(5.dp))
             Divider(
                 modifier = Modifier
@@ -136,7 +139,7 @@ fun BuyGoodPanel(
                 ) {
                     val sumOfGoodsFee = mtData.buyGoodList.sumOf { it.price * it.count }
                     val sumOfPersonPayFee = mtData.personList.sumOf { it.paymentFee }
-                    val modifier = Modifier.height(30.dp)
+                    val modifier = Modifier.padding(3.dp)
                     BuyFeeInfo(
                         modifier,
                         text = "받은 금액",
@@ -216,10 +219,8 @@ fun BuyFeeInfo(
     text: String,
     fee: Int
 ) {
-    Row(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         BuyGoodItemText(
             text = text,
