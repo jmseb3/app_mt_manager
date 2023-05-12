@@ -144,11 +144,6 @@ fun BuyGoodPanel(
                     val modifier = Modifier.padding(3.dp)
                     FeeInfo(
                         modifier,
-                        text = "받은 금액",
-                        fee = sumOfPersonPayFee
-                    )
-                    FeeInfo(
-                        modifier,
                         text = "지출 금액",
                         fee = sumOfGoodsFee
                     )
