@@ -5,8 +5,8 @@ import androidx.compose.runtime.getValue
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.databinding.FragmentPlanBinding
 import com.wonddak.mtmanger.ui.common.fragment.BaseDataBindingFragment
+import com.wonddak.mtmanger.ui.view.PlanView
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
-import com.wonddak.mtmanger.ui.view.plan.PlanView
 
 
 class PlanFragment : BaseDataBindingFragment<FragmentPlanBinding>(R.layout.fragment_plan) {

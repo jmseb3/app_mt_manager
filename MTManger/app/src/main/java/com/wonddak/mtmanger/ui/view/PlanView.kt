@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.plan
+package com.wonddak.mtmanger.ui.view
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -71,7 +71,7 @@ fun PlanView(
         mutableStateOf(false)
     }
     Column(
-        Modifier.fillMaxSize(),
+        Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(

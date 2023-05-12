@@ -156,7 +156,7 @@ fun PlanDialog(
                 }
             }) {
                 Text(
-                    "추가",
+                    if (plan != null) "수정" else "추가",
                     color = match1,
                     fontFamily = maple
                 )

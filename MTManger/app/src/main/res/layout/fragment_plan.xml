@@ -16,11 +16,7 @@
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/plan_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_height="match_parent" />
 
 
     </RelativeLayout>
