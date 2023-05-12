@@ -1,5 +1,6 @@
 package com.wonddak.mtmanger.ui.view.common
 
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -18,9 +19,10 @@ fun DialogTextField(
     placeHolder: String,
     label: String,
     enabled: Boolean = true,
-    readOnly :Boolean = false,
-    trailingIcon : @Composable (() -> Unit)? = null,
+    readOnly: Boolean = false,
+    trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     change: (value: String) -> Unit
 ) {
     val color = TextFieldDefaults.outlinedTextFieldColors(
@@ -53,6 +55,7 @@ fun DialogTextField(
         },
         colors = color,
         trailingIcon = trailingIcon,
-        keyboardOptions = keyboardOptions
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
     )
 }

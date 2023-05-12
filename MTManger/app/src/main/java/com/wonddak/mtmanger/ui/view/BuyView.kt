@@ -40,13 +40,13 @@ import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.MtDataList
-import com.wonddak.mtmanger.ui.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.BuyDialog
+import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 
@@ -195,8 +195,9 @@ fun BuyGoodPanel(
             },
         )
     }
+    val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
+
     if (showAddDialog) {
-        val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
         BuyDialog(
             categoryList = categoryList,
             onDismiss = {

@@ -10,20 +10,33 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.ui.theme.match1
+import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
@@ -38,6 +51,9 @@ fun PersonDialog(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+    val focusRequester by remember { mutableStateOf(FocusRequester()) }
+
     var name by remember {
         mutableStateOf(person?.name ?: "")
     }
@@ -48,21 +64,24 @@ fun PersonDialog(
         mutableStateOf(person?.paymentFee?.toString() ?: "")
     }
     val contentLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { data ->
-            val uriString = data.data!!.dataString
-            val uri = Uri.parse(uriString)
-            val cursor = context.contentResolver.query(
-                uri,
-                arrayOf(
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                    ContactsContract.CommonDataKinds.Phone.NUMBER
-                ), null, null, null
-            )
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            result.data?.let {
+                val uriString = it.dataString
+                val uri = Uri.parse(uriString)
+                val cursor = context.contentResolver.query(
+                    uri,
+                    arrayOf(
+                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                        ContactsContract.CommonDataKinds.Phone.NUMBER
+                    ), null, null, null
+                )
 
-            cursor!!.moveToFirst()
-            name = cursor.getString(0) //0은 이름을 얻어옵니다.
-            number = cursor.getString(1).replace("\\D".toRegex(), "") //1은 번호를 받아옵니다.
-            cursor.close()
+                cursor!!.moveToFirst()
+                name = cursor.getString(0) //0은 이름을 얻어옵니다.
+                number = cursor.getString(1).replace("\\D".toRegex(), "") //1은 번호를 받아옵니다.
+                focusRequester.requestFocus()
+                cursor.close()
+            }
         }
 
     fun getContentInfo() {
@@ -99,7 +118,8 @@ fun PersonDialog(
     ) {
         Column() {
             Box() {
-                IconButton(
+                OutlinedButton(
+                    modifier = Modifier.align(Alignment.TopEnd),
                     onClick = {
                         if (ContextCompat.checkSelfPermission(
                                 context,
@@ -112,17 +132,31 @@ fun PersonDialog(
                         }
                     }
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_baseline_contact_phone_24),
-                        contentDescription = null
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        DefaultText(
+                            text = "연락처에서 불러오기",
+                            color = match1
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_contact_phone_24),
+                            contentDescription = null,
+                            tint = match1
+                        )
+                    }
+
                 }
             }
             DialogTextField(
                 value = name,
                 placeHolder = "이름 입력해 주세요",
                 label = "이름",
-                change = { name = it }
+                change = { name = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                )
             )
             DialogTextField(
                 value = number,
@@ -132,9 +166,11 @@ fun PersonDialog(
                     number = it.replace("\\D".toRegex(), "")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
                 )
             )
+
             DialogTextField(
                 value = fee,
                 placeHolder = "납부금액을 입력해 주세요",
@@ -143,8 +179,15 @@ fun PersonDialog(
                     fee = it.replace("\\D".toRegex(), "")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                )
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
+                modifier = Modifier.focusRequester(focusRequester)
             )
         }
     }

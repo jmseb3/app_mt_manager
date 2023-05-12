@@ -3,6 +3,7 @@ package com.wonddak.mtmanger.ui.view.dialog
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.room.BuyGood
@@ -100,7 +103,11 @@ fun BuyDialog(
                 value = name,
                 placeHolder = "이름 입력해 주세요",
                 label = "이름",
-                change = { name = it })
+                change = { name = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                )
+            )
             DialogTextField(
                 value = count,
                 placeHolder = "수량을 입력해 주세요",
@@ -109,9 +116,11 @@ fun BuyDialog(
                     count = it.replace("\\D".toRegex(), "")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
                 )
             )
+            val focusManager = LocalFocusManager.current
             DialogTextField(
                 value = price,
                 placeHolder = "가격을 입력해 주세요",
@@ -120,7 +129,13 @@ fun BuyDialog(
                     price = it.replace("\\D".toRegex(), "")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
                 )
             )
         }

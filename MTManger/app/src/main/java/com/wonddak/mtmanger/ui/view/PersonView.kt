@@ -46,11 +46,11 @@ import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.MtDataList
 import com.wonddak.mtmanger.room.Person
 import com.wonddak.mtmanger.toPriceString
-import com.wonddak.mtmanger.ui.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
+import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.dialog.PersonDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 

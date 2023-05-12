@@ -2,9 +2,10 @@ package com.wonddak.mtmanger.ui.view.dialog
 
 import android.icu.util.Calendar
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -14,8 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.wonddak.mtmanger.R
+import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.Plan
 import com.wonddak.mtmanger.ui.dialog.DatePicker
 import com.wonddak.mtmanger.ui.view.common.DialogBase
@@ -46,6 +50,7 @@ fun PlanDialog(
     var planText by remember {
         mutableStateOf(plan?.simpletext ?: "")
     }
+    val focusManager = LocalFocusManager.current
 
     DialogBase(
         titleText = if (plan != null) "계획 수정" else "계획 작성",
@@ -65,20 +70,13 @@ fun PlanDialog(
     ) {
         Column {
             DialogTextField(
-                value = title,
-                placeHolder = "제목을 입력해 주세요",
-                label = "제목"
-            ) {
-                title = it
-            }
-            DialogTextField(
                 value = date,
                 placeHolder = "일자를 선택해 주세요",
                 label = "일자",
                 enabled = false,
                 change = {},
                 modifier = Modifier
-                    .clickable {
+                    .noRippleClickable() {
                         val minDate = Calendar.getInstance()
                         minDate.set(
                             startDate.split(".")[0].toInt(),
@@ -101,10 +99,28 @@ fun PlanDialog(
                     }
             )
             DialogTextField(
+                value = title,
+                placeHolder = "제목을 입력해 주세요",
+                label = "제목",
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                )
+            ) {
+                title = it
+            }
+            DialogTextField(
                 value = planText,
                 placeHolder = "계획을 입력해 주세요",
                 label = "계획",
-                modifier = Modifier.height(TextFieldDefaults.MinHeight * 2)
+                modifier = Modifier.height(TextFieldDefaults.MinHeight * 2),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                )
             ) {
                 planText = it
             }

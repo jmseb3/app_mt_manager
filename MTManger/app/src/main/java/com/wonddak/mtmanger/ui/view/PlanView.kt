@@ -55,10 +55,10 @@ import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.MtDataList
 import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.ui.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.dialog.PlanDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import java.io.ByteArrayOutputStream

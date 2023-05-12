@@ -54,20 +54,6 @@ class MTViewModel @Inject constructor(
     private var _categoryList: MutableStateFlow<List<categoryList>> = MutableStateFlow(emptyList())
 
 
-    private var _personFoldStatus = MutableStateFlow<Boolean>(false)
-    val personFoldStatus: StateFlow<Boolean> = _personFoldStatus
-
-    private var _categoryFoldStatus = MutableStateFlow<Boolean>(true)
-    val categoryFoldStatus: StateFlow<Boolean> = _categoryFoldStatus
-
-    fun togglePersonFoldStatus() {
-        _personFoldStatus.value = !_personFoldStatus.value
-    }
-
-    fun toggleCategoryFoldStatus() {
-        _categoryFoldStatus.value = !_categoryFoldStatus.value
-    }
-
     init {
         viewModelScope.launch {
             mainMtId.collectLatest { it ->
