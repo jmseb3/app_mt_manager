@@ -16,7 +16,7 @@ interface MtDataDao {
     fun deleteMtData(mtData: MtData)
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
-    fun getMtData(): LiveData<List<MtData>>
+    fun getMtData(): Flow<List<MtData>>
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
     fun getMtDatadata(): List<MtData>
@@ -117,6 +117,11 @@ interface MtDataDao {
 
     @Query("UPDATE `Plan` SET imgsrc= :imgsrc WHERE planId= :planId")
     fun updatePlanbyid(planId:Int,imgsrc:String)
+
+    @Query("UPDATE `Plan` SET imgBytes= :imgBytes WHERE planId= :planId")
+    fun updateImgBytePlanById(planId:Int,imgBytes:ByteArray)
+    @Query("UPDATE `Plan` SET imgsrc=\"\", imgBytes=NULL WHERE planId= :planId")
+    fun clearPlanImgById(planId:Int)
 
     @Query("UPDATE `Plan` SET nowday= :nowday , nowplantitle= :nowplantitle, simpletext= :simpletext WHERE planId= :planId")
     fun updatePlandialogbyid(planId:Int,nowday:String,nowplantitle:String,simpletext:String)

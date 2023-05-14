@@ -2,15 +2,27 @@ package com.wonddak.mtmanger.viewModel
 
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.repository.MTRepository
-import com.wonddak.mtmanger.room.*
+import com.wonddak.mtmanger.room.BuyGood
+import com.wonddak.mtmanger.room.MtData
+import com.wonddak.mtmanger.room.MtDataList
+import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.categoryList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,12 +30,9 @@ class MTViewModel @Inject constructor(
     private val mtRepository: MTRepository,
     private val pref: SharedPreferences
 ) : ViewModel() {
-    private var _bottomMenuStatus = MutableStateFlow<Boolean>(false)
-    val bottomMenuStatus: StateFlow<Boolean> = _bottomMenuStatus
 
-    private var _topBackButtonStatus = MutableStateFlow<Boolean>(true)
-    val topBackButtonStatus: StateFlow<Boolean> = _topBackButtonStatus
-
+    var showSetting by mutableStateOf(false)
+    var showMtList by mutableStateOf(false)
 
     private var _removeAdStatus = MutableStateFlow<Boolean>(false)
     val removeAdStatus: StateFlow<Boolean> = _removeAdStatus
@@ -45,58 +54,44 @@ class MTViewModel @Inject constructor(
     private var _categoryList: MutableStateFlow<List<categoryList>> = MutableStateFlow(emptyList())
 
 
-    private var _personFoldStatus = MutableStateFlow<Boolean>(false)
-    val personFoldStatus: StateFlow<Boolean> = _personFoldStatus
-
-    private var _buyGoodFoldStatus = MutableStateFlow<Boolean>(false)
-    val buyGoodFoldStatus: StateFlow<Boolean> = _buyGoodFoldStatus
-
-    private var _categoryFoldStatus = MutableStateFlow<Boolean>(true)
-    val categoryFoldStatus: StateFlow<Boolean> = _categoryFoldStatus
-
-    fun togglePersonFoldStatus() {
-        _personFoldStatus.value = !_personFoldStatus.value
-    }
-
-    fun toggleBuyGoodFoldStatus() {
-        _buyGoodFoldStatus.value = !_buyGoodFoldStatus.value
-    }
-
-    fun toggleCategoryFoldStatus() {
-        _categoryFoldStatus.value = !_categoryFoldStatus.value
-    }
-
     init {
         viewModelScope.launch {
-            mainMtId.collectLatest { it ->
-                mtRepository.getMtDataList(it).collectLatest { mtDataList ->
-                    _nowMtDataList.value = mtDataList
+            launch {
+                mainMtId.collectLatest { it ->
+                    mtRepository.getMtDataList(it).collectLatest { mtDataList ->
+                        _nowMtDataList.value = mtDataList
 
-                    if (mtDataList is Resource.Success) {
-                        mtDataList.data?.let { mtData ->
-                            Log.i("JWH", "MtData : ${mtData.mtdata}")
-                            mtData.personList.forEach {
-                                Log.i("JWH", "personList : ${it}")
+                        if (mtDataList is Resource.Success) {
+                            mtDataList.data?.let { mtData ->
+                                Log.i("JWH", "MtData : ${mtData.mtdata}")
+                                mtData.personList.forEach {
+                                    Log.i("JWH", "personList : ${it}")
 
-                            }
-                            mtData.buyGoodList.forEach {
-                                Log.i("JWH", "BuyList : ${it}")
+                                }
+                                mtData.buyGoodList.forEach {
+                                    Log.i("JWH", "BuyList : ${it}")
 
-                            }
-                            mtData.planList.forEach {
-                                Log.i("JWH", "PlanList : ${it}")
+                                }
+                                mtData.planList.forEach {
+                                    Log.i("JWH", "PlanList : ${it}")
 
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-
-        viewModelScope.launch {
-            mtRepository.getCategoryList().collect {
-                _categoryList.value = it
+            launch {
+                mtRepository.getCategoryList().collect {
+                    _categoryList.value = it
+                }
             }
+            launch {
+                mainMtId.collect {
+                    Log.i("JWH", "id is $it")
+                }
+            }
+
         }
     }
 
@@ -107,12 +102,14 @@ class MTViewModel @Inject constructor(
         editor.apply()
     }
 
-    suspend fun checkEndDateById(tempDate: String): Boolean {
-        return mtRepository.checkEndDateById(mainMtId.value ?: 0, tempDate)
-    }
 
-    suspend fun insertMtData(mtData: MtData): Long {
-        return mtRepository.insertMtData(mtData)
+    fun insertMtData(mtData: MtData) {
+        viewModelScope.launch {
+            val newId = withContext(Dispatchers.IO) {
+                mtRepository.insertMtData(mtData).toInt()
+            }
+            setMtId(newId)
+        }
     }
 
 
@@ -181,7 +178,7 @@ class MTViewModel @Inject constructor(
 
     }
 
-    fun getMtTotalLIst(): LiveData<List<MtData>> {
+    fun getMtTotalLIst(): Flow<List<MtData>> {
         return mtRepository.getMtTotalList()
     }
 
@@ -216,14 +213,16 @@ class MTViewModel @Inject constructor(
             }
         }
     }
-
-    fun addEmptyPlan() {
+    fun addPlan(title: String,day: String,text: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mtRepository.insertPlan(
                     Plan(
                         null,
-                        mainMtId.value
+                        mainMtId.value,
+                        nowday =  day,
+                        nowplantitle = title,
+                        simpletext = text
                     )
                 )
             }
@@ -234,6 +233,20 @@ class MTViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mtRepository.updatePlanImgSrcById(planId, imgSrc)
+            }
+        }
+    }
+    fun updatePlanImgByte(planId: Int, imgSrc: ByteArray) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.updatePlanImgBytesById(planId, imgSrc)
+            }
+        }
+    }
+    fun clearPlanImgSrc(planId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.clearPlanImgById(planId)
             }
         }
     }
@@ -277,18 +290,6 @@ class MTViewModel @Inject constructor(
             }
         }
 
-    }
-
-    fun setBottomMenuStatus(show: Boolean) {
-        _bottomMenuStatus.value = show
-    }
-
-    fun toggleBottomMenuStatus() {
-        _bottomMenuStatus.value = !_bottomMenuStatus.value
-    }
-
-    fun setTopButtonStatus(show: Boolean) {
-        _topBackButtonStatus.value = show
     }
 
     fun setRemoveAddStatus(show: Boolean) {

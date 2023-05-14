@@ -1,0 +1,270 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "66a17a04f4105f46a388043395dfe85f",
+    "entities": [
+      {
+        "tableName": "MtData",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mtDataId` INTEGER PRIMARY KEY AUTOINCREMENT, `mtTitle` TEXT NOT NULL, `fee` INTEGER NOT NULL, `mtStart` TEXT NOT NULL, `mtEnd` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "mtDataId",
+            "columnName": "mtDataId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mtTitle",
+            "columnName": "mtTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fee",
+            "columnName": "fee",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mtStart",
+            "columnName": "mtStart",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mtEnd",
+            "columnName": "mtEnd",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "mtDataId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Person",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`personId` INTEGER PRIMARY KEY AUTOINCREMENT, `mtId` INTEGER NOT NULL, `name` TEXT NOT NULL, `phoneNumber` TEXT NOT NULL, `paymentFee` INTEGER NOT NULL, FOREIGN KEY(`mtId`) REFERENCES `MtData`(`mtDataId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "personId",
+            "columnName": "personId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mtId",
+            "columnName": "mtId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phoneNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentFee",
+            "columnName": "paymentFee",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "personId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "MtData",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mtId"
+            ],
+            "referencedColumns": [
+              "mtDataId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "BuyGood",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`buyGoodId` INTEGER PRIMARY KEY AUTOINCREMENT, `mtId` INTEGER NOT NULL, `category` TEXT NOT NULL, `name` TEXT NOT NULL, `count` INTEGER NOT NULL, `price` INTEGER NOT NULL, FOREIGN KEY(`mtId`) REFERENCES `MtData`(`mtDataId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "buyGoodId",
+            "columnName": "buyGoodId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mtId",
+            "columnName": "mtId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "count",
+            "columnName": "count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "buyGoodId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "MtData",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mtId"
+            ],
+            "referencedColumns": [
+              "mtDataId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "categoryList",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Plan",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`planId` INTEGER PRIMARY KEY AUTOINCREMENT, `mtId` INTEGER NOT NULL, `nowday` TEXT NOT NULL, `nowplantitle` TEXT NOT NULL, `simpletext` TEXT NOT NULL, `imgsrc` TEXT NOT NULL, `imgBytes` BLOB NOT NULL, FOREIGN KEY(`mtId`) REFERENCES `MtData`(`mtDataId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "planId",
+            "columnName": "planId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mtId",
+            "columnName": "mtId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nowday",
+            "columnName": "nowday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nowplantitle",
+            "columnName": "nowplantitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "simpletext",
+            "columnName": "simpletext",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imgsrc",
+            "columnName": "imgsrc",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imgBytes",
+            "columnName": "imgBytes",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "planId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "MtData",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mtId"
+            ],
+            "referencedColumns": [
+              "mtDataId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66a17a04f4105f46a388043395dfe85f')"
+    ]
+  }
+}

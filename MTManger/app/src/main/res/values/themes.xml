@@ -15,9 +15,12 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="dialog_fullscreen" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+
+    <style name="DatePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/match2</item>
+        <item name="colorControlActivated">@color/match2</item>
+        <item name="colorControlHighlight">@color/match1</item>
+        <item name="android:windowBackground">@color/match1</item>
     </style>
+
 </resources>

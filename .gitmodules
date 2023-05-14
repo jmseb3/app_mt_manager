@@ -1,0 +1,3 @@
+[submodule "MTManger/keystore"]
+	path = MTManger/keystore
+	url = https://github.com/jmseb3/keystore
