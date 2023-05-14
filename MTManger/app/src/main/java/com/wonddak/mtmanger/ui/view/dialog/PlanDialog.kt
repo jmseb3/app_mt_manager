@@ -119,7 +119,8 @@ fun PlanDialog(
                 ),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
-                )
+                ),
+                singleLine = false
             ) {
                 planText = it
             }

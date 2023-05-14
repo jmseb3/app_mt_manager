@@ -2,24 +2,32 @@ package com.wonddak.mtmanger.ui.view.dialog
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.MtData
+import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MTDialog(
     mtData: MtData? = null,
@@ -50,6 +58,7 @@ fun MTDialog(
 
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
 
     DialogBase(
@@ -142,9 +151,17 @@ fun MTDialog(
                     keyboardType = KeyboardType.Number
                 ), keyboardActions = KeyboardActions(
                     onDone = {
-                        focusManager.clearFocus()
+                        keyboardController?.hide()
                     }
-                )
+                ),
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_won),
+                        contentDescription = null,
+                        tint = match1,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             )
         }
     }

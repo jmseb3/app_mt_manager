@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -187,7 +188,15 @@ fun PersonDialog(
                         focusManager.clearFocus()
                     }
                 ),
-                modifier = Modifier.focusRequester(focusRequester)
+                modifier = Modifier.focusRequester(focusRequester),
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_won),
+                        contentDescription = null,
+                        tint = match1,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             )
         }
     }

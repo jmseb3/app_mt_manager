@@ -25,6 +25,7 @@ fun DialogTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
     change: (value: String) -> Unit
 ) {
     val color = TextFieldDefaults.outlinedTextFieldColors(
@@ -61,6 +62,7 @@ fun DialogTextField(
         keyboardActions = keyboardActions,
         textStyle = TextStyle(
             fontFamily = maple
-        )
+        ),
+        singleLine = singleLine
     )
 }

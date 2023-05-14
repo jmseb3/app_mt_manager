@@ -3,12 +3,14 @@ package com.wonddak.mtmanger.ui.view.dialog
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,12 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
@@ -136,7 +141,15 @@ fun BuyDialog(
                     onDone = {
                         focusManager.clearFocus()
                     }
-                )
+                ),
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_won),
+                        contentDescription = null,
+                        tint = match1,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             )
         }
     }
