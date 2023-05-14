@@ -41,7 +41,7 @@ fun DialogTextField(
             DefaultText(
                 text = placeHolder,
                 color = match1.copy(alpha = 0.5f),
-                fontSize = 11.sp
+                fontSize = 13.sp
             )
         },
         enabled = enabled,

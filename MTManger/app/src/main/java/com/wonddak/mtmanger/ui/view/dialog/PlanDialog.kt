@@ -89,7 +89,7 @@ fun PlanDialog(
                             endDate.split(".")[1].toInt() - 1,
                             endDate.split(".")[2].toInt()
                         )
-                        DatePicker.show(
+                        DatePicker.showDefault(
                             context,
                             minDate.time.time,
                             maxDate.time.time

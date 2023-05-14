@@ -117,56 +117,59 @@ fun PersonPanel(
         mutableStateOf(false)
     }
     if (resource is Resource.Success) {
-        val mtData = (resource as Resource.Success<MtDataList>).data!!
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-        ) {
-            Spacer(modifier = Modifier.height(5.dp))
-            Divider(
-                modifier = Modifier
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                thickness = 4.dp,
-                color = match2
-            )
-            Row(
+        (resource as Resource.Success<MtDataList>).data?.let { mtData ->
+
+
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .wrapContentHeight()
             ) {
-                Column(
-                    Modifier.weight(3f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceAround
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider(
+                    modifier = Modifier
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                    thickness = 4.dp,
+                    color = match2
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(3.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val modifier = Modifier.padding(3.dp)
-                    FeeInfo(
-                        modifier, text = "총 참여자", fee = mtData.personList.size, feeIndex = "명"
-                    )
-                    FeeInfo(modifier,
-                        text = "받은 금액",
-                        fee = mtData.personList.sumOf { it.paymentFee })
-                }
-                Column(
-                    Modifier.weight(2f), horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { showAddDialog = true },
-                        border = BorderStroke(2.dp, match2)
+                    Column(
+                        Modifier.weight(3f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceAround
                     ) {
-                        BuyGoodItemText(text = "참여자 추가")
+                        val modifier = Modifier.padding(3.dp)
+                        FeeInfo(
+                            modifier, text = "총 참여자", fee = mtData.personList.size, feeIndex = "명"
+                        )
+                        FeeInfo(modifier,
+                            text = "받은 금액",
+                            fee = mtData.personList.sumOf { it.paymentFee })
                     }
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(), onClick = {
-                            showItemReset = true
-                        }, border = BorderStroke(2.dp, match2)
+                    Column(
+                        Modifier.weight(2f), horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        BuyGoodItemText(text = "초기화")
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { showAddDialog = true },
+                            border = BorderStroke(2.dp, match2)
+                        ) {
+                            BuyGoodItemText(text = "참여자 추가")
+                        }
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(), onClick = {
+                                showItemReset = true
+                            }, border = BorderStroke(2.dp, match2)
+                        ) {
+                            BuyGoodItemText(text = "초기화")
+                        }
                     }
                 }
             }
@@ -245,18 +248,20 @@ fun PersonItemList(
                 )
             ) {
                 if (resource is Resource.Success) {
-                    val buyGoodList = (resource as Resource.Success<MtDataList>).data!!.personList
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp)
-                    ) {
-                        itemsIndexed(buyGoodList) { index, person ->
-                            PersonItemView(person, mtViewModel)
-                            if (index != buyGoodList.size - 1) {
-                                Divider(
-                                    color = match2
-                                )
+                    (resource as Resource.Success<MtDataList>).data?.let {
+                        val personList = it.personList
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp)
+                        ) {
+                            itemsIndexed(personList) { index, person ->
+                                PersonItemView(person, mtViewModel)
+                                if (index != personList.size - 1) {
+                                    Divider(
+                                        color = match2
+                                    )
+                                }
                             }
                         }
                     }

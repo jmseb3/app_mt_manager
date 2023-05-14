@@ -32,19 +32,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.MainActivity2"
-            android:exported="true"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.MTManger">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"

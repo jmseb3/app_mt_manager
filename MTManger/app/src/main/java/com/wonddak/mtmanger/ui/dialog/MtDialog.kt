@@ -3,16 +3,12 @@ package com.wonddak.mtmanger.ui.dialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
-import androidx.annotation.IntDef
-import androidx.fragment.app.activityViewModels
-import com.wonddak.mtmanger.ui.common.dialog.BaseDialog
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.databinding.DialogAddmtdataBinding
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.viewModel.MTViewModel
+import com.wonddak.mtmanger.ui.common.dialog.BaseDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -79,7 +75,7 @@ class MtDialog(
                 }
             }
             addmtdataStartSelect.setOnClickListener {
-                DatePicker.show(
+                DatePicker.showDefault(
                     requireContext()
                 ) { _, year, month, day ->
                     val tempDate = "${year}.${month + 1}.${day}"
@@ -92,7 +88,7 @@ class MtDialog(
                     if (startTempDate.isEmpty()) {
                         Toast.makeText(requireContext(), "시작일을 입력해주세요", Toast.LENGTH_SHORT).show()
                     } else {
-                        DatePicker.show(
+                        DatePicker.showDefault(
                             requireContext()
                         ) { _, year, month, day ->
                             val tempDate = "${year}.${month + 1}.${day}"

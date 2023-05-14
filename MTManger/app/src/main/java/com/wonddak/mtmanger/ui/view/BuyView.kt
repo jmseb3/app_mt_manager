@@ -113,65 +113,68 @@ fun BuyGoodPanel(
         mutableStateOf(false)
     }
     if (resource is Resource.Success) {
-        val mtData = (resource as Resource.Success<MtDataList>).data!!
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-        ) {
-            Spacer(modifier = Modifier.height(5.dp))
-            Divider(
-                modifier = Modifier
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                thickness = 4.dp,
-                color = match2
-            )
-            Row(
+        (resource as Resource.Success<MtDataList>).data?.let { mtData ->
+
+
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .wrapContentHeight()
             ) {
-                Column(
-                    Modifier.weight(3f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceAround
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider(
+                    modifier = Modifier
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                    thickness = 4.dp,
+                    color = match2
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(3.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val sumOfGoodsFee = mtData.buyGoodList.sumOf { it.price * it.count }
-                    val sumOfPersonPayFee = mtData.personList.sumOf { it.paymentFee }
-                    val modifier = Modifier.padding(3.dp)
-                    FeeInfo(
-                        modifier,
-                        text = "지출 금액",
-                        fee = sumOfGoodsFee
-                    )
-                    FeeInfo(
-                        modifier,
-                        text = "남은 금액",
-                        fee = sumOfPersonPayFee - sumOfGoodsFee
-                    )
-                }
-                Column(
-                    Modifier.weight(2f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { showAddDialog = true },
-                        border = BorderStroke(2.dp, match2)
+                    Column(
+                        Modifier.weight(3f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceAround
                     ) {
-                        BuyGoodItemText(text = "내역 추가")
+                        val sumOfGoodsFee = mtData.buyGoodList.sumOf { it.price * it.count }
+                        val sumOfPersonPayFee = mtData.personList.sumOf { it.paymentFee }
+                        val modifier = Modifier.padding(3.dp)
+                        FeeInfo(
+                            modifier,
+                            text = "지출 금액",
+                            fee = sumOfGoodsFee
+                        )
+                        FeeInfo(
+                            modifier,
+                            text = "남은 금액",
+                            fee = sumOfPersonPayFee - sumOfGoodsFee
+                        )
                     }
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            showItemReset = true
-                        },
-                        border = BorderStroke(2.dp, match2)
+                    Column(
+                        Modifier.weight(2f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        BuyGoodItemText(text = "초기화")
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { showAddDialog = true },
+                            border = BorderStroke(2.dp, match2)
+                        ) {
+                            BuyGoodItemText(text = "내역 추가")
+                        }
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                showItemReset = true
+                            },
+                            border = BorderStroke(2.dp, match2)
+                        ) {
+                            BuyGoodItemText(text = "초기화")
+                        }
                     }
                 }
             }
@@ -273,18 +276,20 @@ fun BuyItemList(
             )
             {
                 if (resource is Resource.Success) {
-                    val buyGoodList = (resource as Resource.Success<MtDataList>).data!!.buyGoodList
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp)
-                    ) {
-                        itemsIndexed(buyGoodList) { index, buyGood ->
-                            BuyItemView(buyGood, mtViewModel)
-                            if (index != buyGoodList.size - 1) {
-                                Divider(
-                                    color = match2
-                                )
+                    (resource as Resource.Success<MtDataList>).data?.let {
+                        val buyGoodList = it.buyGoodList
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp)
+                        ) {
+                            itemsIndexed(buyGoodList) { index, buyGood ->
+                                BuyItemView(buyGood, mtViewModel)
+                                if (index != buyGoodList.size - 1) {
+                                    Divider(
+                                        color = match2
+                                    )
+                                }
                             }
                         }
                     }

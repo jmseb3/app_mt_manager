@@ -56,35 +56,42 @@ class MTViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            mainMtId.collectLatest { it ->
-                mtRepository.getMtDataList(it).collectLatest { mtDataList ->
-                    _nowMtDataList.value = mtDataList
+            launch {
+                mainMtId.collectLatest { it ->
+                    mtRepository.getMtDataList(it).collectLatest { mtDataList ->
+                        _nowMtDataList.value = mtDataList
 
-                    if (mtDataList is Resource.Success) {
-                        mtDataList.data?.let { mtData ->
-                            Log.i("JWH", "MtData : ${mtData.mtdata}")
-                            mtData.personList.forEach {
-                                Log.i("JWH", "personList : ${it}")
+                        if (mtDataList is Resource.Success) {
+                            mtDataList.data?.let { mtData ->
+                                Log.i("JWH", "MtData : ${mtData.mtdata}")
+                                mtData.personList.forEach {
+                                    Log.i("JWH", "personList : ${it}")
 
-                            }
-                            mtData.buyGoodList.forEach {
-                                Log.i("JWH", "BuyList : ${it}")
+                                }
+                                mtData.buyGoodList.forEach {
+                                    Log.i("JWH", "BuyList : ${it}")
 
-                            }
-                            mtData.planList.forEach {
-                                Log.i("JWH", "PlanList : ${it}")
+                                }
+                                mtData.planList.forEach {
+                                    Log.i("JWH", "PlanList : ${it}")
 
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-
-        viewModelScope.launch {
-            mtRepository.getCategoryList().collect {
-                _categoryList.value = it
+            launch {
+                mtRepository.getCategoryList().collect {
+                    _categoryList.value = it
+                }
             }
+            launch {
+                mainMtId.collect {
+                    Log.i("JWH", "id is $it")
+                }
+            }
+
         }
     }
 
