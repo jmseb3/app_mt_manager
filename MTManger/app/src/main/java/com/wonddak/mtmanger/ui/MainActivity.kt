@@ -15,6 +15,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,6 +46,7 @@ import com.wonddak.mtmanger.model.BottomNavItem
 import com.wonddak.mtmanger.ui.theme.MTMangerTheme
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.AdvertView
 import com.wonddak.mtmanger.ui.view.BuyView
 import com.wonddak.mtmanger.ui.view.MainView
 import com.wonddak.mtmanger.ui.view.MtListView
@@ -121,15 +123,18 @@ class MainActivity : ComponentActivity() {
                     containerColor = match1
                 ) {
                     Box(Modifier.padding(it)) {
-                        AnimatedVisibility(
-                            !mtViewModel.showSetting && !mtViewModel.showMtList,
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        ) {
-                            NavGraph(
-                                navController = navController,
-                                mtViewModel
-                            )
+                        Column {
+                            AdvertView()
+                            AnimatedVisibility(
+                                !mtViewModel.showSetting && !mtViewModel.showMtList,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                NavGraph(
+                                    navController = navController,
+                                    mtViewModel
+                                )
+                            }
                         }
                         AnimatedVisibility(
                             mtViewModel.showMtList,
