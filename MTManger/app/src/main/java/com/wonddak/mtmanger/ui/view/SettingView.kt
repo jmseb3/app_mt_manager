@@ -57,6 +57,7 @@ fun SettingView(
     billingModule: BillingModule
 ) {
     val context = LocalContext.current
+    val activity = context as Activity
     var focusId by remember {
         mutableStateOf(-1)
     }
@@ -191,10 +192,9 @@ fun SettingView(
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    billingModule.getPay(context as Activity)
+                    billingModule.getPay(activity)
                 },
                 border = BorderStroke(2.dp, match2),
-                enabled = !removeAdStatus
             ) {
                 BuyGoodItemText(text = if (removeAdStatus) "광고 제거 여부:O" else "광고 제거")
             }

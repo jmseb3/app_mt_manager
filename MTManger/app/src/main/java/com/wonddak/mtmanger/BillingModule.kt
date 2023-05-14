@@ -3,12 +3,19 @@ package com.wonddak.mtmanger
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import com.android.billingclient.api.*
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeResponseListener
+import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class BillingModule(
@@ -62,10 +69,13 @@ class BillingModule(
                     purchaseList.forEach {
                         Log.i(TAG,it.products.toString())
                         if (it.products.contains(REMOVE_ADS)) {
-                            removeAddStatus.value = true
-
+                            if (it.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                                removeAddStatus.value = true
+                            }
+                            Log.i(TAG, it.purchaseState.toString())
+                            Log.i(TAG, it.purchaseTime.toString())
                         }
-                        Log.i(TAG,"광고제거 상태 : $removeAddStatus")
+                        Log.i(TAG, "광고제거 상태 : ${removeAddStatus.value}")
                     }
                 } else {
                     Log.i(TAG, "items : empty") }
@@ -94,7 +104,7 @@ class BillingModule(
         billingClient.queryProductDetailsAsync(tempParam) { billingResult, mutableList ->
             productDetailsList = mutableList
             productDetailsList.forEach {
-                Log.i(TAG,it.toString())
+                Log.i(TAG, "getItem :$it")
             }
         }
     }
@@ -129,19 +139,18 @@ class BillingModule(
         Log.d(TAG, "???? ${billingResult.responseCode}")
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             for (purchase in purchases) {
-                Log.d(TAG,"구매 성공")
+                Log.d(TAG, "구매 성공")
                 //ToastUtil.showShortToast(this, "구매 성공")
                 // 거래 성공 코드
                 // ?
 
 
 //                handlePurchase(purchase)
-
-                val consumeParams = ConsumeParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
-                    .build()
-
-                billingClient.consumeAsync(consumeParams, consumeListener)
+//                val consumeParams = ConsumeParams.newBuilder()
+//                    .setPurchaseToken(purchase.purchaseToken)
+//                    .build()
+//
+//                billingClient.consumeAsync(consumeParams, consumeListener)
 
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
