@@ -13,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,9 +25,6 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.dialog.MTDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun NoDataBase(
@@ -41,9 +37,11 @@ fun NoDataBase(
         if (mainId == 0) {
             NoDataView(mtViewModel)
         } else {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .background(match1)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(match1)
+            ) {
                 content()
             }
         }
@@ -57,7 +55,6 @@ fun NoDataView(
     var showAddDialog by remember {
         mutableStateOf(false)
     }
-    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -83,21 +80,17 @@ fun NoDataView(
             null,
             onDismiss = { showAddDialog = false },
             onAdd = { title, fee, start, end ->
-                scope.launch {
-                    val newId = withContext(Dispatchers.IO) {
-                        mtViewModel.insertMtData(
-                            MtData(
-                                null,
-                                title,
-                                fee.toInt(),
-                                start,
-                                end
-                            )
-                        )
-                    }
-                    mtViewModel.setMtId(newId.toInt())
-                    showAddDialog = false
-                }
+                mtViewModel.insertMtData(
+                    MtData(
+                        null,
+                        title,
+                        fee.toInt(),
+                        start,
+                        end
+                    )
+                )
+                showAddDialog = false
+
             }
         )
     }

@@ -2,7 +2,9 @@ package com.wonddak.mtmanger.ui.view
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -58,9 +60,13 @@ fun SettingView(
     var focusId by remember {
         mutableStateOf(-1)
     }
+    BackHandler() {
+        mtViewModel.showSetting = false
+    }
     Column(
         Modifier
             .fillMaxSize()
+            .background(match1)
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .noRippleClickable(),
         verticalArrangement = Arrangement.SpaceBetween

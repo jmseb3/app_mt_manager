@@ -7,19 +7,26 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,15 +34,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wonddak.mtmanger.BillingModule
+import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.model.BottomNavItem
 import com.wonddak.mtmanger.ui.theme.MTMangerTheme
+import com.wonddak.mtmanger.ui.theme.match1
+import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.BuyView
 import com.wonddak.mtmanger.ui.view.MainView
+import com.wonddak.mtmanger.ui.view.MtListView
 import com.wonddak.mtmanger.ui.view.PersonView
 import com.wonddak.mtmanger.ui.view.PlanView
+import com.wonddak.mtmanger.ui.view.SettingView
+import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,10 +69,10 @@ class MainActivity : ComponentActivity() {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
                 backKeyPressedTime = System.currentTimeMillis();
                 Toast.makeText(this@MainActivity, "한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
-                return;
+                return
             }
             if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-                finish();
+                finish()
             }
         }
     }
@@ -71,10 +85,14 @@ class MainActivity : ComponentActivity() {
         val mainmtid: Int = preferences.getInt("id", 0)
 
         mtViewModel.setMtId(mainmtid)
-        lifecycleScope.launchWhenResumed {
-            billingModule.removeAddStatus.collect {
-                mtViewModel.setRemoveAddStatus(it)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                billingModule.removeAddStatus.collect {
+                    mtViewModel.setRemoveAddStatus(it)
+                }
             }
+
         }
 
         setContent {
@@ -82,13 +100,28 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 Scaffold(
-                    bottomBar = { BottomNavigationBar(navController = navController) }
+                    topBar = {
+                        TopAppBar(mtViewModel = mtViewModel)
+                    },
+                    bottomBar = {
+                        AnimatedVisibility(!mtViewModel.showSetting && !mtViewModel.showMtList) {
+                            BottomNavigationBar(navController = navController)
+                        }
+                    }
                 ) {
                     Box(Modifier.padding(it)) {
-                        NavGraph(
-                            navController = navController,
-                            mtViewModel
-                        )
+                        AnimatedVisibility(!mtViewModel.showSetting && !mtViewModel.showMtList) {
+                            NavGraph(
+                                navController = navController,
+                                mtViewModel
+                            )
+                        }
+                        AnimatedVisibility(mtViewModel.showMtList) {
+                            MtListView(mtViewModel = mtViewModel)
+                        }
+                        AnimatedVisibility(mtViewModel.showSetting) {
+                            SettingView(mtViewModel = mtViewModel, billingModule = billingModule)
+                        }
                     }
                 }
             }
@@ -145,7 +178,9 @@ fun BottomNavigationBar(navController: NavController) {
         BottomNavItem.Plan,
     )
 
-    NavigationBar() {
+    NavigationBar(
+        containerColor = match2,
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
@@ -163,12 +198,73 @@ fun BottomNavigationBar(navController: NavController) {
                     }
                 },
                 icon = {
-                    Icon(painter = painterResource(id = item.icon), contentDescription = null)
+                    Icon(
+                        painter = painterResource(id = item.icon),
+                        contentDescription = null
+                    )
                 },
                 label = {
-                    Text(text = item.title)
-                }
+                    DefaultText(
+                        text = item.title,
+                        color = if (currentRoute == item.screenRoute) match1 else Color.White
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = match1,
+                    unselectedIconColor = Color.White,
+                    indicatorColor = match2
+                ),
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBar(
+    mtViewModel: MTViewModel
+) {
+    TopAppBar(
+        title = {
+            DefaultText(
+                text = "MT 매니저",
+                color = match1
+            )
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = match2
+        ),
+        actions = {
+            AnimatedVisibility(visible = !mtViewModel.showMtList) {
+                IconButton(
+                    onClick = {
+                        mtViewModel.showSetting = true
+                    },
+                    enabled = !mtViewModel.showSetting
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_settings_24),
+                        contentDescription = null,
+                        tint = match1,
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            AnimatedVisibility(mtViewModel.showSetting || mtViewModel.showMtList) {
+                IconButton(
+                    onClick = {
+                        mtViewModel.showSetting = false
+                        mtViewModel.showMtList = false
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.back_arrow),
+                        contentDescription = null,
+                        tint = match1,
+                    )
+                }
+            }
+        }
+    )
 }

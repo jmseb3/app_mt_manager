@@ -1,5 +1,7 @@
 package com.wonddak.mtmanger.ui.view
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,20 +13,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.noRippleClickable
-import com.wonddak.mtmanger.room.MtData
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable
 fun MtListView(
-    mtList: List<MtData>,
-    clickItem: (mtId: Int) -> Unit
+    mtViewModel: MTViewModel,
 ) {
+    BackHandler() {
+        mtViewModel.showMtList = false
+    }
+    val context = LocalContext.current
+    val mtList by mtViewModel.getMtTotalLIst().collectAsState(initial = emptyList())
     Column(
         Modifier
             .fillMaxSize()
@@ -52,7 +61,9 @@ fun MtListView(
                     Text(
                         text = it.mtTitle,
                         modifier = Modifier.noRippleClickable() {
-                            clickItem(it.mtDataId!!)
+                            Toast.makeText(context, "${it.mtTitle}로 변경했어요", Toast.LENGTH_SHORT)
+                                .show()
+                            mtViewModel.setMtId(it.mtDataId!!)
                         }
                     )
                 }

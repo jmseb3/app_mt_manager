@@ -1,12 +1,14 @@
 package com.wonddak.mtmanger.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.*
+import com.wonddak.mtmanger.room.BuyGood
+import com.wonddak.mtmanger.room.MtData
+import com.wonddak.mtmanger.room.MtDataDao
+import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.categoryList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import javax.inject.Inject
@@ -102,7 +104,7 @@ class MTRepository @Inject constructor(
         mtDataDao.deleteCategoryById(categoryId)
     }
 
-    fun getMtTotalList(): LiveData<List<MtData>> {
+    fun getMtTotalList(): Flow<List<MtData>> {
         return mtDataDao.getMtData()
     }
 

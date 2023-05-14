@@ -4,6 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import com.wonddak.mtmanger.ui.theme.maple
@@ -15,6 +16,7 @@ fun DefaultText(
     color: Color = match2,
     text: String,
     fontSize : TextUnit = TextUnit.Unspecified,
+    fontWeight: FontWeight? = null
 ) {
     Text(
         modifier = modifier,
@@ -23,5 +25,6 @@ fun DefaultText(
         fontSize = fontSize,
         textAlign = TextAlign.Center,
         color = color,
+        fontWeight = fontWeight
     )
 }

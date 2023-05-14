@@ -16,7 +16,7 @@ interface MtDataDao {
     fun deleteMtData(mtData: MtData)
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
-    fun getMtData(): LiveData<List<MtData>>
+    fun getMtData(): Flow<List<MtData>>
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
     fun getMtDatadata(): List<MtData>

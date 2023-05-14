@@ -9,7 +9,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
@@ -86,7 +86,7 @@ fun BuyDialog(
                         DropdownMenuItem(
                             modifier = Modifier.background(Color.White),
                             text = {
-                                Text(
+                                DefaultText(
                                     text = item.name,
                                     fontWeight = if (category == item.name) FontWeight.Bold else FontWeight.Normal
                                 )
