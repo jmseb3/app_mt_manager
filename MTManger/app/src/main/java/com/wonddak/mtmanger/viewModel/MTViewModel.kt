@@ -105,7 +105,9 @@ class MTViewModel @Inject constructor(
 
     fun insertMtData(mtData: MtData) {
         viewModelScope.launch {
-            val newId = mtRepository.insertMtData(mtData).toInt()
+            val newId = withContext(Dispatchers.IO) {
+                mtRepository.insertMtData(mtData).toInt()
+            }
             setMtId(newId)
         }
     }

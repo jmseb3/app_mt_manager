@@ -33,17 +33,15 @@ fun NoDataBase(
 ) {
     val mainId by mtViewModel.mainMtId.collectAsState(0)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(match1)
+    ) {
         if (mainId == 0) {
             NoDataView(mtViewModel)
         } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(match1)
-            ) {
-                content()
-            }
+            content()
         }
     }
 }

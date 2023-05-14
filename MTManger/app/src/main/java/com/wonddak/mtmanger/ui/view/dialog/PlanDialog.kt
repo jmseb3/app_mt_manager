@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.ui.dialog.DatePicker
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
