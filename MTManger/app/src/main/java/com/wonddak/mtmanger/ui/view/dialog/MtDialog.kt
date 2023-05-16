@@ -2,11 +2,22 @@ package com.wonddak.mtmanger.ui.view.dialog
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,20 +25,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.wonddak.mtmanger.R
-import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.MtData
+import com.wonddak.mtmanger.toDateString
 import com.wonddak.mtmanger.ui.theme.match1
+import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MTDialog(
     mtData: MtData? = null,
@@ -56,10 +69,12 @@ fun MTDialog(
         mutableStateOf(mtData?.mtStart ?: "")
     }
 
-    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    var showDateRangePicker by remember {
+        mutableStateOf(false)
+    }
+    val datePickerState = rememberDateRangePickerState()
 
     DialogBase(
         titleText = if (mtData == null) "MT 정보 추가" else " MT 정보 수정",
@@ -79,58 +94,22 @@ fun MTDialog(
     ) {
         Column() {
             DialogTextField(
-                value = startDate,
+                value = if (startDate.isNotEmpty() && endDate.isNotEmpty()) "$startDate ~ $endDate" else "",
                 placeHolder = "일자를 선택해 주세요",
-                label = "MT 시작일",
-                enabled = false,
+                label = "MT 일자",
                 change = {},
-                modifier = Modifier
-                    .noRippleClickable() {
-                        DatePicker.showDefault(
-                            context,
-                        ) { _, year, month, day ->
-                            startDate = "$year.${month + 1}.$day"
-                            if (endDate.isNotEmpty()) {
-                                val startDateC = android.icu.util.Calendar.getInstance()
-                                startDateC.set(
-                                    startDate.split(".")[0].toInt(),
-                                    startDate.split(".")[1].toInt() - 1,
-                                    startDate.split(".")[2].toInt()
-                                )
-                                val endDateC = android.icu.util.Calendar.getInstance()
-                                endDateC.set(
-                                    endDate.split(".")[0].toInt(),
-                                    endDate.split(".")[1].toInt() - 1,
-                                    endDate.split(".")[2].toInt()
-                                )
-                                if (endDateC < startDateC) {
-                                    endDate = ""
-                                }
-                            }
-                        }
-                    }
-            )
-            DialogTextField(
-                value = endDate,
-                placeHolder = "일자를 선택해 주세요",
-                label = "MT 종료일",
-                enabled = false,
-                change = {},
-                modifier = Modifier
-                    .noRippleClickable() {
-                        val minDate = android.icu.util.Calendar.getInstance()
-                        minDate.set(
-                            startDate.split(".")[0].toInt(),
-                            startDate.split(".")[1].toInt() - 1,
-                            startDate.split(".")[2].toInt()
+                readOnly = true,
+                trailingIcon = {
+                    IconButton(onClick = {
+                        showDateRangePicker = true
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_calendar_month_24),
+                            contentDescription = null,
+                            tint = match1,
                         )
-                        DatePicker.showDefault(
-                            context,
-                            minDate.time.time
-                        ) { _, year, month, day ->
-                            endDate = "$year.${month + 1}.$day"
-                        }
                     }
+                }
             )
             DialogTextField(
                 value = title,
@@ -149,7 +128,8 @@ fun MTDialog(
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Number
-                ), keyboardActions = KeyboardActions(
+                ),
+                keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardController?.hide()
                     }
@@ -162,6 +142,82 @@ fun MTDialog(
                         modifier = Modifier.size(18.dp)
                     )
                 }
+            )
+        }
+    }
+
+    if (showDateRangePicker) {
+        val confirmEnabled by remember {
+            derivedStateOf { datePickerState.selectedStartDateMillis != null && datePickerState.selectedEndDateMillis != null }
+        }
+        val colors = DatePickerDefaults.colors(
+            containerColor = match2,
+            titleContentColor = match1,
+            weekdayContentColor = match1,
+            subheadContentColor = match1,
+            headlineContentColor = match1,
+            dayContentColor = match1,
+            selectedDayContainerColor = match1,
+            selectedDayContentColor = match2,
+            todayContentColor = match1,
+            todayDateBorderColor = match1,
+            dayInSelectionRangeContentColor = match2.copy(0.5f),
+            dayInSelectionRangeContainerColor = match1.copy(0.5f),
+            dividerColor = match1
+        )
+        DatePickerDialog(
+            onDismissRequest = { showDateRangePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDateRangePicker = false
+                        startDate = datePickerState.selectedStartDateMillis!!.toDateString()
+                        endDate = datePickerState.selectedEndDateMillis!!.toDateString()
+                    },
+                    enabled = confirmEnabled
+                ) {
+                    DefaultText(
+                        text = "확인",
+                        color = match1,
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDateRangePicker = false
+                    },
+                ) {
+                    DefaultText(
+                        text = "취소",
+                        color = match1,
+                    )
+                }
+            },
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = false
+            ),
+            colors = colors
+        )
+        {
+            DateRangePicker(
+                modifier = Modifier.fillMaxHeight(0.9f),
+                state = datePickerState,
+                title = {
+
+                },
+                headline = {
+                    DefaultText(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 3.dp),
+                        text = "MT 일자 선택",
+                        color = match1,
+                    )
+                },
+                colors = colors,
+                showModeToggle = false
             )
         }
     }

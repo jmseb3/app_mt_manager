@@ -30,11 +30,12 @@ fun DialogTextField(
 ) {
     val color = TextFieldDefaults.outlinedTextFieldColors(
         focusedBorderColor = match1,
-        textColor = match1,
+        focusedTextColor = match1,
         disabledBorderColor = match1,
         disabledTextColor = match1,
         cursorColor = match1,
-        unfocusedBorderColor = match1.copy(alpha = 0.5f)
+        unfocusedBorderColor = match1.copy(alpha = 0.5f),
+        unfocusedTextColor = match1
     )
     OutlinedTextField(
         modifier = modifier,
