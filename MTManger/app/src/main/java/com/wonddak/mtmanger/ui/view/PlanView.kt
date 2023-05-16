@@ -9,6 +9,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -16,6 +17,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.wonddak.mtmanger.R
 import com.wonddak.mtmanger.model.Resource
+import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.MtDataList
 import com.wonddak.mtmanger.room.Plan
 import com.wonddak.mtmanger.ui.theme.maple
@@ -117,17 +120,17 @@ fun PlanView(
     }
     val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
 
-    if (showPlanDialog && planResource is Resource.Success){
+    if (showPlanDialog && planResource is Resource.Success) {
         (planResource as Resource.Success<MtDataList>).data?.let {
             PlanDialog(
-                startDate =it.mtdata.mtStart ,
-                endDate =it.mtdata.mtEnd ,
-                plan =null,
+                startDate = it.mtdata.mtStart,
+                endDate = it.mtdata.mtEnd,
+                plan = null,
                 onDismiss = {
                     showPlanDialog = false
                 },
                 onAdd = { title, day, text ->
-                    mtViewModel.addPlan(title,day,text)
+                    mtViewModel.addPlan(title, day, text)
                     showPlanDialog = false
                 }
             )
@@ -234,9 +237,6 @@ fun PlanCardView(
                 onClick = {
                     showPlanDialog = true
                 },
-                onLongClick = {
-                    showItemDelete = true
-                },
             ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
@@ -250,20 +250,49 @@ fun PlanCardView(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 3.dp)
         ) {
-            IconButton(
-                modifier = Modifier
-                    .size(36.dp)
-                    .align(Alignment.TopEnd),
-                onClick = {
-                    picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                },
+            Row(
+                modifier = Modifier.align(Alignment.TopEnd)
             ) {
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    painter = painterResource(id = R.drawable.add_photo),
-                    contentDescription = null,
-                    tint = match1
-                )
+
+                IconButton(
+                    modifier = Modifier
+                        .size(36.dp),
+                    onClick = {
+                        picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                ) {
+                    AnimatedVisibility(plan.imgBytes == null && plan.imgsrc.isEmpty()) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(id = R.drawable.add_photo),
+                            contentDescription = null,
+                            tint = match1
+                        )
+                    }
+                    AnimatedVisibility(plan.imgBytes != null || plan.imgsrc.isNotEmpty()) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(id = R.drawable.baseline_change_circle_24),
+                            contentDescription = null,
+                            tint = match1
+                        )
+                    }
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(36.dp),
+                    onClick = {
+                        showItemDelete = true
+                    },
+                ) {
+
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(id = R.drawable.baseline_delete_outline_24),
+                        contentDescription = null,
+                        tint = match1
+                    )
+                }
             }
             Column(
                 Modifier.fillMaxWidth(),
@@ -283,11 +312,11 @@ fun PlanCardView(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 val imageModifier = Modifier
-                    .combinedClickable(
+                    .noRippleClickable(
                         onClick = { },
                         onLongClick = {
                             showImgDelete = true
-                        },
+                        }
                     )
                     .fillMaxWidth()
                 if (plan.imgBytes != null) {
