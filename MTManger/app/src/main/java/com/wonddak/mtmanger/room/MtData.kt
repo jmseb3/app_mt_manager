@@ -49,7 +49,7 @@ data class BuyGood(
     val price: Int,
 ) {
     fun getCountString(): String {
-        return count.toPriceString()
+        return count.toPriceString("")
     }
 
     fun getPriceString(): String {

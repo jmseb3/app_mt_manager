@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="match1">#D7C49E</color>
-    <color name="match2">#343148</color>
-<!--    <color name="match2">#8AAAE5</color>-->
-<!--    <color name="match1">#FEFEFE</color>-->
-</resources>
