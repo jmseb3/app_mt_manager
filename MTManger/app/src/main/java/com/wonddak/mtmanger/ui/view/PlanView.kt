@@ -9,7 +9,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -248,7 +247,7 @@ fun PlanCardView(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 3.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Row(
                 modifier = Modifier.align(Alignment.TopEnd)
@@ -261,22 +260,17 @@ fun PlanCardView(
                         picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     },
                 ) {
-                    AnimatedVisibility(plan.imgBytes == null && plan.imgsrc.isEmpty()) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(id = R.drawable.add_photo),
-                            contentDescription = null,
-                            tint = match1
-                        )
+                    val id = if (plan.imgBytes == null && plan.imgsrc.isEmpty()) {
+                        R.drawable.add_photo
+                    } else {
+                        R.drawable.baseline_change_circle_24
                     }
-                    AnimatedVisibility(plan.imgBytes != null || plan.imgsrc.isNotEmpty()) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(id = R.drawable.baseline_change_circle_24),
-                            contentDescription = null,
-                            tint = match1
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(id = id),
+                        contentDescription = null,
+                        tint = match1
+                    )
                 }
                 IconButton(
                     modifier = Modifier

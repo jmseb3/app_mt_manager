@@ -10,7 +10,7 @@ interface MtDataDao {
 //    mtdata 관련
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMtData(mtData: MtData) :Long
+    fun insertMtData(mtData: MtData): Long
 
     @Delete
     fun deleteMtData(mtData: MtData)
@@ -18,17 +18,11 @@ interface MtDataDao {
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
     fun getMtData(): Flow<List<MtData>>
 
-    @Query("SELECT * FROM MtData ORDER BY mtDataId")
-    fun getMtDatadata(): List<MtData>
-
     @Query("SELECT * FROM MtData WHERE mtDataId= :MtDataId")
     fun getMtDataById(MtDataId: Int?): MtData
 
-    @Query("SELECT * FROM MtData WHERE mtTitle= :MtTitle")
-    fun getMtDataByTitle(MtTitle: String): MtData
-
-    @Query("DELETE FROM MtData WHERE mtTitle= :MtTitle")
-    fun deleteMtDataByTitle(MtTitle: String)
+    @Query("DELETE FROM MtData WHERE mtDataId= :mtDataId")
+    fun deleteMtDataById(mtDataId: Int)
 
     @Query("DELETE From MtData")
     fun clearMtDataS()

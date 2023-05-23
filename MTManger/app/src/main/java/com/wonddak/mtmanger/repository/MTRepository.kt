@@ -10,7 +10,6 @@ import com.wonddak.mtmanger.room.Plan
 import com.wonddak.mtmanger.room.categoryList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class MTRepository @Inject constructor(
@@ -28,24 +27,16 @@ class MTRepository @Inject constructor(
     fun getCategoryList() = flow {
         mtDataDao.getCategoryDataList().collect { categoryList ->
             emit(categoryList)
-            Log.i("JWH","get Categort $categoryList")
+            Log.i("JWH", "get Categort $categoryList")
         }
-    }
-
-    suspend fun checkEndDateById(mtId: Int, tempDate: String): Boolean {
-        val transFormat = SimpleDateFormat("yyyy.MM.dd")
-
-        val nowDate = mtDataDao.getMtDataById(mtId)
-
-        val mtEndData = transFormat.parse(nowDate.mtEnd)
-        val mtStartData = transFormat.parse(nowDate.mtStart)
-        val nowCheckData = transFormat.parse(tempDate)
-
-        return (nowCheckData in mtStartData..mtEndData)
     }
 
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
+    }
+
+    fun deleteMtDataById(mtId: Int) {
+        mtDataDao.deleteMtDataById(mtId)
     }
 
     suspend fun insertPerson(person: Person) {

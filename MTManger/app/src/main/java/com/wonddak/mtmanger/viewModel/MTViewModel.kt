@@ -182,6 +182,14 @@ class MTViewModel @Inject constructor(
         return mtRepository.getMtTotalList()
     }
 
+    fun deleteMt(mtDataId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.deleteMtDataById(mtDataId)
+            }
+        }
+    }
+
     fun deletePerson(personId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

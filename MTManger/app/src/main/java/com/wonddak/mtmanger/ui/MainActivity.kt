@@ -257,8 +257,13 @@ fun TopAppBar(
 ) {
     TopAppBar(
         title = {
+            val title = when {
+                mtViewModel.showMtList -> "MT 리스트"
+                mtViewModel.showSetting -> "설정"
+                else -> "MT 매니저"
+            }
             DefaultText(
-                text = "MT 매니저",
+                text = title,
                 color = match1
             )
         },
