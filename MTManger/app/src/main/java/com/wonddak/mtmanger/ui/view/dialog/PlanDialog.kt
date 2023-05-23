@@ -71,7 +71,17 @@ fun PlanDialog(
     var showPlanDatePicker by remember {
         mutableStateOf(false)
     }
+    val startTime = Calendar.getInstance()
+    startTime.set(
+        startDate.split(".")[0].toInt(),
+        startDate.split(".")[1].toInt() - 1,
+        startDate.split(".")[2].toInt(),
+        9,
+        0,
+        0,
+    )
     val planeDatePicker = rememberDatePickerState(
+        initialSelectedDateMillis = startTime.timeInMillis,
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
                 val start = Calendar.getInstance()
@@ -95,7 +105,7 @@ fun PlanDialog(
                 Log.i("JWH", start.timeInMillis.toDateStringInfos())
                 Log.i("JWH", utcTimeMillis.toDateStringInfos())
                 Log.i("JWH", end.timeInMillis.toDateStringInfos())
-                return (start.timeInMillis <= utcTimeMillis && utcTimeMillis <= end.timeInMillis)
+                return (start.timeInMillis <= (utcTimeMillis) && (utcTimeMillis) <= end.timeInMillis)
             }
 
             override fun isSelectableYear(year: Int): Boolean {
