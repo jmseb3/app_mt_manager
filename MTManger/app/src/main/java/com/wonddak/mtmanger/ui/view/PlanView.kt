@@ -10,9 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -165,7 +163,6 @@ fun PlanListView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlanCardView(
     modifier: Modifier = Modifier,
@@ -232,12 +229,11 @@ fun PlanCardView(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .combinedClickable(
+            .noRippleClickable(
                 onClick = {
                     showPlanDialog = true
                 },
-            ),
-        elevation = CardDefaults.cardElevation(
+            ), elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
         ),
         colors = CardDefaults.cardColors(
