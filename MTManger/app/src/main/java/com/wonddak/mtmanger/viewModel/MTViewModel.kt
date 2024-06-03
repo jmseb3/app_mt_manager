@@ -1,9 +1,12 @@
 package com.wonddak.mtmanger.viewModel
 
+import android.app.Activity
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wonddak.mtmanger.BillingModule
+import com.wonddak.mtmanger.di.Billing
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.repository.MTRepository
 import com.wonddak.mtmanger.room.BuyGood
@@ -16,8 +19,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,11 +30,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MTViewModel @Inject constructor(
     private val mtRepository: MTRepository,
-    private val pref: SharedPreferences
+    private val pref: SharedPreferences,
+    private val billing: BillingModule,
 ) : ViewModel() {
-
-    private var _removeAdStatus = MutableStateFlow<Boolean>(false)
-    val removeAdStatus: StateFlow<Boolean> = _removeAdStatus
+    val removeAdStatus
+        get() = billing.removeAddStatus.stateIn(
+            viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = false
+        )
 
     val mainMtId: StateFlow<Int>
         get() = _mainMtId
@@ -85,7 +94,6 @@ class MTViewModel @Inject constructor(
                     Log.i("JWH", "id is $it")
                 }
             }
-
         }
     }
 
@@ -207,14 +215,15 @@ class MTViewModel @Inject constructor(
             }
         }
     }
-    fun addPlan(title: String,day: String,text: String) {
+
+    fun addPlan(title: String, day: String, text: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mtRepository.insertPlan(
                     Plan(
                         null,
                         mainMtId.value,
-                        nowDay =  day,
+                        nowDay = day,
                         nowPlanTitle = title,
                         simpleText = text
                     )
@@ -230,6 +239,7 @@ class MTViewModel @Inject constructor(
             }
         }
     }
+
     fun updatePlanImgByte(planId: Int, imgSrc: ByteArray) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -237,6 +247,7 @@ class MTViewModel @Inject constructor(
             }
         }
     }
+
     fun clearPlanImgSrc(planId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -283,10 +294,10 @@ class MTViewModel @Inject constructor(
                 mtRepository.deleteCategoryById(categoryId)
             }
         }
-
     }
 
-    fun setRemoveAddStatus(show: Boolean) {
-        _removeAdStatus.value = show
+    fun startPay(activity: Activity) {
+        billing.getPay(activity)
     }
+
 }

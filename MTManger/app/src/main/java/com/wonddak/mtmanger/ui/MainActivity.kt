@@ -13,7 +13,6 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,10 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.wonddak.mtmanger.BillingModule
 import com.wonddak.mtmanger.ui.main.BottomNavigationBar
@@ -38,7 +33,6 @@ import com.wonddak.mtmanger.ui.view.AdvertView
 import com.wonddak.mtmanger.ui.view.SplashView
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,9 +40,6 @@ class MainActivity : ComponentActivity() {
     private var backKeyPressedTime: Long = 0
 
     private val mtViewModel: MTViewModel by viewModels()
-
-    @Inject
-    lateinit var billingModule: BillingModule
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -71,15 +62,6 @@ class MainActivity : ComponentActivity() {
         this.onBackPressedDispatcher.addCallback(this, callback)
         val mainmtid: Int = preferences.getInt("id", 0)
         mtViewModel.setMtId(mainmtid)
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                billingModule.removeAddStatus.collect {
-                    mtViewModel.setRemoveAddStatus(it)
-                }
-            }
-        }
-
         setContent {
             MTMangerTheme {
                 val navController = rememberNavController()
@@ -116,7 +98,6 @@ class MainActivity : ComponentActivity() {
                                 NavGraph(
                                     navController = navController,
                                     mtViewModel,
-                                    billingModule
                                 )
                             }
                         }

@@ -25,7 +25,6 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 fun NavGraph(
     navController: NavHostController,
     mtViewModel: MTViewModel,
-    billingModule: BillingModule
 ) {
 
     NavHost(navController = navController, startDestination = Const.HOME) {
@@ -33,8 +32,7 @@ fun NavGraph(
 
         composable(Const.SETTING) {
             SettingView(
-                mtViewModel = mtViewModel,
-                billingModule = billingModule
+                mtViewModel = mtViewModel
             ) {
                 navController.popBackStack()
             }

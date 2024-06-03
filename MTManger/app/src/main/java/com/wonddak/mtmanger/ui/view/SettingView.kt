@@ -54,7 +54,6 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun SettingView(
     mtViewModel: MTViewModel,
-    billingModule: BillingModule,
     close: () -> Unit
 ) {
     val context = LocalContext.current
@@ -193,7 +192,7 @@ fun SettingView(
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    billingModule.getPay(activity)
+                    mtViewModel.startPay(activity)
                 },
                 border = BorderStroke(2.dp, match2),
             ) {
@@ -204,7 +203,7 @@ fun SettingView(
                 onClick = {
                     Intent(Intent.ACTION_SEND).apply {
                         type = "plain/text"
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("jmseb2@gmail.com"))
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf("jmseb2@gmail.com"))
                         putExtra(Intent.EXTRA_SUBJECT, "<MT매니저 관련 문의입니다.>")
                         putExtra(Intent.EXTRA_TEXT, "내용:")
                     }.let { context.startActivity(it) }
