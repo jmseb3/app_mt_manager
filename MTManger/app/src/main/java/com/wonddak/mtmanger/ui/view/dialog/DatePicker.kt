@@ -2,7 +2,6 @@ package com.wonddak.mtmanger.ui.view.dialog
 
 import android.app.DatePickerDialog
 import android.content.Context
-import com.wonddak.mtmanger.R
 import java.util.Calendar
 
 object DatePicker {

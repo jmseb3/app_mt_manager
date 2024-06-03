@@ -2,7 +2,6 @@ package com.wonddak.mtmanger.di
 
 import android.content.Context
 import com.wonddak.mtmanger.room.AppDatabase
-import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.dao.BuyGoodDao
 import com.wonddak.mtmanger.room.dao.CategoryListDao
 import com.wonddak.mtmanger.room.dao.MtDataDao

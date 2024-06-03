@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wonddak.mtmanger.BillingModule
-import com.wonddak.mtmanger.di.Billing
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.repository.MTRepository
 import com.wonddak.mtmanger.room.BuyGood

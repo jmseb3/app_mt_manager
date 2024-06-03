@@ -16,7 +16,6 @@ import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
-import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

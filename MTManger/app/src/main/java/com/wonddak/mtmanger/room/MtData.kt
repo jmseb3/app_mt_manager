@@ -1,6 +1,11 @@
 package com.wonddak.mtmanger.room
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.wonddak.mtmanger.toPriceString
 
 @Entity
