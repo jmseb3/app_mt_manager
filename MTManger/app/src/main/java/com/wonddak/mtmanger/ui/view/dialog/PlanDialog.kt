@@ -39,15 +39,15 @@ fun PlanDialog(
 ) {
 
     var title by remember {
-        mutableStateOf(plan?.nowplantitle ?: "")
+        mutableStateOf(plan?.nowPlanTitle ?: "")
     }
     var date by remember {
-        mutableStateOf(plan?.nowday ?: "")
+        mutableStateOf(plan?.nowDay ?: "")
     }
     val context = LocalContext.current
 
     var planText by remember {
-        mutableStateOf(plan?.simpletext ?: "")
+        mutableStateOf(plan?.simpleText ?: "")
     }
     val focusManager = LocalFocusManager.current
 

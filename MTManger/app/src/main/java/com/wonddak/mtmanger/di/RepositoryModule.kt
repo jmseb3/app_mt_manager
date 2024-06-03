@@ -1,15 +1,14 @@
 package com.wonddak.mtmanger.di
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.wonddak.mtmanger.repository.MTRepository
-import com.wonddak.mtmanger.room.AppDatabase
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.MtDataDao
+import com.wonddak.mtmanger.room.dao.BuyGoodDao
+import com.wonddak.mtmanger.room.dao.CategoryListDao
+import com.wonddak.mtmanger.room.dao.MtDataDao
+import com.wonddak.mtmanger.room.dao.PersonDao
+import com.wonddak.mtmanger.room.dao.PlanDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -20,6 +19,10 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideMtRepository(
-        mtDataDao: MtDataDao
-    ) : MTRepository = MTRepository(mtDataDao)
+        mtDataDao: MtDataDao,
+        buyGoodDao: BuyGoodDao,
+        categoryListDao: CategoryListDao,
+        personDao: PersonDao,
+        planDao: PlanDao,
+    ): MTRepository = MTRepository(mtDataDao, buyGoodDao, categoryListDao, personDao, planDao)
 }

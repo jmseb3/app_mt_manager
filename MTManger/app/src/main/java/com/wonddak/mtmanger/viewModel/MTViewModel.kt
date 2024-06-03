@@ -2,9 +2,6 @@ package com.wonddak.mtmanger.viewModel
 
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wonddak.mtmanger.model.Resource
@@ -217,9 +214,9 @@ class MTViewModel @Inject constructor(
                     Plan(
                         null,
                         mainMtId.value,
-                        nowday =  day,
-                        nowplantitle = title,
-                        simpletext = text
+                        nowDay =  day,
+                        nowPlanTitle = title,
+                        simpleText = text
                     )
                 )
             }

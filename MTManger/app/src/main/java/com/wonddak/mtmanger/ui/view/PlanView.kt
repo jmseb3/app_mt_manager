@@ -269,14 +269,14 @@ fun PlanCardView(
                 Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = plan.nowplantitle,
+                    text = plan.nowPlanTitle,
                     color = match1,
                     fontSize = 23.sp,
                     fontFamily = maple
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = plan.nowday,
+                    text = plan.nowDay,
                     color = match1,
                     fontSize = 15.sp,
                     fontFamily = maple
@@ -302,10 +302,10 @@ fun PlanCardView(
                         contentScale = ContentScale.Fit,
                         alignment = Alignment.Center
                     )
-                } else if (plan.imgsrc.isNotEmpty()) {
+                } else if (plan.imgSrc.isNotEmpty()) {
                     Image(
                         painter = rememberAsyncImagePainter(
-                            model = Uri.parse(plan.imgsrc)  // or ht
+                            model = Uri.parse(plan.imgSrc)  // or ht
                         ),
                         contentDescription = "",
                         modifier = imageModifier,
@@ -314,7 +314,7 @@ fun PlanCardView(
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = plan.simpletext,
+                    text = plan.simpleText,
                     color = match1,
                     fontFamily = maple
                 )
