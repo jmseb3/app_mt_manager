@@ -1,10 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    ext {
-        room_version = "2.5.0"
-        glide_version = "4.14.2"
-    }
-}
 plugins {
     alias(libs.plugins.androidApplication).apply(false)
     alias(libs.plugins.androidLibrary).apply(false)
