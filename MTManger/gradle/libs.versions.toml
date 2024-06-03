@@ -4,7 +4,7 @@ hilt = "2.51.1"
 kotlin = "1.9.24"
 lifecycle = "2.5.1"
 room = "2.6.1"
-billing = "5.0.0"
+billing = "7.0.0"
 datastore = "1.1.1"
 
 [libraries]
