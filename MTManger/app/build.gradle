@@ -2,18 +2,19 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.room)
     id 'kotlin-kapt'
 
 }
 apply from: "../keystore/signing.gradle"
 android {
     namespace = "com.wonddak.mtmanger"
-    compileSdk =  34
+    compileSdk = 34
 
     defaultConfig {
-        applicationId ="com.wonddak.mtmanger"
+        applicationId = "com.wonddak.mtmanger"
         minSdk = 24
-        targetSdk =  33
+        targetSdk = 33
         versionCode = 7
         versionName = "2.0.2"
 
@@ -45,7 +46,7 @@ android {
         jvmTarget = "17"
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.2"
+        kotlinCompilerExtensionVersion "1.5.14"
     }
     namespace "com.wonddak.mtmanger"
     packagingOptions {
@@ -53,6 +54,13 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {
@@ -63,17 +71,20 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation("androidx.navigation:navigation-compose:2.5.1")
+    implementation("io.coil-kt:coil-compose:2.3.0")
 
-    implementation("androidx.room:room-runtime:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
-    implementation("androidx.room:room-ktx:2.5.0")
+    //ADmob
+    implementation("com.google.android.gms:play-services-ads:23.1.0")
+
+    //Room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.google.android.gms:play-services-ads:23.1.0")
-    implementation("io.coil-kt:coil-compose:2.3.0")
 
     //Billing
     implementation(libs.billing)
