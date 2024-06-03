@@ -36,10 +36,9 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun MtListView(
     mtViewModel: MTViewModel,
+    close :() -> Unit
 ) {
-    BackHandler() {
-        mtViewModel.showMtList = false
-    }
+    BackHandler { close() }
     val context = LocalContext.current
     val mtList by mtViewModel.getMtTotalLIst().collectAsState(initial = emptyList())
     Column(
@@ -83,7 +82,7 @@ fun MtListView(
                         )
                             .show()
                         mtViewModel.setMtId(mtdata.mtDataId!!)
-                        mtViewModel.showMtList = false
+                        close()
                     }
                     Divider(
                         color = match2

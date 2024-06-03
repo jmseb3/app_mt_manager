@@ -31,9 +31,6 @@ class MTViewModel @Inject constructor(
     private val pref: SharedPreferences
 ) : ViewModel() {
 
-    var showSetting by mutableStateOf(false)
-    var showMtList by mutableStateOf(false)
-
     private var _removeAdStatus = MutableStateFlow<Boolean>(false)
     val removeAdStatus: StateFlow<Boolean> = _removeAdStatus
 

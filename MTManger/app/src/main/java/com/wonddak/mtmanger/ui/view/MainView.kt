@@ -33,6 +33,7 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun MainView(
     mtViewModel: MTViewModel,
+    showMTList :() -> Unit
 ) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     var showAddDialog by remember {
@@ -184,7 +185,7 @@ fun MainView(
                     }
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { mtViewModel.showMtList = true },
+                        onClick = { showMTList() },
                         border = BorderStroke(2.dp, match2),
                     ) {
                         DefaultText(text = "MT 목록")

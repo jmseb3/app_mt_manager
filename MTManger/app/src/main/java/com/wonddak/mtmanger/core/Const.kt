@@ -1,22 +1,18 @@
 package com.wonddak.mtmanger.core
 
 object Const {
-    object pref{
+    object pref {
         const val name = "mainMT"
-        const val id ="id"
+        const val id = "id"
     }
 
-    object Dialog {
-        const val Title = "dialog_title"
-        const val FEE = "dialog_fee"
-        const val Start = "dialog_start"
-        const val End = "dialog_end"
-        const val Text = "dialog_text"
-    }
+    const val HOME = "home"
+    const val MAIN = "nav_main"
+    const val PERSON = "nav_person"
+    const val BUY = "nav_buy"
+    const val PLAN = "nav_plan"
 
-    const val Main = "main_bot"
-    const val Person = "person_bot"
-    const val Buy = "buy_bot"
-    const val Plan = "plan_bot"
+    const val SETTING = "nav_setting"
+    const val MT_LIST = "nav_mt_list"
 
 }

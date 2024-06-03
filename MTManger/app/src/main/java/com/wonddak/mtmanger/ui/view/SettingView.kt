@@ -54,15 +54,16 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun SettingView(
     mtViewModel: MTViewModel,
-    billingModule: BillingModule
+    billingModule: BillingModule,
+    close: () -> Unit
 ) {
     val context = LocalContext.current
     val activity = context as Activity
     var focusId by remember {
         mutableStateOf(-1)
     }
-    BackHandler() {
-        mtViewModel.showSetting = false
+    BackHandler {
+        close()
     }
     Column(
         Modifier
