@@ -19,12 +19,8 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".ui.SplashActivity"
             android:exported="true"
-            android:taskAffinity=".FLAG_ACTIVITY_NO_HISTORY">
+            android:windowSoftInputMode="adjustNothing" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

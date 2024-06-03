@@ -29,6 +29,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -54,6 +57,7 @@ import com.wonddak.mtmanger.ui.view.MtListView
 import com.wonddak.mtmanger.ui.view.PersonView
 import com.wonddak.mtmanger.ui.view.PlanView
 import com.wonddak.mtmanger.ui.view.SettingView
+import com.wonddak.mtmanger.ui.view.SplashView
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.viewModel.MTViewModel
@@ -107,52 +111,64 @@ class MainActivity : ComponentActivity() {
         setContent {
             MTMangerTheme {
                 val navController = rememberNavController()
+                var showSplash by remember {
+                    mutableStateOf(true)
+                }
 
-                Scaffold(
-                    topBar = {
-                        TopAppBar(mtViewModel = mtViewModel)
-                    },
-                    bottomBar = {
-                        AnimatedVisibility(
-                            !mtViewModel.showSetting && !mtViewModel.showMtList,
-                            enter = expandVertically(),
-                            exit = shrinkVertically(),
-                        ) {
-                            BottomNavigationBar(navController = navController)
-                        }
-                    },
-                    containerColor = match1
-                ) {
-                    Box(Modifier.padding(it)) {
-                        Column {
-                            val removeAd by mtViewModel.removeAdStatus.collectAsState(true)
-                            if (!removeAd) {
-                                AdvertView()
-                            }
+                if (showSplash) {
+                    SplashView() {
+                        showSplash = false
+                    }
+                } else {
+                    Scaffold(
+                        topBar = {
+                            TopAppBar(mtViewModel = mtViewModel)
+                        },
+                        bottomBar = {
                             AnimatedVisibility(
                                 !mtViewModel.showSetting && !mtViewModel.showMtList,
-                                enter = fadeIn(),
-                                exit = fadeOut()
+                                enter = expandVertically(),
+                                exit = shrinkVertically(),
                             ) {
-                                NavGraph(
-                                    navController = navController,
-                                    mtViewModel
+                                BottomNavigationBar(navController = navController)
+                            }
+                        },
+                        containerColor = match1
+                    ) {
+                        Box(Modifier.padding(it)) {
+                            Column {
+                                val removeAd by mtViewModel.removeAdStatus.collectAsState(true)
+                                if (!removeAd) {
+                                    AdvertView()
+                                }
+                                AnimatedVisibility(
+                                    !mtViewModel.showSetting && !mtViewModel.showMtList,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
+                                    NavGraph(
+                                        navController = navController,
+                                        mtViewModel
+                                    )
+                                }
+                            }
+                            AnimatedVisibility(
+                                mtViewModel.showMtList,
+                                enter = expandHorizontally(),
+                                exit = shrinkHorizontally()
+                            ) {
+                                MtListView(mtViewModel = mtViewModel)
+                            }
+                            AnimatedVisibility(
+                                mtViewModel.showSetting,
+                                enter = expandHorizontally(),
+                                exit = shrinkHorizontally()
+                            ) {
+                                SettingView(
+                                    mtViewModel = mtViewModel,
+                                    billingModule = billingModule
                                 )
                             }
-                        }
-                        AnimatedVisibility(
-                            mtViewModel.showMtList,
-                            enter = expandHorizontally(),
-                            exit = shrinkHorizontally()
-                        ) {
-                            MtListView(mtViewModel = mtViewModel)
-                        }
-                        AnimatedVisibility(
-                            mtViewModel.showSetting,
-                            enter = expandHorizontally(),
-                            exit = shrinkHorizontally()
-                        ) {
-                            SettingView(mtViewModel = mtViewModel, billingModule = billingModule)
                         }
                     }
                 }
