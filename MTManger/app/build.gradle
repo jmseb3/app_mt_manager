@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.room)
-    id 'kotlin-kapt'
+    alias(libs.plugins.compose.compiler)
+    id("kotlin-kapt")
 
 }
 apply from: "../keystore/signing.gradle"
@@ -15,8 +16,8 @@ android {
         applicationId = "com.wonddak.mtmanger"
         minSdk = 24
         targetSdk = 34
-        versionCode = 7
-        versionName = "2.0.2"
+        versionCode = 8
+        versionName = "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -45,10 +46,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion "1.5.14"
-    }
-    namespace "com.wonddak.mtmanger"
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
