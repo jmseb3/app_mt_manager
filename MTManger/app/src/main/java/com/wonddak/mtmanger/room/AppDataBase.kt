@@ -14,9 +14,9 @@ import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 
 @Database(
-    entities = [MtData::class, Person::class,BuyGood::class,categoryList::class,Plan::class],
-    version = 6,
-    exportSchema = false
+    entities = [MtData::class, Person::class, BuyGood::class, categoryList::class, Plan::class],
+    version = 7,
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -34,6 +34,14 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE Plan ADD COLUMN imgBytes BLOB")
             }
         }
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_Person_mtId` ON `Person` (`mtId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_BuyGood_mtId` ON `BuyGood` (`mtId`)")
+                database.execSQL("CREATE INDEX IF NOT EXISTS `index_Plan_mtId` ON `Plan` (`mtId`)")
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
@@ -42,6 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "MtDatabaase.db"
                 ).createFromAsset("categoryList.db")
                     .addMigrations(MIGRATION_5_6)
+                    .addMigrations(MIGRATION_6_7)
                     .build()
             }
             return INSTANCE as AppDatabase

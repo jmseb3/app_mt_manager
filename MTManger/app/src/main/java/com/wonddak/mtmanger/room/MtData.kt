@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.wonddak.mtmanger.toPriceString
@@ -25,6 +26,9 @@ data class MtData(
             childColumns = arrayOf("mtId"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["mtId"])
     ]
 )
 data class Person(
@@ -43,6 +47,9 @@ data class Person(
             childColumns = arrayOf("mtId"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["mtId"])
     ]
 )
 data class BuyGood(
@@ -77,6 +84,9 @@ data class BuyGood(
             childColumns = arrayOf("mtId"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["mtId"])
     ]
 )
 data class Plan(
