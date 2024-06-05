@@ -180,8 +180,8 @@ fun PlanCardView(
             // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
-                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                context.contentResolver.takePersistableUriPermission(uri, flag)
+//                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+//                context.contentResolver.takePersistableUriPermission(uri, flag)
                 mtViewModel.updatePlanImgSrc(
                     plan.planId!!,
                     uri.toString()
