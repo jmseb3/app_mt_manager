@@ -1,8 +1,26 @@
 package com.wonddak.mtmanger
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.wonddak.mtmanger.di.billingModule
+import com.wonddak.mtmanger.di.configModule
+import com.wonddak.mtmanger.di.dataBaseModule
+import com.wonddak.mtmanger.di.repositoryModule
+import com.wonddak.mtmanger.di.viewmodelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
-@HiltAndroidApp
-class MtManagerApplication :Application(){
+class MtManagerApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            // Log Koin into Android logger
+            androidLogger()
+            // Reference Android context
+            androidContext(this@MtManagerApplication)
+            // Load modules
+            modules(billingModule + configModule + dataBaseModule + repositoryModule + viewmodelModule)
+        }
+    }
 }

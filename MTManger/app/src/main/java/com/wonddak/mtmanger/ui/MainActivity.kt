@@ -31,17 +31,14 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.AdvertView
 import com.wonddak.mtmanger.ui.view.SplashView
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private var backKeyPressedTime: Long = 0
 
-    private val mtViewModel: MTViewModel by viewModels()
-
-    @Inject
-    lateinit var preferences: SharedPreferences
+    private val mtViewModel: MTViewModel by viewModel()
+    private val preferences: SharedPreferences by inject()
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
