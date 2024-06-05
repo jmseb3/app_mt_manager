@@ -31,8 +31,8 @@ fun TopAppContent(
                 color = match1
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = match2
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = match2,
         ),
         actions = {
             AnimatedVisibility(visible = currentRoute != Const.MT_LIST) {
