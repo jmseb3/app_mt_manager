@@ -118,17 +118,19 @@ fun MTDialog(
                 change = {},
                 modifier = Modifier
                     .noRippleClickable() {
-                        val minDate = android.icu.util.Calendar.getInstance()
-                        minDate.set(
-                            startDate.split(".")[0].toInt(),
-                            startDate.split(".")[1].toInt() - 1,
-                            startDate.split(".")[2].toInt()
-                        )
-                        DatePicker.showDefault(
-                            context,
-                            minDate.time.time
-                        ) { _, year, month, day ->
-                            endDate = "$year.${month + 1}.$day"
+                        if(startDate.isNotEmpty()) {
+                            val minDate = android.icu.util.Calendar.getInstance()
+                            minDate.set(
+                                startDate.split(".")[0].toInt(),
+                                startDate.split(".")[1].toInt() - 1,
+                                startDate.split(".")[2].toInt()
+                            )
+                            DatePicker.showDefault(
+                                context,
+                                minDate.time.time
+                            ) { _, year, month, day ->
+                                endDate = "$year.${month + 1}.$day"
+                            }
                         }
                     }
             )

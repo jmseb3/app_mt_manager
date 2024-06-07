@@ -24,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +41,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.wonddak.mtmanger.BillingModule
 import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
@@ -54,15 +54,15 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun SettingView(
     mtViewModel: MTViewModel,
-    billingModule: BillingModule
+    close: () -> Unit
 ) {
     val context = LocalContext.current
     val activity = context as Activity
     var focusId by remember {
         mutableStateOf(-1)
     }
-    BackHandler() {
-        mtViewModel.showSetting = false
+    BackHandler {
+        close()
     }
     Column(
         Modifier
@@ -84,7 +84,7 @@ fun SettingView(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .height(4.dp)
                     .clip(RoundedCornerShape(4.dp)),
@@ -192,7 +192,7 @@ fun SettingView(
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    billingModule.getPay(activity)
+                    mtViewModel.startPay(activity)
                 },
                 border = BorderStroke(2.dp, match2),
             ) {
@@ -203,7 +203,7 @@ fun SettingView(
                 onClick = {
                     Intent(Intent.ACTION_SEND).apply {
                         type = "plain/text"
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("jmseb2@gmail.com"))
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf("jmseb2@gmail.com"))
                         putExtra(Intent.EXTRA_SUBJECT, "<MT매니저 관련 문의입니다.>")
                         putExtra(Intent.EXTRA_TEXT, "내용:")
                     }.let { context.startActivity(it) }

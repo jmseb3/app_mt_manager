@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,7 +77,7 @@ fun BuyView(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .height(4.dp)
                     .clip(RoundedCornerShape(4.dp)),
@@ -122,7 +123,7 @@ fun BuyGoodPanel(
                     .wrapContentHeight()
             ) {
                 Spacer(modifier = Modifier.height(5.dp))
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .height(4.dp)
                         .clip(RoundedCornerShape(4.dp)),
@@ -286,7 +287,7 @@ fun BuyItemList(
                             itemsIndexed(buyGoodList) { index, buyGood ->
                                 BuyItemView(buyGood, mtViewModel)
                                 if (index != buyGoodList.size - 1) {
-                                    Divider(
+                                    HorizontalDivider(
                                         color = match2
                                     )
                                 }

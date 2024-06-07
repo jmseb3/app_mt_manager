@@ -2,7 +2,6 @@ package com.wonddak.mtmanger.ui.view.dialog
 
 import android.app.DatePickerDialog
 import android.content.Context
-import com.wonddak.mtmanger.R
 import java.util.Calendar
 
 object DatePicker {
@@ -16,7 +15,7 @@ object DatePicker {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         DatePickerDialog(
-            context, R.style.DatePicker, onDateSetListener, year, month, day
+            context, 0, onDateSetListener, year, month, day
         ).show()
     }
 
@@ -32,7 +31,7 @@ object DatePicker {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val picker = DatePickerDialog(
-            context, R.style.DatePicker, onDateSetListener, year, month, day
+            context, 0, onDateSetListener, year, month, day
         )
         picker.datePicker.apply {
             this.minDate = minDate
@@ -52,7 +51,7 @@ object DatePicker {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val picker = DatePickerDialog(
-            context, R.style.DatePicker, onDateSetListener, year, month, day
+            context, 0, onDateSetListener, year, month, day
         )
         picker.datePicker.apply {
             this.minDate = minDate

@@ -4,6 +4,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,9 +29,10 @@ fun DialogTextField(
     singleLine: Boolean = true,
     change: (value: String) -> Unit
 ) {
-    val color = TextFieldDefaults.outlinedTextFieldColors(
+    val color = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = match1,
-        textColor = match1,
+        focusedTextColor = match1,
+        unfocusedTextColor = match1,
         disabledBorderColor = match1,
         disabledTextColor = match1,
         cursorColor = match1,

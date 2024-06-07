@@ -1,6 +1,12 @@
 package com.wonddak.mtmanger.room
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import androidx.room.Relation
 import com.wonddak.mtmanger.toPriceString
 
 @Entity
@@ -20,6 +26,9 @@ data class MtData(
             childColumns = arrayOf("mtId"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["mtId"])
     ]
 )
 data class Person(
@@ -38,6 +47,9 @@ data class Person(
             childColumns = arrayOf("mtId"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["mtId"])
     ]
 )
 data class BuyGood(
@@ -72,15 +84,22 @@ data class BuyGood(
             childColumns = arrayOf("mtId"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["mtId"])
     ]
 )
 data class Plan(
     @PrimaryKey(autoGenerate = true) val planId: Int?,
     val mtId: Int,
-    val nowday: String = "",
-    val nowplantitle: String = "",
-    val simpletext: String = "",
-    val imgsrc: String = "",
+    @ColumnInfo(name = "nowday")
+    val nowDay: String = "",
+    @ColumnInfo(name = "nowplantitle")
+    val nowPlanTitle: String = "",
+    @ColumnInfo(name = "simpletext")
+    val simpleText: String = "",
+    @ColumnInfo(name = "imgsrc")
+    val imgSrc: String = "",
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     val imgBytes: ByteArray? = null
 )
@@ -111,31 +130,3 @@ data class categoryList(
     val id: Int?,
     val name: String
 )
-
-fun getDummyData(): MtDataList {
-    val mtData = MtData(1, "test", 100000, "2023.05.05", "2023.05.06")
-    val person = Person(
-        1,
-        1,
-        "person",
-        "010-7183-7659",
-        5000
-    )
-    val buyGood = BuyGood(
-        1,
-        1,
-        "test",
-        "good",
-        3, 500
-    )
-    val plan = Plan(
-        1,
-        1,
-    )
-    return MtDataList(
-        mtData,
-        listOf(person, person),
-        listOf(buyGood, buyGood),
-        listOf(plan, plan)
-    )
-}

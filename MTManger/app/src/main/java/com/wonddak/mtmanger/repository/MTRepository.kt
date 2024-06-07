@@ -4,17 +4,25 @@ import android.util.Log
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.MtDataDao
 import com.wonddak.mtmanger.room.Person
 import com.wonddak.mtmanger.room.Plan
 import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.room.dao.BuyGoodDao
+import com.wonddak.mtmanger.room.dao.CategoryListDao
+import com.wonddak.mtmanger.room.dao.MtDataDao
+import com.wonddak.mtmanger.room.dao.PersonDao
+import com.wonddak.mtmanger.room.dao.PlanDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class MTRepository @Inject constructor(
-    val mtDataDao: MtDataDao
+    private val mtDataDao: MtDataDao,
+    private val buyGoodDao: BuyGoodDao,
+    private val categoryListDao: CategoryListDao,
+    private val personDao: PersonDao,
+    private val planDao: PlanDao
 ) {
 
     fun getMtDataList(id: Int) = flow {
@@ -26,9 +34,9 @@ class MTRepository @Inject constructor(
     }
 
     fun getCategoryList() = flow {
-        mtDataDao.getCategoryDataList().collect { categoryList ->
+        categoryListDao.getCategoryDataList().collect { categoryList ->
             emit(categoryList)
-            Log.i("JWH","get Categort $categoryList")
+            Log.i("JWH", "get Categort $categoryList")
         }
     }
 
@@ -49,59 +57,59 @@ class MTRepository @Inject constructor(
     }
 
     suspend fun insertPerson(person: Person) {
-        mtDataDao.insertPerson(person)
+        personDao.insertPerson(person)
     }
 
     suspend fun clearPerson(mtId: Int) {
-        mtDataDao.clearPersons(mtId)
+        personDao.clearPersons(mtId)
     }
 
     suspend fun deletePersonById(personId: Int) {
-        mtDataDao.deletePersonById(personId)
+        personDao.deletePersonById(personId)
     }
 
     suspend fun insertBuyGood(buyGood: BuyGood) {
-        mtDataDao.insertBuyGood(buyGood)
+        buyGoodDao.insertBuyGood(buyGood)
     }
 
     suspend fun clearBuyGood(mtId: Int) {
-        mtDataDao.clearBuyGoods(mtId)
+        buyGoodDao.clearBuyGoods(mtId)
     }
 
     suspend fun deleteBuyGoodById(buyGoodId: Int) {
-        mtDataDao.deleteBuyGoodById(buyGoodId)
+        buyGoodDao.deleteBuyGoodById(buyGoodId)
     }
 
     suspend fun insertPlan(plan: Plan) {
-        mtDataDao.insertPlan(plan)
+        planDao.insertPlan(plan)
     }
 
     suspend fun updatePlanImgSrcById(planId: Int, imgSrc: String = "") {
-        mtDataDao.updatePlanbyid(planId, imgSrc)
+        planDao.updatePlanById(planId, imgSrc)
     }
 
     suspend fun updatePlanImgBytesById(planId: Int, img: ByteArray) {
-        mtDataDao.updateImgBytePlanById(planId, img)
+        planDao.updateImgBytePlanById(planId, img)
     }
 
     suspend fun clearPlanImgById(planId: Int) {
-        mtDataDao.clearPlanImgById(planId)
+        planDao.clearPlanImgById(planId)
     }
 
     suspend fun updatePlanById(planId: Int, day: String, title: String, text: String) {
-        mtDataDao.updatePlandialogbyid(planId, day, title, text)
+        planDao.updatePlanDialogById(planId, day, title, text)
     }
 
     suspend fun deletePlanById(planId: Int) {
-        mtDataDao.deletePlanById(planId)
+        planDao.deletePlanById(planId)
     }
 
-    suspend fun insertCategory(categoryList: categoryList){
-        mtDataDao.insertCategory(categoryList)
+    suspend fun insertCategory(categoryList: categoryList) {
+        categoryListDao.insertCategory(categoryList)
     }
 
-    suspend fun deleteCategoryById(categoryId:Int) {
-        mtDataDao.deleteCategoryById(categoryId)
+    suspend fun deleteCategoryById(categoryId: Int) {
+        categoryListDao.deleteCategoryById(categoryId)
     }
 
     fun getMtTotalList(): Flow<List<MtData>> {

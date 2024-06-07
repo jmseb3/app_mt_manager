@@ -1,26 +1,12 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.MTManger" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/match2</item>
-        <item name="colorPrimaryVariant">@color/match2</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/match1</item>
-        <item name="colorSecondaryVariant">@color/match2</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="windowNoTitle">true</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.MTManger" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
-
-    <style name="DatePicker" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/match2</item>
-        <item name="colorControlActivated">@color/match2</item>
-        <item name="colorControlHighlight">@color/match1</item>
-        <item name="android:windowBackground">@color/match1</item>
-    </style>
 
 </resources>

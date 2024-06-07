@@ -29,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -88,7 +89,7 @@ fun PlanView(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .height(4.dp)
                     .clip(RoundedCornerShape(4.dp)),
@@ -179,8 +180,8 @@ fun PlanCardView(
             // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
-                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                context.contentResolver.takePersistableUriPermission(uri, flag)
+//                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+//                context.contentResolver.takePersistableUriPermission(uri, flag)
                 mtViewModel.updatePlanImgSrc(
                     plan.planId!!,
                     uri.toString()
@@ -269,14 +270,14 @@ fun PlanCardView(
                 Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = plan.nowplantitle,
+                    text = plan.nowPlanTitle,
                     color = match1,
                     fontSize = 23.sp,
                     fontFamily = maple
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = plan.nowday,
+                    text = plan.nowDay,
                     color = match1,
                     fontSize = 15.sp,
                     fontFamily = maple
@@ -302,10 +303,10 @@ fun PlanCardView(
                         contentScale = ContentScale.Fit,
                         alignment = Alignment.Center
                     )
-                } else if (plan.imgsrc.isNotEmpty()) {
+                } else if (plan.imgSrc.isNotEmpty()) {
                     Image(
                         painter = rememberAsyncImagePainter(
-                            model = Uri.parse(plan.imgsrc)  // or ht
+                            model = Uri.parse(plan.imgSrc)  // or ht
                         ),
                         contentDescription = "",
                         modifier = imageModifier,
@@ -314,7 +315,7 @@ fun PlanCardView(
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = plan.simpletext,
+                    text = plan.simpleText,
                     color = match1,
                     fontFamily = maple
                 )

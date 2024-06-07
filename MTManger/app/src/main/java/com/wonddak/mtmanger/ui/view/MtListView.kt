@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,10 +37,9 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun MtListView(
     mtViewModel: MTViewModel,
+    close :() -> Unit
 ) {
-    BackHandler() {
-        mtViewModel.showMtList = false
-    }
+    BackHandler { close() }
     val context = LocalContext.current
     val mtList by mtViewModel.getMtTotalLIst().collectAsState(initial = emptyList())
     Column(
@@ -83,9 +83,9 @@ fun MtListView(
                         )
                             .show()
                         mtViewModel.setMtId(mtdata.mtDataId!!)
-                        mtViewModel.showMtList = false
+                        close()
                     }
-                    Divider(
+                    HorizontalDivider(
                         color = match2
                     )
                 }
