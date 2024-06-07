@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 class MTViewModel(
     private val mtRepository: MTRepository,
@@ -294,7 +293,7 @@ class MTViewModel(
     }
 
     fun startPay(activity: Activity) {
-        billing.getPay(activity)
+        billing.purchaseRemoveAdRequest(activity)
     }
 
 }
