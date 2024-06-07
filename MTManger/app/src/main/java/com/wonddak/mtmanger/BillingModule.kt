@@ -55,8 +55,12 @@ class BillingModule(
                 Log.i(TAG, "연결성공")
                 if (billingResult.responseCode == BillingResponseCode.OK) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        queryPurchase()
-                        querySkuDetails()
+                        launch {
+                            queryPurchase()
+                        }
+                        launch {
+                            querySkuDetails()
+                        }
                     }
                 }
             }
@@ -183,7 +187,6 @@ class BillingModule(
 
     private suspend fun handlePurchase(purchase: Purchase) {
         Log.i(TAG, purchase.products.toString())
-        purchase.products.first().makeToast()
         if (purchase.products.contains(REMOVE_ADS)) {
             handleRemoveAd(purchase)
         }
@@ -191,10 +194,8 @@ class BillingModule(
 
     private suspend fun handleRemoveAd(purchase: Purchase) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-            "광고제거 구매 완료됨".makeToast()
             if (!purchase.isAcknowledged) {
                 //확인이 되지 않은 경우
-                "확인이 아직 되지 않음".makeToast()
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
                 withContext(Dispatchers.IO) {
