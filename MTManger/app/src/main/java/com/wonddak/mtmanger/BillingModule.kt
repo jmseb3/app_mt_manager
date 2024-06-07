@@ -3,6 +3,8 @@ package com.wonddak.mtmanger
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClientStateListener
@@ -39,7 +41,6 @@ class BillingModule(
         .build()
 
     private var productDetailsList: List<ProductDetails> = mutableListOf()
-    private lateinit var consumeListener: ConsumeResponseListener
 
     var removeAddStatus = MutableStateFlow(false)
 
@@ -64,7 +65,7 @@ class BillingModule(
     /**
      * 기존 구매 목록 처리
      */
-    fun queryPurchase() {
+    private suspend fun queryPurchase() {
         if (!billingClient.isReady) {
             Log.e(TAG, "queryPurchases: BillingClient is not ready")
         }
@@ -75,25 +76,19 @@ class BillingModule(
         billingClient.queryPurchasesAsync(
             queryPurchasesParams
         ) { billingResult, purchaseList ->
-            if (billingResult.responseCode == BillingResponseCode.OK) {
-                if (purchaseList.isNotEmpty()) {
-                    purchaseList.forEach {
-                        Log.i(TAG, it.products.toString())
-                        if (it.products.contains(REMOVE_ADS)) {
-                            if (it.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                                removeAddStatus.value = true
-                            }
-                            Log.i(TAG, it.purchaseState.toString())
-                            Log.i(TAG, it.purchaseTime.toString())
+            CoroutineScope(Dispatchers.Main).launch {
+                if (billingResult.responseCode == BillingResponseCode.OK) {
+                    if (purchaseList.isNotEmpty()) {
+                        purchaseList.forEach {
+                            handlePurchase(it)
                         }
-                        Log.i(TAG, "광고제거 상태 : ${removeAddStatus.value}")
+                    } else {
+                        Log.i(TAG, "items : empty")
                     }
-                } else {
-                    Log.i(TAG, "items : empty")
-                }
 
-            } else {
-                Log.e(TAG, billingResult.debugMessage)
+                } else {
+                    Log.e(TAG, billingResult.debugMessage)
+                }
             }
         }
     }
@@ -102,7 +97,7 @@ class BillingModule(
      * 구매 가능 목록 호출
      * 필요하다면 API 구분 필요
      * */
-    suspend fun querySkuDetails() {
+    private suspend fun querySkuDetails() {
         val productList = listOf(
             QueryProductDetailsParams.Product.newBuilder()
                 .setProductId(REMOVE_ADS)
@@ -161,12 +156,16 @@ class BillingModule(
             }
         } else if (billingResult.responseCode == BillingResponseCode.USER_CANCELED) {
             // 유저 취소 errorcode
+            "상품 주문 취소"
         } else {
             // 에러
+            "구매 요청 실패"
         }
     }
 
-    private suspend fun handlePurchase(purchase: Purchase) {
+    //소비성 결제인경우
+    //현재 앱은 해당사항이 없다.
+    private suspend fun makeConsume(purchase: Purchase) {
         val consumeParams = ConsumeParams.newBuilder()
             .setPurchaseToken(purchase.purchaseToken)
             .build()
@@ -175,12 +174,31 @@ class BillingModule(
             billingClient.consumePurchase(consumeParams)
         }
         Log.d(TAG, "$consumeResult")
+    }
+
+    private suspend fun handlePurchase(purchase: Purchase) {
+        Log.i(TAG, purchase.products.toString())
         if (purchase.products.contains(REMOVE_ADS)) {
-            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            handleRemoveAd(purchase)
+        }
+    }
+
+    private suspend fun handleRemoveAd(purchase: Purchase) {
+
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                withContext(Dispatchers.IO) {
+                    billingClient.acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
+                        if (billingResult.responseCode == BillingResponseCode.OK) {
+
+                        }
+                    }
+                }
+            } else {
                 removeAddStatus.value = true
             }
-            Log.i(TAG, purchase.purchaseState.toString())
-            Log.i(TAG, purchase.purchaseTime.toString())
         }
         Log.i(TAG, "광고제거 상태 : ${removeAddStatus.value}")
     }
