@@ -3,6 +3,7 @@ package com.wonddak.mtmanger
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener
 import com.android.billingclient.api.BillingClient
@@ -156,11 +157,15 @@ class BillingModule(
             }
         } else if (billingResult.responseCode == BillingResponseCode.USER_CANCELED) {
             // 유저 취소 errorcode
-            "상품 주문 취소"
+            "상품 주문 취소".makeToast()
         } else {
             // 에러
-            "구매 요청 실패"
+            "구매 요청 실패".makeToast()
         }
+    }
+
+    private fun String.makeToast() {
+        Toast.makeText(context,this,Toast.LENGTH_SHORT).show()
     }
 
     //소비성 결제인경우
@@ -178,16 +183,18 @@ class BillingModule(
 
     private suspend fun handlePurchase(purchase: Purchase) {
         Log.i(TAG, purchase.products.toString())
+        purchase.products.first().makeToast()
         if (purchase.products.contains(REMOVE_ADS)) {
             handleRemoveAd(purchase)
         }
     }
 
     private suspend fun handleRemoveAd(purchase: Purchase) {
-
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            "광고제거 구매 완료됨".makeToast()
             if (!purchase.isAcknowledged) {
                 //확인이 되지 않은 경우
+                "확인이 아직 되지 않음".makeToast()
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
                 withContext(Dispatchers.IO) {
@@ -201,6 +208,5 @@ class BillingModule(
                 removeAddStatus.value = true
             }
         }
-        Log.i(TAG, "광고제거 상태 : ${removeAddStatus.value}")
     }
 }
