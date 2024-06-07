@@ -187,12 +187,13 @@ class BillingModule(
 
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (!purchase.isAcknowledged) {
+                //확인이 되지 않은 경우
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
                 withContext(Dispatchers.IO) {
                     billingClient.acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
                         if (billingResult.responseCode == BillingResponseCode.OK) {
-
+                            removeAddStatus.value = true
                         }
                     }
                 }
