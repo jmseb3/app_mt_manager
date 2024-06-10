@@ -2,7 +2,6 @@ package com.wonddak.mtmanger.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
@@ -11,6 +10,7 @@ import com.wonddak.mtmanger.room.dao.CategoryListDao
 import com.wonddak.mtmanger.room.dao.MtDataDao
 import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
+import com.wonddak.mtmanger.room.entity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
@@ -41,7 +41,8 @@ private val MIGRATION_6_7 = object : Migration(6, 7) {
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_Plan_mtId` ON `Plan` (`mtId`)")
     }
 }
-expect fun getDatabaseBuilder() : RoomDatabase.Builder<AppDatabase>
+
+expect fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase>
 
 fun getRoomDatabase(): AppDatabase {
     return getDatabaseBuilder()

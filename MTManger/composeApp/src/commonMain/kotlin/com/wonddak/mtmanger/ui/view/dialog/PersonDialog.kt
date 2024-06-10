@@ -21,8 +21,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.wonddak.mtmanger.room.Person
-import com.wonddak.mtmanger.room.SimplePerson
+import com.wonddak.mtmanger.room.entity.*
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogBase

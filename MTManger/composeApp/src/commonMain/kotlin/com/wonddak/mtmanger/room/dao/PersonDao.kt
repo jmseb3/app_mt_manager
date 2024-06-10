@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.wonddak.mtmanger.room.Person
+import com.wonddak.mtmanger.room.entity.Person
 
 @Dao
 interface PersonDao {

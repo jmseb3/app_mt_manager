@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.BuyGood
-import com.wonddak.mtmanger.room.MtDataList
+import com.wonddak.mtmanger.room.entity.BuyGood
+import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
@@ -201,13 +201,8 @@ fun BuyGoodPanel(
             onDismiss = {
                 showAddDialog = false
             },
-            onAdd = { category, name, count, price ->
-                mtViewModel.insertBuyGood(
-                    category,
-                    name,
-                    count.toInt(),
-                    price.toInt()
-                )
+            onAdd = { data ->
+                mtViewModel.insertBuyGood(data)
                 showAddDialog = false
             }
         )
@@ -238,7 +233,6 @@ fun BuyItemList(
                     .padding(vertical = 5.dp)
 
             ) {
-                val weight1 = Modifier.weight(1f)
                 listOf(
                     "분류",
                     "이름",
@@ -247,7 +241,7 @@ fun BuyItemList(
                     "합"
                 ).forEach {title ->
                     BuyGoodItemText(
-                        weight1,
+                        Modifier.weight(1f),
                         color = match1,
                         text = title
                     )
@@ -313,27 +307,12 @@ fun BuyItemView(
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val weight1 = Modifier.weight(1f)
-        BuyGoodItemText(
-            weight1,
-            text = buyGood.category
-        )
-        BuyGoodItemText(
-            weight1,
-            text = buyGood.name
-        )
-        BuyGoodItemText(
-            weight1,
-            text = buyGood.getCountString()
-        )
-        BuyGoodItemText(
-            weight1,
-            text = buyGood.getPriceString()
-        )
-        BuyGoodItemText(
-            weight1,
-            text = buyGood.getTotalString()
-        )
+        buyGood.getItemList().forEach { title ->
+            BuyGoodItemText(
+                Modifier.weight(1f),
+                text = title
+            )
+        }
     }
 
     if (showItemDelete) {
@@ -355,12 +334,9 @@ fun BuyItemView(
             onDismiss = {
                 showEditDialog = false
             },
-            onAdd = { category, name, count, price ->
+            onAdd = { data ->
                 mtViewModel.insertBuyGood(
-                    category,
-                    name,
-                    count.toInt(),
-                    price.toInt(),
+                    data,
                     buyGood.buyGoodId!!
                 )
                 showEditDialog = false

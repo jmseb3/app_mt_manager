@@ -22,8 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.wonddak.mtmanger.room.BuyGood
-import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.room.entity.BuyGood
+import com.wonddak.mtmanger.room.entity.SimpleBuyGood
+import com.wonddak.mtmanger.room.entity.categoryList
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogBase
@@ -38,29 +39,19 @@ fun BuyDialog(
     buyGood: BuyGood? = null,
     categoryList: List<categoryList>,
     onDismiss: () -> Unit = {},
-    onAdd: (category: String, name: String, count: String, price: String) -> Unit
+    onAdd: (SimpleBuyGood) -> Unit
 ) {
-//    val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
-    var category by remember { mutableStateOf(buyGood?.category ?: categoryList[0].name) }
-    var name by remember { mutableStateOf(buyGood?.name ?: "") }
-    var count by remember { mutableStateOf(buyGood?.count?.toString() ?: "") }
-    var price by remember { mutableStateOf(buyGood?.price?.toString() ?: "") }
-
+    var simpleBuyGood by remember {
+        mutableStateOf(buyGood?.toSimple() ?: SimpleBuyGood(categoryList[0].name))
+    }
     DialogBase(
         titleText = if (buyGood != null) "내역 수정" else "내역 추가",
         confirmText = if (buyGood != null) "수정" else "추가",
         onConfirm = {
-            if (category.isEmpty() || name.isEmpty() || price.isEmpty() || count.isEmpty()) {
-//                Toast.makeText(
-//                    context,
-//                    context.getString(R.string.dialog_error_field),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-            } else {
-                onAdd(category, name, price, count)
-            }
+            onAdd(simpleBuyGood)
         },
+        confirmEnabled = simpleBuyGood.isConfirm(),
         onDismiss = onDismiss
     )
     {
@@ -73,7 +64,7 @@ fun BuyDialog(
             ) {
                 DialogTextField(
                     modifier = Modifier.menuAnchor(),
-                    value = category,
+                    value = simpleBuyGood.category,
                     placeHolder = "",
                     label = "카테고리",
                     change = {},
@@ -92,11 +83,11 @@ fun BuyDialog(
                             text = {
                                 DefaultText(
                                     text = item.name,
-                                    fontWeight = if (category == item.name) FontWeight.Bold else FontWeight.Normal
+                                    fontWeight = if (simpleBuyGood.category == item.name) FontWeight.Bold else FontWeight.Normal
                                 )
                             },
                             onClick = {
-                                category = item.name
+                                simpleBuyGood = simpleBuyGood.copy(category = item.name)
                                 expanded = false
                             }
                         )
@@ -104,20 +95,20 @@ fun BuyDialog(
                 }
             }
             DialogTextField(
-                value = name,
+                value = simpleBuyGood.name,
                 placeHolder = "이름 입력해 주세요",
                 label = "이름",
-                change = { name = it },
+                change = { simpleBuyGood = simpleBuyGood.copy(name = it) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 )
             )
             DialogTextField(
-                value = count,
+                value = simpleBuyGood.count,
                 placeHolder = "수량을 입력해 주세요",
                 label = "수량",
                 change = {
-                    count = it.replace("\\D".toRegex(), "")
+                    simpleBuyGood = simpleBuyGood.copy(count = it.replace("\\D".toRegex(), ""))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -126,11 +117,11 @@ fun BuyDialog(
             )
             val focusManager = LocalFocusManager.current
             DialogTextField(
-                value = price,
+                value = simpleBuyGood.price,
                 placeHolder = "가격을 입력해 주세요",
                 label = "가격",
                 change = {
-                    price = it.replace("\\D".toRegex(), "")
+                    simpleBuyGood = simpleBuyGood.copy(price = it.replace("\\D".toRegex(), ""))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,

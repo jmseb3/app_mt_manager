@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.room.entity.categoryList
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 
@@ -15,7 +15,6 @@ fun CategoryDialog(
     onDismiss: () -> Unit = {},
     onAdd: (category: String) -> Unit
 ) {
-//    val context = LocalContext.current
     var categoryInput by remember {
         mutableStateOf(category.name)
     }
@@ -23,12 +22,9 @@ fun CategoryDialog(
         titleText = "카테고리 수정",
         confirmText = "수정",
         onConfirm = {
-            if (categoryInput.isEmpty()) {
-//                Toast.makeText(context, "모든 항목을 입력해주세요", Toast.LENGTH_SHORT).show()
-            } else {
-                onAdd(categoryInput)
-            }
+            onAdd(categoryInput)
         },
+        confirmEnabled = categoryInput.isNotEmpty(),
         onDismiss = onDismiss
     )
     {

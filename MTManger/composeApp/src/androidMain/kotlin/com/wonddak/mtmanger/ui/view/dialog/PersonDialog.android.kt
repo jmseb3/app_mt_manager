@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.wonddak.mtmanger.model.SnackBarMsg
-import com.wonddak.mtmanger.room.SimplePerson
+import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import org.koin.compose.koinInject
 

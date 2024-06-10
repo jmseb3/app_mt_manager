@@ -36,8 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.MtDataList
-import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.entity.MtDataList
+import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
@@ -105,17 +105,17 @@ fun PlanView(
     }
     val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
 
-    if (showPlanDialog && planResource is Resource.Success){
+    if (showPlanDialog && planResource is Resource.Success) {
         (planResource as Resource.Success<MtDataList>).data?.let {
             PlanDialog(
-                startDate =it.mtdata.mtStart ,
-                endDate =it.mtdata.mtEnd ,
-                plan =null,
+                startDate = it.mtdata.mtStart,
+                endDate = it.mtdata.mtEnd,
+                plan = null,
                 onDismiss = {
                     showPlanDialog = false
                 },
                 onAdd = { title, day, text ->
-                    mtViewModel.addPlan(title,day,text)
+                    mtViewModel.addPlan(title, day, text)
                     showPlanDialog = false
                 }
             )

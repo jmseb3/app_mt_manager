@@ -23,8 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.MtDataList
+import com.wonddak.mtmanger.room.entity.*
 import com.wonddak.mtmanger.toPriceString
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText

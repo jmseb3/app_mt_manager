@@ -1,12 +1,12 @@
 package com.wonddak.mtmanger.repository
 
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.BuyGood
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.Person
-import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.room.SimplePerson
-import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.room.entity.BuyGood
+import com.wonddak.mtmanger.room.entity.MtData
+import com.wonddak.mtmanger.room.entity.Person
+import com.wonddak.mtmanger.room.entity.Plan
+import com.wonddak.mtmanger.room.entity.SimplePerson
+import com.wonddak.mtmanger.room.entity.categoryList
 import com.wonddak.mtmanger.room.dao.BuyGoodDao
 import com.wonddak.mtmanger.room.dao.CategoryListDao
 import com.wonddak.mtmanger.room.dao.MtDataDao

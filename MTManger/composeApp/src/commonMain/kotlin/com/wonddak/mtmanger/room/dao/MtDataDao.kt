@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.MtDataList
+import com.wonddak.mtmanger.room.entity.MtDataList
+import com.wonddak.mtmanger.room.entity.MtData
 import kotlinx.coroutines.flow.Flow
 
 @Dao

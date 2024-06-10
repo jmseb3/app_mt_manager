@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import com.wonddak.mtmanger.noRippleClickable
-import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import org.jetbrains.compose.ui.tooling.preview.Preview

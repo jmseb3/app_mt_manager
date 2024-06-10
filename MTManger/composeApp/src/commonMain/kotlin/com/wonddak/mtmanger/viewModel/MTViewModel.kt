@@ -8,21 +8,20 @@ import androidx.lifecycle.viewModelScope
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.model.SnackBarMsg
 import com.wonddak.mtmanger.repository.MTRepository
-import com.wonddak.mtmanger.room.BuyGood
-import com.wonddak.mtmanger.room.MtData
-import com.wonddak.mtmanger.room.MtDataList
-import com.wonddak.mtmanger.room.Person
-import com.wonddak.mtmanger.room.Plan
-import com.wonddak.mtmanger.room.SimplePerson
-import com.wonddak.mtmanger.room.categoryList
+import com.wonddak.mtmanger.room.entity.MtData
+import com.wonddak.mtmanger.room.entity.MtDataList
+import com.wonddak.mtmanger.room.entity.Person
+import com.wonddak.mtmanger.room.entity.Plan
+import com.wonddak.mtmanger.room.entity.SimplePerson
+import com.wonddak.mtmanger.room.entity.categoryList
+import com.wonddak.mtmanger.room.entity.BuyGood
+import com.wonddak.mtmanger.room.entity.SimpleBuyGood
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -33,12 +32,14 @@ class MTViewModel(
 
     var snackBarMsg: SnackBarMsg? by mutableStateOf(null)
 
-    fun showSnackBarMsg(msg:String) {
+    fun showSnackBarMsg(msg: String) {
         snackBarMsg = SnackBarMsg(msg)
     }
+
     fun closeSnackBar() {
         snackBarMsg = null
     }
+
     val mainMtId: StateFlow<Int>
         get() = _mainMtId
     private val _mainMtId = MutableStateFlow(0)
@@ -92,7 +93,7 @@ class MTViewModel(
 
 
     fun insertPerson(
-        simplePerson : SimplePerson
+        simplePerson: SimplePerson
     ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -111,8 +112,8 @@ class MTViewModel(
     }
 
     fun updatePerson(
-        personId:Int,
-        simplePerson : SimplePerson
+        personId: Int,
+        simplePerson: SimplePerson
     ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -126,10 +127,7 @@ class MTViewModel(
     }
 
     fun insertBuyGood(
-        category: String,
-        name: String,
-        count: Int,
-        price: Int,
+        simpleBuyGood: SimpleBuyGood,
         buyGoodId: Int? = null
     ) {
         viewModelScope.launch {
@@ -138,10 +136,10 @@ class MTViewModel(
                     BuyGood(
                         buyGoodId,
                         mainMtId.value,
-                        category,
-                        name,
-                        count,
-                        price
+                        simpleBuyGood.category,
+                        simpleBuyGood.category,
+                        simpleBuyGood.count.toInt(),
+                        simpleBuyGood.price.toInt()
                     )
                 )
             }

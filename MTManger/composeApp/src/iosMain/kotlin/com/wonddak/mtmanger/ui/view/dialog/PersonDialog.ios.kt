@@ -2,8 +2,7 @@ package com.wonddak.mtmanger.ui.view.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.wonddak.mtmanger.room.SimplePerson
-
+import com.wonddak.mtmanger.room.entity.*
 @Composable
 internal actual fun ContactButton(
     modifier: Modifier,

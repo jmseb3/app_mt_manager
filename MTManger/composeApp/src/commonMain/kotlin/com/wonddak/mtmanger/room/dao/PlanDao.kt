@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.entity.Plan
 
 @Dao
 interface PlanDao {
