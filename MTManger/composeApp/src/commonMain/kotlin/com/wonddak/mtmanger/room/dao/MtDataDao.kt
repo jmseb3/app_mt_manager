@@ -38,5 +38,5 @@ interface MtDataDao {
 
     @Transaction
     @Query("SELECT * FROM MtData WHERE mtDataId=:mtid")
-    fun getMtDataList(mtid: Int): Flow<MtDataList>
+    fun getMtDataList(mtid: Int): Flow<MtDataList?>
 }

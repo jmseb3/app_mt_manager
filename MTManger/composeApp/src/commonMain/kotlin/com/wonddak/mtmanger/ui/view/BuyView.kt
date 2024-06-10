@@ -116,8 +116,6 @@ fun BuyGoodPanel(
     }
     if (resource is Resource.Success) {
         (resource as Resource.Success<MtDataList>).data?.let { mtData ->
-
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

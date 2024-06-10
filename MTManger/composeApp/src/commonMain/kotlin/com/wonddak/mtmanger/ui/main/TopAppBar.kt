@@ -49,7 +49,7 @@ fun TopAppContent(
                     Icon(
                         painter = painterResource(resource = Res.drawable.ic_baseline_settings_24),
                         contentDescription = null,
-                        tint = match1,
+                        tint = match2,
                     )
                 }
             }
