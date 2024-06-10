@@ -21,11 +21,10 @@ import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.queryProductDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class BillingModule(
+actual class BillingModule(
     private val context: Context,
 ) : PurchasesUpdatedListener {
 
@@ -40,8 +39,6 @@ class BillingModule(
         .build()
 
     private var productDetailsList: List<ProductDetails> = mutableListOf()
-
-    var removeAddStatus = MutableStateFlow(false)
 
     init {
         billingClient.startConnection(object : BillingClientStateListener {

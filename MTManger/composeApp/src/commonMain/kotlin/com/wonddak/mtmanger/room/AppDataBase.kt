@@ -19,7 +19,6 @@ import kotlinx.coroutines.IO
     version = 7,
     exportSchema = true
 )
-@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun MtDataDao(): MtDataDao
     abstract fun PlanDao(): PlanDao

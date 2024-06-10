@@ -11,8 +11,10 @@ import com.wonddak.mtmanger.ui.theme.match2
 fun DialogBase(
     titleText: String = "",
     confirmText: String = "확인",
+    confirmEnabled: Boolean = true,
     onConfirm: () -> Unit,
     dismissText: String = "취소",
+    dismissEnabled: Boolean = true,
     onDismiss: () -> Unit,
     bodyContent: @Composable () -> Unit
 ) {
@@ -31,7 +33,10 @@ fun DialogBase(
             bodyContent()
         },
         confirmButton = {
-            TextButton(onClick = onConfirm) {
+            TextButton(
+                onClick = onConfirm,
+                enabled = confirmEnabled
+            ) {
                 DefaultText(
                     text = confirmText,
                     color = match1,
@@ -40,7 +45,10 @@ fun DialogBase(
 
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(
+                onClick = onDismiss,
+                enabled = dismissEnabled
+            ) {
                 DefaultText(
                     text = dismissText,
                     color = match1,

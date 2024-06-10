@@ -7,7 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,11 +31,13 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.AdvertView
 import com.wonddak.mtmanger.ui.view.SplashView
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.compose.koinInject
 
 @Composable
 internal fun App(
-    mtViewModel : MTViewModel = koinInject()
+    mtViewModel : MTViewModel = koinInject(),
+    payViewModel : PayViewModel = koinInject()
 ) = AppTheme {
     val navController = rememberNavController()
     var showSplash by remember {
@@ -40,7 +48,35 @@ internal fun App(
             showSplash = false
         }
     } else {
+        val snackbarHostState = remember { SnackbarHostState() }
+        LaunchedEffect(mtViewModel.snackBarMsg) {
+            mtViewModel.snackBarMsg?.let { snackBarMsg ->
+                val snackbarResult = snackbarHostState.showSnackbar(
+                    message = snackBarMsg.msg,
+                    actionLabel = snackBarMsg.label,
+                    withDismissAction = false,
+                    duration = SnackbarDuration.Short
+                )
+                when (snackbarResult) {
+                    SnackbarResult.Dismissed -> {
+                        mtViewModel.snackBarMsg = null
+                    }
+
+                    SnackbarResult.ActionPerformed -> {
+                        snackBarMsg.action.invoke()
+                        mtViewModel.snackBarMsg = null
+                    }
+                }
+            }
+        }
         Scaffold(
+            snackbarHost = {
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        snackbarData = data
+                    )
+                }
+            },
             topBar = {
                 TopAppContent(navController)
             },
@@ -57,10 +93,9 @@ internal fun App(
         ) {
             Box(Modifier.padding(it)) {
                 Column {
-//                    val removeAd by mtViewModel.removeAdStatus.collectAsState(true)
-//                    if (!removeAd) {
-//                        AdvertView()
-//                    }
+                    if (!payViewModel.removeAdStatus) {
+                        AdvertView()
+                    }
                     NavGraph(
                         navController = navController,
                         mtViewModel,

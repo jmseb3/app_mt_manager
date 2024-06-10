@@ -77,18 +77,9 @@ fun NoDataView(
         MTDialog(
             null,
             onDismiss = { showAddDialog = false },
-            onAdd = { title, fee, start, end ->
-                mtViewModel.insertMtData(
-                    MtData(
-                        null,
-                        title,
-                        fee.toInt(),
-                        start,
-                        end
-                    )
-                )
+            onAdd = { data ->
+                mtViewModel.insertMtData(data)
                 showAddDialog = false
-
             }
         )
     }

@@ -1,22 +1,25 @@
 package com.wonddak.mtmanger.ui.view.dialog
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.MtData
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.common.DialogBase
@@ -29,12 +32,7 @@ import org.jetbrains.compose.resources.painterResource
 fun MTDialog(
     mtData: MtData? = null,
     onDismiss: () -> Unit = {},
-    onAdd: (
-        title: String,
-        fee: String,
-        startDate: String,
-        endDate: String
-    ) -> Unit
+    onAdd: (mtData: MtData) -> Unit
 ) {
 
     var title by remember {
@@ -53,51 +51,51 @@ fun MTDialog(
         mutableStateOf(mtData?.mtStart ?: "")
     }
 
-    val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-
+    var showDatePicker by remember {
+        mutableStateOf(false)
+    }
     DialogBase(
         titleText = if (mtData == null) "MT 정보 추가" else " MT 정보 수정",
         confirmText = if (mtData == null) "추가" else "수정",
+        confirmEnabled = title.isNotEmpty() && fee.isNotEmpty() && startDate.isNotEmpty() && endDate.isNotEmpty(),
         onConfirm = {
-            if (title.isEmpty() || fee.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-//                Toast.makeText(
-//                    context,
-//                    context.getString(R.string.dialog_error_field),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-            } else {
-                onAdd(title, fee, startDate, endDate)
-            }
+            onAdd(MtData(title, fee.toInt(), startDate, endDate))
         },
         onDismiss = onDismiss
     ) {
         Column() {
-            DialogTextField(
-                value = startDate,
-                placeHolder = "일자를 선택해 주세요",
-                label = "MT 시작일",
-                enabled = false,
-                change = {},
-                modifier = Modifier
-                    .noRippleClickable() {
-                       // 일자 선택 출력
-                    }
-            )
-            DialogTextField(
-                value = endDate,
-                placeHolder = "일자를 선택해 주세요",
-                label = "MT 종료일",
-                enabled = false,
-                change = {},
-                modifier = Modifier
-                    .noRippleClickable() {
-                        if(startDate.isNotEmpty()) {
-                            // 일자 선택 출력
-                        }
-                    }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.weight(3f)
+                ) {
+                    DialogTextField(
+                        value = startDate,
+                        placeHolder = "일자를 선택해 주세요",
+                        label = "MT 시작일",
+                        enabled = false,
+                        change = {},
+                    )
+                    DialogTextField(
+                        value = endDate,
+                        placeHolder = "일자를 선택해 주세요",
+                        label = "MT 종료일",
+                        enabled = false,
+                        change = {},
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        showDatePicker = true
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Notifications, contentDescription = null)
+                }
+            }
             DialogTextField(
                 value = title,
                 placeHolder = "제목을 입력해주세요",
@@ -131,5 +129,15 @@ fun MTDialog(
             )
         }
     }
-
+    if (showDatePicker) {
+        DateRangePickerDialog(
+            onDismiss = {
+                showDatePicker = false
+            },
+            onDateSelected = { startDateV, endDateV ->
+                startDate = startDateV
+                endDate = endDateV
+            }
+        )
+    }
 }

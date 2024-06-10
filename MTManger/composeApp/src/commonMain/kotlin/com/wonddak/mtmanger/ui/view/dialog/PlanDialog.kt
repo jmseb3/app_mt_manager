@@ -101,9 +101,3 @@ fun PlanDialog(
         }
     }
 }
-
-@Composable
-@Preview
-fun PlanDialogPreView() {
-    PlanDialog("2023.05.12", "2023.05.14", Plan(0, 0))
-}

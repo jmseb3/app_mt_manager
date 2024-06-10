@@ -13,7 +13,6 @@ import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialogTextField(
     modifier: Modifier = Modifier,

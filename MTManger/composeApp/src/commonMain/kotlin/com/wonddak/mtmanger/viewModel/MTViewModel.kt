@@ -1,14 +1,19 @@
 package com.wonddak.mtmanger.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wonddak.mtmanger.model.Resource
+import com.wonddak.mtmanger.model.SnackBarMsg
 import com.wonddak.mtmanger.repository.MTRepository
 import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.MtData
 import com.wonddak.mtmanger.room.MtDataList
 import com.wonddak.mtmanger.room.Person
 import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.SimplePerson
 import com.wonddak.mtmanger.room.categoryList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -26,13 +31,14 @@ class MTViewModel(
 //    private val pref: SharedPreferences,
 ) : ViewModel() {
 
-//    val removeAdStatus
-//        get() = billing.removeAddStatus.stateIn(
-//            viewModelScope,
-//            started = SharingStarted.WhileSubscribed(5000L),
-//            initialValue = false
-//        )
+    var snackBarMsg: SnackBarMsg? by mutableStateOf(null)
 
+    fun showSnackBarMsg(msg:String) {
+        snackBarMsg = SnackBarMsg(msg)
+    }
+    fun closeSnackBar() {
+        snackBarMsg = null
+    }
     val mainMtId: StateFlow<Int>
         get() = _mainMtId
     private val _mainMtId = MutableStateFlow(0)
@@ -86,9 +92,7 @@ class MTViewModel(
 
 
     fun insertPerson(
-        name: String,
-        fee: Int,
-        number: String
+        simplePerson : SimplePerson
     ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -96,11 +100,27 @@ class MTViewModel(
                     Person(
                         null,
                         mainMtId.value,
-                        name,
-                        number,
-                        fee
+                        simplePerson.name,
+                        simplePerson.phoneNumber,
+                        simplePerson.paymentFee.toInt()
                     )
                 )
+                showSnackBarMsg("${simplePerson.name}님을 추가했습니다.")
+            }
+        }
+    }
+
+    fun updatePerson(
+        personId:Int,
+        simplePerson : SimplePerson
+    ) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.updatePerson(
+                    personId,
+                    simplePerson
+                )
+                showSnackBarMsg("정보를 수정했습니다.")
             }
         }
     }

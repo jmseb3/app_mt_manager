@@ -16,7 +16,15 @@ data class MtData(
     val fee: Int,
     val mtStart: String,
     val mtEnd: String,
-)
+) {
+    constructor(title: String, fee: Int, mtStart: String, mtEnd: String) : this(
+        null,
+        title,
+        fee,
+        mtStart,
+        mtEnd
+    )
+}
 
 @Entity(
     foreignKeys = [
@@ -37,7 +45,21 @@ data class Person(
     val name: String,
     val phoneNumber: String,
     val paymentFee: Int
-)
+) {
+    fun toSimplePerson() :SimplePerson {
+        return SimplePerson(name,phoneNumber,paymentFee.toString())
+    }
+}
+
+data class SimplePerson(
+    var name: String = "",
+    var phoneNumber: String = "",
+    var paymentFee: String = ""
+) {
+    fun isConfirm() :Boolean {
+        return  name.isNotEmpty() && phoneNumber.isNotEmpty() && paymentFee.isNotEmpty()
+    }
+}
 
 @Entity(
     foreignKeys = [

@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view
+package com.wonddak.mtmanger.ui.view.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +34,7 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun MainView(
     mtViewModel: MTViewModel,
-    showMTList :() -> Unit
+    showMTList: () -> Unit
 ) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     var showAddDialog by remember {
@@ -42,6 +43,7 @@ fun MainView(
     var showEditDialog by remember {
         mutableStateOf(false)
     }
+    val showDialog by remember { derivedStateOf { showAddDialog && showEditDialog } }
     Column(
         Modifier
             .fillMaxSize()
@@ -197,38 +199,16 @@ fun MainView(
                     ) {
                         DefaultText(text = "다른 여행 떠나기")
                     }
-                    if (showAddDialog) {
+                    if (showDialog) {
                         MTDialog(
-                            null,
-                            onDismiss = { showAddDialog = false },
-                            onAdd = { title, fee, start, end ->
-                                mtViewModel.insertMtData(
-                                    MtData(
-                                        null,
-                                        title,
-                                        fee.toInt(),
-                                        start,
-                                        end
-                                    )
-                                )
+                            if (showEditDialog) mtData.mtdata else null,
+                            onDismiss = {
                                 showAddDialog = false
-                            }
-                        )
-                    }
-                    if (showEditDialog) {
-                        MTDialog(
-                            mtData.mtdata,
-                            onDismiss = { showEditDialog = false },
-                            onAdd = { title, fee, start, end ->
-                                mtViewModel.insertMtData(
-                                    MtData(
-                                        null,
-                                        title,
-                                        fee.toInt(),
-                                        start,
-                                        end
-                                    )
-                                )
+                                showEditDialog = false
+                            },
+                            onAdd = { data ->
+                                mtViewModel.insertMtData(data)
+                                showAddDialog = false
                                 showEditDialog = false
                             }
                         )

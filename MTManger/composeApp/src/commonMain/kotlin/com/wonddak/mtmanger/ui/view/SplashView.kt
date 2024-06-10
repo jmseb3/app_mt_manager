@@ -27,7 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SplashView(
-    removeSplash : () -> Unit = {}
+    removeSplash: () -> Unit = {}
 ) {
     LaunchedEffect(true) {
         delay(2_000)
@@ -40,7 +40,6 @@ fun SplashView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Image(
             painter = painterResource(resource = Res.drawable.icon),
             contentDescription = null,
@@ -53,12 +52,5 @@ fun SplashView(
             color = match1,
             fontWeight = FontWeight.Bold
         )
-
     }
-}
-
-@Preview
-@Composable
-fun SplashViewPreview() {
-    SplashView()
 }

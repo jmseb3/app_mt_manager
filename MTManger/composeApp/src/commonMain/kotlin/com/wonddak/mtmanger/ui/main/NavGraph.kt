@@ -11,11 +11,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
-import com.wonddak.mtmanger.ui.view.BuyView
-import com.wonddak.mtmanger.ui.view.MainView
+import com.wonddak.mtmanger.ui.view.home.BuyView
+import com.wonddak.mtmanger.ui.view.home.MainView
 import com.wonddak.mtmanger.ui.view.MtListView
-import com.wonddak.mtmanger.ui.view.PersonView
-import com.wonddak.mtmanger.ui.view.PlanView
+import com.wonddak.mtmanger.ui.view.home.PersonView
+import com.wonddak.mtmanger.ui.view.home.PlanView
 import com.wonddak.mtmanger.ui.view.SettingView
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.viewModel.MTViewModel
@@ -30,14 +30,10 @@ fun NavGraph(
         homeGraph(navController, mtViewModel)
 
         composable(Const.SETTING) {
-            SettingView(
-                mtViewModel = mtViewModel
-            ) {
-                navController.popBackStack()
-            }
+            SettingView()
         }
         composable(Const.MT_LIST) {
-            MtListView(mtViewModel = mtViewModel) {
+            MtListView() {
                 navController.popBackStack()
             }
         }
@@ -76,9 +72,7 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(BottomNavItem.Plan.screenRoute) {
             NoDataBase(mtViewModel) {
-                PlanView(
-                    mtViewModel = mtViewModel
-                )
+                PlanView()
             }
         }
     }

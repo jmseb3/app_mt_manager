@@ -14,6 +14,9 @@ interface PersonDao {
     @Query("DELETE FROM Person WHERE personId = :personId")
     fun deletePersonById(personId: Int)
 
+    @Query("UPDATE Person SET name = :name,paymentFee = :fee,phoneNumber =:number  WHERE personId = :personId")
+    fun updatePersonData(name: String, fee: Int, number: String, personId: Int)
+
     @Query("DELETE FROM person WHERE mtId= :mtid")
     fun clearPersons(mtid: Int)
 }

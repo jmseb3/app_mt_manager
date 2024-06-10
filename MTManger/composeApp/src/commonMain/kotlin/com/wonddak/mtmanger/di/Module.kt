@@ -9,6 +9,7 @@ import com.wonddak.mtmanger.room.dao.MtDataDao
 import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 import com.wonddak.mtmanger.room.getRoomDatabase
+import com.wonddak.mtmanger.util.AppUtil
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -43,6 +44,7 @@ val dataBaseModule = module {
         database.PlanDao()
     }
 }
+
 
 val repositoryModule = module {
     singleOf(::MTRepository)

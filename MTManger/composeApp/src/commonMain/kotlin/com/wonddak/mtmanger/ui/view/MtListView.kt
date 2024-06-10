@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wonddak.mtmanger.model.SnackBarMsg
 import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.MtData
 import com.wonddak.mtmanger.ui.theme.maple
@@ -29,14 +31,13 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun MtListView(
-    mtViewModel: MTViewModel,
-    close :() -> Unit
+    mtViewModel: MTViewModel = koinInject(),
+    close: () -> Unit
 ) {
-//    BackHandler { close() }
-//    val context = LocalContext.current
     val mtList by mtViewModel.getMtTotalLIst().collectAsState(initial = emptyList())
     Column(
         Modifier
@@ -70,15 +71,12 @@ fun MtListView(
                     .border(2.dp, match2, RoundedCornerShape(10.dp))
                     .padding(5.dp)
             ) {
-                items(mtList) { mtdata ->
-                    MtListItem(mtData = mtdata) {
-//                        Toast.makeText(
-//                            context,
-//                            "${mtdata.mtTitle}로 변경했어요",
-//                            Toast.LENGTH_SHORT
-//                        )
-//                            .show()
-                        mtViewModel.setMtId(mtdata.mtDataId!!)
+                items(mtList) { mtData ->
+                    MtListItem(mtData = mtData) {
+                        mtViewModel.snackBarMsg = SnackBarMsg(
+                            "${mtData.mtTitle}로 변경했어요."
+                        )
+                        mtViewModel.setMtId(mtData.mtDataId!!)
                         close()
                     }
                     HorizontalDivider(

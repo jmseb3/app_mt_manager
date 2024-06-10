@@ -5,6 +5,7 @@ import com.wonddak.mtmanger.room.BuyGood
 import com.wonddak.mtmanger.room.MtData
 import com.wonddak.mtmanger.room.Person
 import com.wonddak.mtmanger.room.Plan
+import com.wonddak.mtmanger.room.SimplePerson
 import com.wonddak.mtmanger.room.categoryList
 import com.wonddak.mtmanger.room.dao.BuyGoodDao
 import com.wonddak.mtmanger.room.dao.CategoryListDao
@@ -51,6 +52,15 @@ class MTRepository(
 
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
+    }
+
+    suspend fun updatePerson(personId: Int, simplePerson: SimplePerson) {
+        personDao.updatePersonData(
+            simplePerson.name,
+            simplePerson.paymentFee.toInt(),
+            simplePerson.phoneNumber,
+            personId
+        )
     }
 
     suspend fun insertPerson(person: Person) {

@@ -14,8 +14,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun DeleteDialog(
     msg: String = "정말 삭제하시겠습니까?",
-    onDelete:() ->Unit = {},
-    onDismiss:() -> Unit = {}
+    onDelete: () -> Unit = {},
+    onDismiss: () -> Unit = {}
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -30,7 +30,7 @@ fun DeleteDialog(
         confirmButton = {
             TextButton(onClick = onDelete) {
                 DefaultText(
-                    text ="삭제",
+                    text = "삭제",
                     color = match1,
                 )
             }
@@ -39,7 +39,7 @@ fun DeleteDialog(
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 DefaultText(
-                    text =  "취소",
+                    text = "취소",
                     color = match1,
                 )
             }
@@ -50,6 +50,6 @@ fun DeleteDialog(
 
 @Composable
 @Preview
-fun DeleteDialogPreView(){
+fun DeleteDialogPreView() {
     DeleteDialog(msg = "정말 삭제하시겠습니까?")
 }

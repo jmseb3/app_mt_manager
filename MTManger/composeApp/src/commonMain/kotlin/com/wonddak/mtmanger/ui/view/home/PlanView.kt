@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view
+package com.wonddak.mtmanger.ui.view.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -49,10 +49,11 @@ import mtmanger.composeapp.generated.resources.add_photo
 import mtmanger.composeapp.generated.resources.dialog_delete_image
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun PlanView(
-    mtViewModel: MTViewModel,
+    mtViewModel: MTViewModel = koinInject(),
 ) {
     var showPlanDialog by remember {
         mutableStateOf(false)

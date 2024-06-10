@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.toPriceString
-import com.wonddak.mtmanger.ui.view.BuyGoodItemText
+import com.wonddak.mtmanger.ui.view.home.BuyGoodItemText
 
 @Composable
 fun FeeInfo(

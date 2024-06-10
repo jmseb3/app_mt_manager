@@ -2,6 +2,7 @@ import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.serialization.builtins.main
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -32,16 +33,16 @@ kotlin {
         }
     }
 
-//    listOf(
-//        iosX64(),
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach {
-//        it.binaries.framework {
-//            baseName = "ComposeApp"
-//            isStatic = true
-//        }
-//    }
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -52,7 +53,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.viewmodel.compose)
             implementation(libs.navigation.compose)
-
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
             implementation(libs.room.runtime)
 //            implementation("io.coil-kt:coil-compose:2.6.0")
             implementation(libs.bundles.koin.shared)
@@ -117,6 +118,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        getByName("main") {
+            this.assets.srcDir("$rootDir/assets")
+        }
+    }
 }
 
 room {
@@ -126,8 +132,8 @@ room {
 dependencies {
     with(libs.room.compiler) {
         add("kspAndroid", this)
-//        add("kspIosX64", this)
-//        add("kspIosArm64", this)
-//        add("kspIosSimulatorArm64", this)
+        add("kspIosX64", this)
+        add("kspIosArm64", this)
+        add("kspIosSimulatorArm64", this)
     }
 }

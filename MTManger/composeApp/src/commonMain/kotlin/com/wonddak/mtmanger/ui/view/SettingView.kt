@@ -1,5 +1,6 @@
 package com.wonddak.mtmanger.ui.view
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +21,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,16 +45,18 @@ import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import com.wonddak.mtmanger.ui.view.dialog.CategoryDialog
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
+import com.wonddak.mtmanger.ui.view.home.BuyGoodItemText
+import com.wonddak.mtmanger.util.AppUtil
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import com.wonddak.mtmanger.viewModel.PayViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun SettingView(
-    mtViewModel: MTViewModel,
-    close: () -> Unit
+    mtViewModel: MTViewModel = koinInject(),
+    payViewModel: PayViewModel = koinInject()
 ) {
-    var focusId by remember {
-        mutableStateOf(-1)
-    }
+    var focusId by remember { mutableIntStateOf(-1) }
     Column(
         Modifier
             .fillMaxSize()
@@ -175,31 +180,21 @@ fun SettingView(
                 )
             }
         }
-        Column() {
-//            val removeAdStatus by mtViewModel.removeAdStatus.collectAsState(false)
-//            OutlinedButton(
-//                modifier = Modifier.fillMaxWidth(),
-//                onClick = {
-//                    mtViewModel.startPay(activity)
-//                },
-//                border = BorderStroke(2.dp, match2),
-//            ) {
-//                BuyGoodItemText(text = if (removeAdStatus) "광고 제거 여부:O" else "광고 제거")
-//            }
-//            OutlinedButton(
-//                modifier = Modifier.fillMaxWidth(),
-//                onClick = {
-//                    Intent(Intent.ACTION_SEND).apply {
-//                        type = "plain/text"
-//                        putExtra(Intent.EXTRA_EMAIL, arrayOf("jmseb2@gmail.com"))
-//                        putExtra(Intent.EXTRA_SUBJECT, "<MT매니저 관련 문의입니다.>")
-//                        putExtra(Intent.EXTRA_TEXT, "내용:")
-//                    }.let { context.startActivity(it) }
-//                },
-//                border = BorderStroke(2.dp, match2),
-//            ) {
-//                BuyGoodItemText(text = "문의하기")
-//            }
+        Column {
+            val removeAdStatus = payViewModel.removeAdStatus
+            SettingAdFooter(removeAdStatus)
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    AppUtil.sendMail()
+                },
+                border = BorderStroke(2.dp, match2),
+            ) {
+                BuyGoodItemText(text = "문의하기")
+            }
         }
     }
 }
+
+@Composable
+internal expect fun SettingAdFooter(removeAd: Boolean)
