@@ -1,0 +1,49 @@
+package com.wonddak.mtmanger.di
+
+
+import com.wonddak.mtmanger.repository.MTRepository
+import com.wonddak.mtmanger.room.AppDatabase
+import com.wonddak.mtmanger.room.dao.BuyGoodDao
+import com.wonddak.mtmanger.room.dao.CategoryListDao
+import com.wonddak.mtmanger.room.dao.MtDataDao
+import com.wonddak.mtmanger.room.dao.PersonDao
+import com.wonddak.mtmanger.room.dao.PlanDao
+import com.wonddak.mtmanger.room.getRoomDatabase
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
+
+
+//val configModule = module {
+////    single<SharedPreferences> {
+////        androidContext().getSharedPreferences(Const.pref.name, 0)
+////    }
+//}
+val dataBaseModule = module {
+    single<AppDatabase> {
+        getRoomDatabase()
+    }
+    single<MtDataDao> {
+        val database = get<AppDatabase>()
+        database.MtDataDao()
+    }
+    single<BuyGoodDao> {
+        val database = get<AppDatabase>()
+        database.BuyGoodDao()
+    }
+    single<CategoryListDao> {
+        val database = get<AppDatabase>()
+        database.CategoryListDao()
+    }
+    single<PersonDao> {
+        val database = get<AppDatabase>()
+        database.PersonDao()
+    }
+    single<PlanDao> {
+        val database = get<AppDatabase>()
+        database.PlanDao()
+    }
+}
+
+val repositoryModule = module {
+    singleOf(::MTRepository)
+}

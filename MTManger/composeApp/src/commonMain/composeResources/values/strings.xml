@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MT 매니저</string>
+    <string name="info_text">짧게 눌러서 수정/ 길게 눌러서 삭제 가능합니다.</string>
+    <string name="admob_app_id">ca-app-pub-2369897242309575~7008427528</string>
+    <string name="banner_ad_unit_id">ca-app-pub-2369897242309575/1756100845</string>
+    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="dialog_error_field">모든 항목을 입력해 주세요.</string>
+    <string name="dialog_delete_reset">정말 초기화 하시겠습니까?</string>
+    <string name="dialog_delete_image">사진을 삭제 하시겠습니까?</string>
+</resources>
