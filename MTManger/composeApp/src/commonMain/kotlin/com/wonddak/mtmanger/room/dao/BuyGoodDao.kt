@@ -10,12 +10,12 @@ import com.wonddak.mtmanger.room.entity.BuyGood
 interface BuyGoodDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBuyGood(buyGood: BuyGood)
+    suspend fun insertBuyGood(buyGood: BuyGood)
 
     @Query("DELETE FROM BuyGood WHERE buyGoodId = :buyGoodId")
-    fun deleteBuyGoodById(buyGoodId: Int)
+    suspend fun deleteBuyGoodById(buyGoodId: Int)
 
     @Query("DELETE FROM BuyGood WHERE mtId =:id")
-    fun clearBuyGoods(id: Int)
+    suspend fun clearBuyGoods(id: Int)
 
 }

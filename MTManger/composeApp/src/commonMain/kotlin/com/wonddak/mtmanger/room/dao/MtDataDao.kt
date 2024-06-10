@@ -13,30 +13,30 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MtDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMtData(mtData: MtData) :Long
+    suspend fun insertMtData(mtData: MtData) :Long
 
     @Delete
-    fun deleteMtData(mtData: MtData)
+    suspend fun deleteMtData(mtData: MtData)
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
     fun getMtData(): Flow<List<MtData>>
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
-    fun getMtDatadata(): List<MtData>
+    suspend fun getMtDatadata(): List<MtData>
 
     @Query("SELECT * FROM MtData WHERE mtDataId= :MtDataId")
-    fun getMtDataById(MtDataId: Int?): MtData
+    suspend fun getMtDataById(MtDataId: Int?): MtData
 
     @Query("SELECT * FROM MtData WHERE mtTitle= :MtTitle")
-    fun getMtDataByTitle(MtTitle: String): MtData
+    suspend fun getMtDataByTitle(MtTitle: String): MtData
 
     @Query("DELETE FROM MtData WHERE mtTitle= :MtTitle")
-    fun deleteMtDataByTitle(MtTitle: String)
+    suspend fun deleteMtDataByTitle(MtTitle: String)
 
     @Query("DELETE From MtData")
-    fun clearMtDataS()
+    suspend fun clearMtDataS()
 
     @Transaction
-    @Query("SELECT * FROM MtData WHERE mtDataId=:mtid")
-    fun getMtDataList(mtid: Int): Flow<MtDataList?>
+    @Query("SELECT * FROM MtData WHERE mtDataId=:mtId")
+    fun getMtDataList(mtId: Int): Flow<MtDataList?>
 }

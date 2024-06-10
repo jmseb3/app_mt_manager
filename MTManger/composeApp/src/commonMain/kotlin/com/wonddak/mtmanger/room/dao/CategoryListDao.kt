@@ -13,8 +13,8 @@ interface CategoryListDao {
     fun getCategoryDataList(): Flow<List<categoryList>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCategory(categoryList: categoryList)
+    suspend fun insertCategory(categoryList: categoryList)
 
     @Query("DELETE FROM categoryList WHERE id =:id")
-    fun deleteCategoryById(id: Int)
+    suspend fun deleteCategoryById(id: Int)
 }
