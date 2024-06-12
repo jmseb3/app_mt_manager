@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import com.wonddak.mtmanger.room.dao.BuyGoodDao
 import com.wonddak.mtmanger.room.dao.CategoryListDao
@@ -49,7 +50,7 @@ fun getRoomDatabase(): AppDatabase {
         .addMigrations(MIGRATION_5_6)
         .addMigrations(MIGRATION_6_7)
 //        .fallbackToDestructiveMigrationOnDowngrade()
-//        .setDriver(BundledSQLiteDriver())
+        .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
 }

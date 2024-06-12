@@ -7,12 +7,6 @@ import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewmodelModule = module {
-    viewModel<MTViewModel> {
-        MTViewModel(get())
-    }
-    viewModel<PayViewModel> {
-        PayViewModel()
-    }
-//    viewModelOf(::MTViewModel)
-//    viewModelOf(::PayViewModel)
+    viewModelOf(::MTViewModel)
+    viewModelOf(::PayViewModel)
 }

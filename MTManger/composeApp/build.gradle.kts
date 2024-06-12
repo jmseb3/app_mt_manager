@@ -40,6 +40,7 @@ kotlin {
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -54,6 +55,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
             implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
 //            implementation("io.coil-kt:coil-compose:2.6.0")
             implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
