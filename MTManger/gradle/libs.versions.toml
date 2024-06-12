@@ -1,12 +1,12 @@
 [versions]
-agp = "8.4.1"
+agp = "8.3.2"
 kotlin = "2.0.0"
 compose = "1.6.10"
 navigationCompose = "2.7.0-alpha07"
 room = "2.7.0-alpha03"
 billing = "7.0.0"
 datastore = "1.1.1"
-koin = "3.6.0-Beta4"
+koin = "3.6.0-wasm-alpha2"
 koin2 = "1.2.0-Beta4"
 ksp = "2.0.0-1.0.22"
 androidx-uiTest = "1.6.7"
@@ -22,18 +22,17 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
 
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.3" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.0" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin2" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin2" }
 
 [plugins]
@@ -45,5 +44,5 @@ room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
-koin-android = ["koin-core", "koin-android", "koin-compose"]
-koin-shared = ["koin-core", "koin-test", "koin-compose-viewmodel"]
+koin-android = ["koin-core", "koin-android"]
+koin-shared = ["koin-core", "koin-test","koin-compose","koin-compose-viewmodel"]

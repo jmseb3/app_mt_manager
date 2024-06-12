@@ -11,8 +11,7 @@
           {
             "fieldPath": "mtDataId",
             "columnName": "mtDataId",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "mtTitle",
@@ -44,9 +43,7 @@
           "columnNames": [
             "mtDataId"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "Person",
@@ -55,8 +52,7 @@
           {
             "fieldPath": "personId",
             "columnName": "personId",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "mtId",
@@ -121,8 +117,7 @@
           {
             "fieldPath": "buyGoodId",
             "columnName": "buyGoodId",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "mtId",
@@ -193,8 +188,7 @@
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "name",
@@ -208,9 +202,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "Plan",
@@ -219,8 +211,7 @@
           {
             "fieldPath": "planId",
             "columnName": "planId",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "mtId",
@@ -255,8 +246,7 @@
           {
             "fieldPath": "imgBytes",
             "columnName": "imgBytes",
-            "affinity": "BLOB",
-            "notNull": false
+            "affinity": "BLOB"
           }
         ],
         "primaryKey": {
@@ -291,7 +281,6 @@
         ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e949911b0f8f8e58ea769676e195847f')"

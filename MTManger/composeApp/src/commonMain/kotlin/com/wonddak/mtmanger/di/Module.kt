@@ -47,5 +47,7 @@ val dataBaseModule = module {
 
 
 val repositoryModule = module {
-    singleOf(::MTRepository)
+    single<MTRepository> {
+        MTRepository(get(),get(),get(),get(),get())
+    }
 }

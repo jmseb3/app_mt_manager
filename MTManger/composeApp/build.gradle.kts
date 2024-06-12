@@ -2,7 +2,6 @@ import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
-import org.jetbrains.kotlin.serialization.builtins.main
 
 plugins {
     alias(libs.plugins.multiplatform)
@@ -56,6 +55,7 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
             implementation(libs.room.runtime)
 //            implementation("io.coil-kt:coil-compose:2.6.0")
+            implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
 
         }
@@ -69,7 +69,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.uiTooling)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.room.ktx)
             implementation("com.google.android.gms:play-services-ads:23.1.0")
             implementation(libs.billing)
             implementation(libs.billing.ktx)
