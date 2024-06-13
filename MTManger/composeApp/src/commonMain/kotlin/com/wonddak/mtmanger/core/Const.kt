@@ -1,11 +1,6 @@
 package com.wonddak.mtmanger.core
 
 object Const {
-    object pref {
-        const val name = "mainMT"
-        const val id = "id"
-    }
-
     const val HOME = "home"
     const val MAIN = "nav_main"
     const val PERSON = "nav_person"

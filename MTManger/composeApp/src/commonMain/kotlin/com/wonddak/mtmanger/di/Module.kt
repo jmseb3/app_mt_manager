@@ -9,16 +9,22 @@ import com.wonddak.mtmanger.room.dao.MtDataDao
 import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 import com.wonddak.mtmanger.room.getRoomDatabase
-import com.wonddak.mtmanger.util.AppUtil
+import com.wonddak.mtmanger.util.DataStoreProvider
+import com.wonddak.mtmanger.util.Storage
+import com.wonddak.mtmanger.viewModel.MTViewModel
+import com.wonddak.mtmanger.viewModel.PayViewModel
+import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 
-//val configModule = module {
-////    single<SharedPreferences> {
-////        androidContext().getSharedPreferences(Const.pref.name, 0)
-////    }
-//}
+val configModule = module {
+    singleOf(::DataStoreProvider)
+    single<Storage> {
+        Storage(get())
+    }
+}
+
 val dataBaseModule = module {
     single<AppDatabase> {
         getRoomDatabase()
@@ -48,6 +54,11 @@ val dataBaseModule = module {
 
 val repositoryModule = module {
     single<MTRepository> {
-        MTRepository(get(),get(),get(),get(),get())
+        MTRepository(get(), get(), get(), get(), get())
     }
+}
+
+val viewmodelModule = module {
+    viewModelOf(::MTViewModel)
+    viewModelOf(::PayViewModel)
 }

@@ -12,4 +12,4 @@ fun startKoinCommon(appDeclaration: KoinAppDeclaration = {}) {
     }
 }
 
-fun sharedModule() = dataBaseModule + repositoryModule + viewmodelModule
+fun sharedModule() = dataBaseModule + repositoryModule + viewmodelModule + configModule

@@ -22,7 +22,7 @@ class MtManagerApplication : Application() {
             // Reference Android context
             androidContext(this@MtManagerApplication)
             // Load modules
-            modules(billingModule + configModule + sharedModule())
+            modules(billingModule  + sharedModule())
         }
     }
 }
