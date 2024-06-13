@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.util
 
 import kotlinx.coroutines.flow.MutableStateFlow
 

@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger
+package com.wonddak.mtmanger.util
 
 import android.app.Activity
 import android.content.Context
@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
@@ -48,7 +47,7 @@ actual class BillingModule(
 
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 Log.i(TAG, "연결성공")
-                if (billingResult.responseCode == BillingResponseCode.OK) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     CoroutineScope(Dispatchers.Main).launch {
                         launch {
                             queryPurchase()
@@ -77,7 +76,7 @@ actual class BillingModule(
             queryPurchasesParams
         ) { billingResult, purchaseList ->
             CoroutineScope(Dispatchers.Main).launch {
-                if (billingResult.responseCode == BillingResponseCode.OK) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     if (purchaseList.isNotEmpty()) {
                         purchaseList.forEach {
                             handlePurchase(it)
@@ -139,7 +138,7 @@ actual class BillingModule(
         val billingResult =
             billingClient.launchBillingFlow(activity, billingFlowParams).responseCode
         Log.d(TAG, billingResult.toString())
-        Log.d(TAG, BillingResponseCode.OK.toString())
+        Log.d(TAG, BillingClient.BillingResponseCode.OK.toString())
     }
 
     override fun onPurchasesUpdated(
@@ -147,14 +146,14 @@ actual class BillingModule(
         purchases: MutableList<Purchase>?
     ) {
         Log.d(TAG, "${billingResult.responseCode}")
-        if (billingResult.responseCode == BillingResponseCode.OK && purchases != null) {
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             //구매 성공
             CoroutineScope(Dispatchers.Main).launch {
                 for (purchase in purchases) {
                     handlePurchase(purchase)
                 }
             }
-        } else if (billingResult.responseCode == BillingResponseCode.USER_CANCELED) {
+        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
             // 유저 취소 errorcode
             "상품 주문 취소".makeToast()
         } else {
@@ -164,7 +163,7 @@ actual class BillingModule(
     }
 
     private fun String.makeToast() {
-        Toast.makeText(context,this,Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
     }
 
     //소비성 결제인경우
@@ -195,7 +194,7 @@ actual class BillingModule(
                     .setPurchaseToken(purchase.purchaseToken)
                 withContext(Dispatchers.IO) {
                     billingClient.acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
-                        if (billingResult.responseCode == BillingResponseCode.OK) {
+                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                             removeAddStatus.value = true
                         }
                     }

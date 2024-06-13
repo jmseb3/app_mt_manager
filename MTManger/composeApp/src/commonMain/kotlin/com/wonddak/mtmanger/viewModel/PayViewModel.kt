@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wonddak.mtmanger.removeAddStatus
+import com.wonddak.mtmanger.util.removeAddStatus
 import kotlinx.coroutines.launch
 
 class PayViewModel() : ViewModel() {
