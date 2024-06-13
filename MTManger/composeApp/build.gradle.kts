@@ -53,13 +53,14 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.viewmodel.compose)
             implementation(libs.navigation.compose)
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+            implementation(libs.kotlinx.datetime)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
 //            implementation("io.coil-kt:coil-compose:2.6.0")
+
             implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
-
+            implementation(libs.datastore.preferences.core)
         }
 
         commonTest.dependencies {
@@ -76,6 +77,7 @@ kotlin {
             implementation(libs.billing.ktx)
 
             implementation(libs.bundles.koin.android)
+            implementation(libs.datastore.preferences)
 
         }
 
