@@ -137,7 +137,7 @@ class MTViewModel(
                         buyGoodId,
                         mainMtId,
                         simpleBuyGood.category,
-                        simpleBuyGood.category,
+                        simpleBuyGood.name,
                         simpleBuyGood.count.toInt(),
                         simpleBuyGood.price.toInt()
                     )
