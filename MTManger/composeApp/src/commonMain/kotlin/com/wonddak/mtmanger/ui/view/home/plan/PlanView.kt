@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.home
+package com.wonddak.mtmanger.ui.view.home.plan
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi

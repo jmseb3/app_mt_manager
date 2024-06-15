@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,8 +19,14 @@ import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.toInstant
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanDialog(
     startDate: String,
@@ -43,20 +51,16 @@ fun PlanDialog(
     }
     val focusManager = LocalFocusManager.current
 
+    var showDatePicker by remember {
+        mutableStateOf(false)
+    }
     DialogBase(
         titleText = if (plan != null) "계획 수정" else "계획 작성",
         confirmText = if (plan != null) "수정" else "추가",
         onConfirm = {
-            if (title.isEmpty() || date.isEmpty() || planText.isEmpty()) {
-//                Toast.makeText(
-//                    context,
-//                    context.getString(R.string.dialog_error_field),
-//                    Toast.LENGTH_SHORT
-//                ).show()
-            } else {
-                onAdd(title, date, planText)
-            }
+            onAdd(title, date, planText)
         },
+        confirmEnabled = title.isNotEmpty() && date.isNotEmpty() && planText.isNotEmpty(),
         onDismiss = onDismiss
     ) {
         Column {
@@ -68,7 +72,7 @@ fun PlanDialog(
                 change = {},
                 modifier = Modifier
                     .noRippleClickable() {
-                       //일정 수정
+                        showDatePicker = true
                     }
             )
             DialogTextField(
@@ -98,6 +102,34 @@ fun PlanDialog(
             ) {
                 planText = it
             }
+        }
+    }
+
+    if (showDatePicker) {
+        val start = Instant.parse(
+            startDate.replace(
+                ".",
+                "-"
+            ) + "T00:00:00Z"
+        ).toEpochMilliseconds()
+        val end = Instant.parse(
+            endDate.replace(
+                ".",
+                "-"
+            ) + "T00:00:00Z"
+        ).toEpochMilliseconds()
+        OneDatePickerDialog(
+            initialSelectedDateMillis = start,
+            selectableDates = object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                    return utcTimeMillis in (start..end)
+                }
+            },
+            onDismiss = {
+                showDatePicker = false
+            }
+        ) {
+            date = it
         }
     }
 }

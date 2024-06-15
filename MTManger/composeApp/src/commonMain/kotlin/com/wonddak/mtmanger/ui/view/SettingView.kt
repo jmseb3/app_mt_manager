@@ -45,7 +45,7 @@ import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import com.wonddak.mtmanger.ui.view.dialog.CategoryDialog
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
-import com.wonddak.mtmanger.ui.view.home.BuyGoodItemText
+import com.wonddak.mtmanger.ui.view.home.buy.BuyGoodItemText
 import com.wonddak.mtmanger.util.AppUtil
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel

@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.home
+package com.wonddak.mtmanger.ui.view.home.buy
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -19,8 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,30 +30,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.entity.*
-import com.wonddak.mtmanger.toPriceString
+import com.wonddak.mtmanger.room.entity.BuyGood
+import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
+import com.wonddak.mtmanger.ui.view.dialog.BuyDialog
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
-import com.wonddak.mtmanger.ui.view.dialog.PersonDialog
-import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_reset
-import mtmanger.composeapp.generated.resources.ic_baseline_phone_24
 import mtmanger.composeapp.generated.resources.info_text
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
+
 
 @Composable
-fun PersonView(
+fun BuyView(
     mtViewModel: MTViewModel,
 ) {
     Column(
@@ -73,7 +71,7 @@ fun PersonView(
                     .padding(vertical = 5.dp)
             )
             Text(
-                text = "참여자 명단",
+                text = "구매내역",
                 color = match2,
                 fontSize = 30.sp,
                 fontFamily = maple(),
@@ -94,21 +92,21 @@ fun PersonView(
                 color = match2
             )
             Spacer(modifier = Modifier.height(3.dp))
-            PersonItemList(
-                Modifier.fillMaxHeight(), mtViewModel
+            BuyItemList(
+                Modifier.fillMaxHeight(),
+                mtViewModel
             )
         }
         Row {
-            PersonPanel(mtViewModel)
+            BuyGoodPanel(mtViewModel)
         }
     }
 }
 
 @Composable
-fun PersonPanel(
+fun BuyGoodPanel(
     mtViewModel: MTViewModel,
 ) {
-//    val context = LocalContext.current
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     var showItemReset by remember {
         mutableStateOf(false)
@@ -118,8 +116,6 @@ fun PersonPanel(
     }
     if (resource is Resource.Success) {
         (resource as Resource.Success<MtDataList>).data?.let { mtData ->
-
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,28 +141,37 @@ fun PersonPanel(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
+                        val sumOfGoodsFee = mtData.buyGoodList.sumOf { it.price * it.count }
+                        val sumOfPersonPayFee = mtData.personList.sumOf { it.paymentFee }
                         val modifier = Modifier.padding(3.dp)
                         FeeInfo(
-                            modifier, text = "총 참여자", fee = mtData.personList.size, feeIndex = "명"
+                            modifier,
+                            text = "지출 금액",
+                            fee = sumOfGoodsFee
                         )
-                        FeeInfo(modifier,
-                            text = "받은 금액",
-                            fee = mtData.personList.sumOf { it.paymentFee })
+                        FeeInfo(
+                            modifier,
+                            text = "남은 금액",
+                            fee = sumOfPersonPayFee - sumOfGoodsFee
+                        )
                     }
                     Column(
-                        Modifier.weight(2f), horizontalAlignment = Alignment.CenterHorizontally
+                        Modifier.weight(2f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         OutlinedButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = { showAddDialog = true },
                             border = BorderStroke(2.dp, match2)
                         ) {
-                            BuyGoodItemText(text = "참여자 추가")
+                            BuyGoodItemText(text = "내역 추가")
                         }
                         OutlinedButton(
-                            modifier = Modifier.fillMaxWidth(), onClick = {
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
                                 showItemReset = true
-                            }, border = BorderStroke(2.dp, match2)
+                            },
+                            border = BorderStroke(2.dp, match2)
                         ) {
                             BuyGoodItemText(text = "초기화")
                         }
@@ -180,7 +185,7 @@ fun PersonPanel(
         DeleteDialog(
             msg = stringResource(resource = Res.string.dialog_delete_reset),
             onDelete = {
-                mtViewModel.clearPersonData()
+                mtViewModel.clearBuyGoodData()
                 showItemReset = false
             },
             onDismiss = {
@@ -188,14 +193,16 @@ fun PersonPanel(
             },
         )
     }
+    val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
+
     if (showAddDialog) {
-        PersonDialog(
-            null,
+        BuyDialog(
+            categoryList = categoryList,
             onDismiss = {
                 showAddDialog = false
             },
             onAdd = { data ->
-                mtViewModel.insertPerson(data)
+                mtViewModel.insertBuyGood(data)
                 showAddDialog = false
             }
         )
@@ -203,13 +210,15 @@ fun PersonPanel(
 }
 
 @Composable
-fun PersonItemList(
+fun BuyItemList(
     modifier: Modifier = Modifier,
     mtViewModel: MTViewModel,
 ) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     Card(
-        modifier = modifier, shape = RoundedCornerShape(10.dp), colors = CardDefaults.cardColors(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
             containerColor = match2
         )
     ) {
@@ -224,16 +233,19 @@ fun PersonItemList(
                     .padding(vertical = 5.dp)
 
             ) {
-                val weight1 = Modifier.weight(1f)
-                BuyGoodItemText(
-                    weight1, color = match1, text = "이름"
-                )
-                BuyGoodItemText(
-                    weight1, color = match1, text = "납부금액"
-                )
-                BuyGoodItemText(
-                    weight1, color = match1, text = "폰"
-                )
+                listOf(
+                    "분류",
+                    "이름",
+                    "수량",
+                    "단가",
+                    "합"
+                ).forEach {title ->
+                    BuyGoodItemText(
+                        Modifier.weight(1f),
+                        color = match1,
+                        text = title
+                    )
+                }
             }
             Card(
                 modifier = Modifier
@@ -243,18 +255,19 @@ fun PersonItemList(
                 colors = CardDefaults.cardColors(
                     containerColor = match1
                 )
-            ) {
+            )
+            {
                 if (resource is Resource.Success) {
                     (resource as Resource.Success<MtDataList>).data?.let {
-                        val personList = it.personList
+                        val buyGoodList = it.buyGoodList
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp)
                         ) {
-                            itemsIndexed(personList) { index, person ->
-                                PersonItemView(person, mtViewModel)
-                                if (index != personList.size - 1) {
+                            itemsIndexed(buyGoodList) { index, buyGood ->
+                                BuyItemView(buyGood, mtViewModel)
+                                if (index != buyGoodList.size - 1) {
                                     HorizontalDivider(
                                         color = match2
                                     )
@@ -270,8 +283,8 @@ fun PersonItemList(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PersonItemView(
-    person: Person,
+fun BuyItemView(
+    buyGood: BuyGood,
     mtViewModel: MTViewModel,
 ) {
     var showItemDelete by remember {
@@ -280,7 +293,6 @@ fun PersonItemView(
     var showEditDialog by remember {
         mutableStateOf(false)
     }
-    val deviceActionHelper : DeviceActionHelper = koinInject()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -292,25 +304,13 @@ fun PersonItemView(
                 onLongClick = {
                     showItemDelete = true
                 },
-            ), verticalAlignment = Alignment.CenterVertically
+            ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        val weight1 = Modifier.weight(1f)
-        BuyGoodItemText(
-            weight1, text = person.name
-        )
-        BuyGoodItemText(
-            weight1, text = person.paymentFee.toPriceString()
-        )
-        IconButton(
-            modifier = weight1,
-            onClick = {
-                deviceActionHelper.makeCall(person.phoneNumber)
-            }
-        ) {
-            Icon(
-                painter = painterResource(resource = Res.drawable.ic_baseline_phone_24),
-                contentDescription = null,
-                tint = match2
+        buyGood.getItemList().forEach { title ->
+            BuyGoodItemText(
+                Modifier.weight(1f),
+                text = title
             )
         }
     }
@@ -318,7 +318,7 @@ fun PersonItemView(
     if (showItemDelete) {
         DeleteDialog(
             onDelete = {
-                mtViewModel.deletePerson(person.personId!!)
+                mtViewModel.deleteBuyGood(buyGood.buyGoodId!!)
                 showItemDelete = false
             },
             onDismiss = {
@@ -327,15 +327,35 @@ fun PersonItemView(
         )
     }
     if (showEditDialog) {
-        PersonDialog(
-            person,
+        val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
+        BuyDialog(
+            buyGood = buyGood,
+            categoryList = categoryList,
             onDismiss = {
                 showEditDialog = false
             },
             onAdd = { data ->
-                mtViewModel.updatePerson(person.personId!!, data)
+                mtViewModel.insertBuyGood(
+                    data,
+                    buyGood.buyGoodId!!
+                )
                 showEditDialog = false
             }
         )
     }
+}
+
+@Composable
+fun BuyGoodItemText(
+    modifier: Modifier = Modifier,
+    color: Color = match2,
+    text: String,
+    fontSize: TextUnit = 12.sp,
+) {
+    DefaultText(
+        modifier = modifier,
+        color = color,
+        text = text,
+        fontSize = fontSize,
+    )
 }

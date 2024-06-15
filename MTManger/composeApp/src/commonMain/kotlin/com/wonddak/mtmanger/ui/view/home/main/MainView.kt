@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.home
+package com.wonddak.mtmanger.ui.view.home.main
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember

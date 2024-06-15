@@ -11,11 +11,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
-import com.wonddak.mtmanger.ui.view.home.BuyView
-import com.wonddak.mtmanger.ui.view.home.MainView
-import com.wonddak.mtmanger.ui.view.MtListView
-import com.wonddak.mtmanger.ui.view.home.PersonView
-import com.wonddak.mtmanger.ui.view.home.PlanView
+import com.wonddak.mtmanger.ui.view.home.buy.BuyView
+import com.wonddak.mtmanger.ui.view.home.main.MainView
+import com.wonddak.mtmanger.ui.view.home.main.MtListView
+import com.wonddak.mtmanger.ui.view.home.person.PersonView
+import com.wonddak.mtmanger.ui.view.home.plan.PlanView
 import com.wonddak.mtmanger.ui.view.SettingView
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.viewModel.MTViewModel

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.ui.theme.match2
-import com.wonddak.mtmanger.ui.view.home.BuyGoodItemText
+import com.wonddak.mtmanger.ui.view.home.buy.BuyGoodItemText
 import com.wonddak.mtmanger.util.BillingModule
 import org.koin.compose.koinInject
 

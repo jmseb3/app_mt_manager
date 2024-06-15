@@ -39,7 +39,7 @@ fun DialogBase(
             ) {
                 DefaultText(
                     text = confirmText,
-                    color = match1,
+                    color = if(confirmEnabled) match1 else match1.copy(alpha = 0.5f),
                 )
             }
 

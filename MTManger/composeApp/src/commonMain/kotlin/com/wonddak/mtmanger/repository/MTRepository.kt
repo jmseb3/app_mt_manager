@@ -14,6 +14,9 @@ import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 
 class MTRepository(
     private val mtDataDao: MtDataDao,
@@ -36,20 +39,6 @@ class MTRepository(
             emit(categoryList)
         }
     }
-
-    suspend fun checkEndDateById(mtId: Int, tempDate: String): Boolean {
-//        val transFormat = SimpleDateFormat("yyyy.MM.dd")
-
-        val nowDate = mtDataDao.getMtDataById(mtId)
-
-//        val mtEndData = transFormat.parse(nowDate.mtEnd)
-//        val mtStartData = transFormat.parse(nowDate.mtStart)
-//        val nowCheckData = transFormat.parse(tempDate)
-
-//        return (nowCheckData in mtStartData..mtEndData)
-        return true
-    }
-
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
     }

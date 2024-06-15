@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -97,14 +100,14 @@ fun DateRangePickerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(Modifier.weight(1f)) {
-                        (if (datePickerState.selectedStartDateMillis != null) datePickerState.selectedStartDateMillis?.let {
+                        Text(datePickerState.selectedStartDateMillis?.let {
                             it.toDateString()
-                        } else "Start Date")?.let { Text(text = it) }
+                        } ?: "Start Date")
                     }
                     Box(Modifier.weight(1f)) {
-                        (if (datePickerState.selectedEndDateMillis != null) datePickerState.selectedEndDateMillis?.let {
+                        Text(datePickerState.selectedEndDateMillis?.let {
                             it.toDateString()
-                        } else "End Date")?.let { Text(text = it) }
+                        } ?: "End Date")
                     }
                     Box(Modifier.weight(0.2f)) {
                         IconButton(
@@ -116,6 +119,96 @@ fun DateRangePickerDialog(
                                 onDismiss()
                             },
                             enabled = datePickerState.selectedStartDateMillis != null && datePickerState.selectedEndDateMillis != null
+                        ) {
+                            Icon(imageVector = Icons.Default.Done, contentDescription = "Ok")
+                        }
+                    }
+                }
+            },
+            showModeToggle = true,
+            colors = DatePickerDefaults.colors(
+                containerColor = match2,
+                dayInSelectionRangeContainerColor = match1.copy(alpha = 0.5f),
+                dayInSelectionRangeContentColor = match2,
+                selectedDayContainerColor = match1
+            )
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OneDatePickerDialog(
+    initialSelectedDateMillis : Long? = null,
+    selectableDates: SelectableDates,
+    onDismiss: () -> Unit,
+    onDateSelected: (String) -> Unit
+) {
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = initialSelectedDateMillis,
+        selectableDates = selectableDates
+    )
+
+    DatePickerDialog(
+        onDismissRequest = { onDismiss() },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onDateSelected(
+                        datePickerState.selectedDateMillis.toDateString(),
+                    )
+                    onDismiss()
+                },
+                enabled = datePickerState.selectedDateMillis != null
+            ) {
+                Text(text = "확인")
+            }
+        },
+        dismissButton = {
+            Button(onClick = {
+                onDismiss()
+            }) {
+                Text(text = "닫기")
+            }
+        }
+    ) {
+        DatePicker(
+            state = datePickerState,
+            dateFormatter = remember {
+                DatePickerDefaults.dateFormatter(
+                    "yy MM dd",
+                    "yy MM dd",
+                    "yy MM dd"
+                )
+            },
+            title = {
+                Text(
+                    text = "계획 일을 선택하세요",
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+            },
+            headline = {
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(Modifier.weight(1f)) {
+                        Text(datePickerState.selectedDateMillis?.let {
+                            it.toDateString()
+                        } ?: "Start Date")
+                    }
+                    Box(Modifier.weight(0.2f)) {
+                        IconButton(
+                            onClick = {
+                                onDateSelected(
+                                    datePickerState.selectedDateMillis.toDateString(),
+                                )
+                                onDismiss()
+                            },
+                            enabled = datePickerState.selectedDateMillis != null
                         ) {
                             Icon(imageVector = Icons.Default.Done, contentDescription = "Ok")
                         }

@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view
+package com.wonddak.mtmanger.ui.view.home.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
