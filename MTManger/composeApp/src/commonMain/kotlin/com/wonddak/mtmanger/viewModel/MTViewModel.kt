@@ -82,7 +82,6 @@ class MTViewModel(
         }
     }
 
-
     fun insertMtData(mtData: MtData) {
         viewModelScope.launch {
             val newId = withContext(Dispatchers.IO) {

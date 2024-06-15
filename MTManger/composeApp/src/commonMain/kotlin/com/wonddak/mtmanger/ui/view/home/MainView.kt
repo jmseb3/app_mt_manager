@@ -42,7 +42,6 @@ fun MainView(
     var showEditDialog by remember {
         mutableStateOf(false)
     }
-    val showDialog by remember { derivedStateOf { showAddDialog && showEditDialog } }
     Column(
         Modifier
             .fillMaxSize()
@@ -198,17 +197,30 @@ fun MainView(
                     ) {
                         DefaultText(text = "다른 여행 떠나기")
                     }
-                    if (showDialog) {
+                    if (showEditDialog) {
                         MTDialog(
-                            if (showEditDialog) mtData.mtdata else null,
+                            mtData.mtdata,
                             onDismiss = {
-                                showAddDialog = false
                                 showEditDialog = false
                             },
                             onAdd = { data ->
                                 mtViewModel.insertMtData(data)
-                                showAddDialog = false
+                                mtViewModel.showSnackBarMsg("정보를 수정했습니다.")
                                 showEditDialog = false
+                            }
+                        )
+                    }
+
+                    if (showAddDialog) {
+                        MTDialog(
+                            null,
+                            onDismiss = {
+                                showAddDialog = false
+                            },
+                            onAdd = { data ->
+                                mtViewModel.insertMtData(data)
+                                mtViewModel.showSnackBarMsg("${data.mtTitle}로 변경했어요")
+                                showAddDialog = false
                             }
                         )
                     }
