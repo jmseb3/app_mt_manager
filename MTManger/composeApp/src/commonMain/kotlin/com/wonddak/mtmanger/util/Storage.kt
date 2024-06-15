@@ -4,6 +4,7 @@ import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,6 +19,12 @@ class Storage(provider: DataStoreProvider) {
         get() = dataStore.data.map {
             it[intPreferencesKey("id")] ?: 0
         }
+
+    suspend fun updateId(id:Int){
+        dataStore.edit {
+            it[intPreferencesKey("id")] = id
+        }
+    }
 }
 
 internal fun createDataStoreWithDefaults(

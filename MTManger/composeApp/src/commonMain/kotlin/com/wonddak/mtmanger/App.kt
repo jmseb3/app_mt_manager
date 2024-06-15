@@ -43,12 +43,15 @@ import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.KoinAppDeclaration
 
 @Composable
-internal fun App() {
+internal fun App(
+    init : KoinAppDeclaration = {}
+) {
     KoinApplication(
         application = {
-            println("init !!!! ")
+            init()
             modules(sharedModule()) }
     ) {
         AppTheme {

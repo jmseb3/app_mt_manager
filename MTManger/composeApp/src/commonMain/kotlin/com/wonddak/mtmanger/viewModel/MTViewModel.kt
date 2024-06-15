@@ -16,18 +16,21 @@ import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.room.entity.SimpleBuyGood
 import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.room.entity.categoryList
+import com.wonddak.mtmanger.util.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MTViewModel(
     private val mtRepository: MTRepository,
-//    private val pref: SharedPreferences,
+    private val storage: Storage,
 ) : ViewModel() {
 
     var snackBarMsg: SnackBarMsg? by mutableStateOf(null)
@@ -40,9 +43,7 @@ class MTViewModel(
         snackBarMsg = null
     }
 
-    val mainMtId: StateFlow<Int>
-        get() = _mainMtId
-    private val _mainMtId = MutableStateFlow(0)
+    var mainMtId by mutableStateOf(0)
 
     val nowMtDataList: StateFlow<Resource<MtDataList>>
         get() = _nowMtDataList
@@ -60,7 +61,8 @@ class MTViewModel(
     init {
         viewModelScope.launch {
             launch {
-                mainMtId.collectLatest { it ->
+                storage.id.collectLatest {
+                    mainMtId = it
                     mtRepository.getMtDataList(it).collectLatest { mtDataList ->
                         _nowMtDataList.value = mtDataList
                     }
@@ -75,10 +77,9 @@ class MTViewModel(
     }
 
     fun setMtId(id: Int) {
-        _mainMtId.value = id
-//        val editor = pref.edit()
-//        editor.putInt("id", id)
-//        editor.apply()
+        viewModelScope.launch {
+            storage.updateId(id)
+        }
     }
 
 
@@ -100,7 +101,7 @@ class MTViewModel(
                 mtRepository.insertPerson(
                     Person(
                         null,
-                        mainMtId.value,
+                        mainMtId,
                         simplePerson.name,
                         simplePerson.phoneNumber,
                         simplePerson.paymentFee.toInt()
@@ -135,7 +136,7 @@ class MTViewModel(
                 mtRepository.insertBuyGood(
                     BuyGood(
                         buyGoodId,
-                        mainMtId.value,
+                        mainMtId,
                         simpleBuyGood.category,
                         simpleBuyGood.category,
                         simpleBuyGood.count.toInt(),
@@ -156,7 +157,7 @@ class MTViewModel(
             withContext(Dispatchers.IO) {
                 mtRepository.insertMtData(
                     MtData(
-                        mainMtId.value ?: 0,
+                        mainMtId ?: 0,
                         title,
                         fee,
                         start,
@@ -191,7 +192,7 @@ class MTViewModel(
     fun clearPersonData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mtRepository.clearPerson(mainMtId.value)
+                mtRepository.clearPerson(mainMtId)
             }
         }
     }
@@ -199,7 +200,7 @@ class MTViewModel(
     fun clearBuyGoodData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mtRepository.clearBuyGood(mainMtId.value)
+                mtRepository.clearBuyGood(mainMtId)
             }
         }
     }
@@ -210,7 +211,7 @@ class MTViewModel(
                 mtRepository.insertPlan(
                     Plan(
                         null,
-                        mainMtId.value,
+                        mainMtId,
                         nowDay = day,
                         nowPlanTitle = title,
                         simpleText = text

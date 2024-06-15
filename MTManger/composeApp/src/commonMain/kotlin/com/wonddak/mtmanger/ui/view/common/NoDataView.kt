@@ -30,14 +30,12 @@ fun NoDataBase(
     mtViewModel: MTViewModel,
     content: @Composable () -> Unit
 ) {
-    val mainId by mtViewModel.mainMtId.collectAsState(0)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(match1)
     ) {
-        if (mainId == 0) {
+        if (mtViewModel.mainMtId == 0) {
             NoDataView(mtViewModel)
         } else {
             content()
