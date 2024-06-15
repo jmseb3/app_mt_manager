@@ -10,6 +10,7 @@ import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 import com.wonddak.mtmanger.room.getRoomDatabase
 import com.wonddak.mtmanger.util.DataStoreProvider
+import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.util.Storage
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel
@@ -58,7 +59,15 @@ val repositoryModule = module {
     }
 }
 
+val deviceModule = module {
+    single<DeviceActionHelper> {
+        DeviceActionHelper()
+    }
+}
+
 val viewmodelModule = module {
     viewModelOf(::MTViewModel)
     viewModelOf(::PayViewModel)
 }
+
+fun sharedModule() = dataBaseModule + repositoryModule + viewmodelModule + configModule + deviceModule

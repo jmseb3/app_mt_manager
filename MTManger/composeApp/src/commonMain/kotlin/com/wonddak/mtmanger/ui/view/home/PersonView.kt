@@ -44,6 +44,7 @@ import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.dialog.PersonDialog
+import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_reset
@@ -51,6 +52,7 @@ import mtmanger.composeapp.generated.resources.ic_baseline_phone_24
 import mtmanger.composeapp.generated.resources.info_text
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun PersonView(
@@ -278,6 +280,7 @@ fun PersonItemView(
     var showEditDialog by remember {
         mutableStateOf(false)
     }
+    val deviceActionHelper : DeviceActionHelper = koinInject()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -301,11 +304,7 @@ fun PersonItemView(
         IconButton(
             modifier = weight1,
             onClick = {
-//                context.startActivity(
-//                    Intent(
-//                        Intent.ACTION_DIAL, Uri.parse("tel:" + person.phoneNumber)
-//                    )
-//                )
+                deviceActionHelper.makeCall(person.phoneNumber)
             }
         ) {
             Icon(
