@@ -56,7 +56,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
-            implementation("io.coil-kt:coil-compose:2.6.0")
+            implementation(libs.coil.compose)
+
 
             implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
@@ -78,6 +79,8 @@ kotlin {
 
             implementation(libs.bundles.koin.android)
             implementation(libs.datastore.preferences)
+            implementation("io.coil-kt:coil-compose:2.6.0")
+
 
         }
 
