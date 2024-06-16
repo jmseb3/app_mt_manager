@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.dialog
+package com.wonddak.mtmanger.ui.view.home.buy
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

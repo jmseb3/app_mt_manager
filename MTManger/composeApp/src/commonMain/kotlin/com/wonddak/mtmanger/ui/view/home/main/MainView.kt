@@ -26,7 +26,6 @@ import com.wonddak.mtmanger.room.entity.*
 import com.wonddak.mtmanger.toPriceString
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
-import com.wonddak.mtmanger.ui.view.dialog.MTDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable

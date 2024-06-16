@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.dialog
+package com.wonddak.mtmanger.ui.view.home.person
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

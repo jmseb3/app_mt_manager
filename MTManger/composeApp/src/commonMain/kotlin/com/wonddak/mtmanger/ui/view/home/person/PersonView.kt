@@ -43,7 +43,6 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
-import com.wonddak.mtmanger.ui.view.dialog.PersonDialog
 import com.wonddak.mtmanger.ui.view.home.buy.BuyGoodItemText
 import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.viewModel.MTViewModel

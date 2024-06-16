@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
-import com.wonddak.mtmanger.ui.view.dialog.MTDialog
+import com.wonddak.mtmanger.ui.view.home.main.MTDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable

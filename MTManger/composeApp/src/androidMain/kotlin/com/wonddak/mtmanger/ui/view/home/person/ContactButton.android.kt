@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view.dialog
+package com.wonddak.mtmanger.ui.view.home.person
 
 import android.content.Intent
 import android.content.pm.PackageManager
