@@ -16,7 +16,7 @@ import com.wonddak.mtmanger.ui.view.home.main.MainView
 import com.wonddak.mtmanger.ui.view.home.main.MtListView
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
-import com.wonddak.mtmanger.ui.view.SettingView
+import com.wonddak.mtmanger.ui.view.setting.SettingView
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.viewModel.MTViewModel
 

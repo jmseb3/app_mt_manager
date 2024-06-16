@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view
+package com.wonddak.mtmanger.ui.view.setting
 
 import android.app.Activity
 import androidx.compose.foundation.BorderStroke

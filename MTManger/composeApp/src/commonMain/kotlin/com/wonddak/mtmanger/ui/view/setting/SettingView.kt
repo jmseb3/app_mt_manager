@@ -1,4 +1,4 @@
-package com.wonddak.mtmanger.ui.view
+package com.wonddak.mtmanger.ui.view.setting
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -195,6 +195,3 @@ fun SettingView(
         }
     }
 }
-
-@Composable
-internal expect fun SettingAdFooter(removeAd: Boolean)
