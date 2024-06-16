@@ -159,52 +159,6 @@ fun PlanCardView(
     startDate: String,
     endDate: String
 ) {
-//    val context = LocalContext.current
-//    val picker =
-//        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-//            // Callback is invoked after the user selects a media item or closes the
-//            // photo picker.
-//            if (uri != null) {
-//                Log.d("PhotoPicker", "Selected URI: $uri")
-////                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-////                context.contentResolver.takePersistableUriPermission(uri, flag)
-//                mtViewModel.updatePlanImgSrc(
-//                    plan.planId!!,
-//                    uri.toString()
-//                )
-//
-//                context.contentResolver.openInputStream(uri)?.use { fis ->
-//                    val byteBuffer = ByteArrayOutputStream()
-//                    val bufferSize = 1024
-//                    val buffer = ByteArray(bufferSize)
-//                    var len = 0
-//                    while (fis.read(buffer).also { len = it } != -1) {
-//                        byteBuffer.write(buffer, 0, len)
-//                    }
-//                    Log.i("JWH", byteBuffer.toByteArray().joinToString(" "))
-//                    val originalImage = byteBuffer.toByteArray()
-//                    val bitmapImage =
-//                        BitmapFactory.decodeByteArray(originalImage, 0, originalImage.size)
-//                    val mutableBitmapImage =
-//                        Bitmap.createScaledBitmap(bitmapImage, 800, 600, false)
-//                    val outputStream = ByteArrayOutputStream()
-//                    mutableBitmapImage.compress(Bitmap.CompressFormat.PNG, 0, outputStream)
-//                    if (mutableBitmapImage != bitmapImage) {
-//                        mutableBitmapImage.recycle();
-//                    } // else they are the same, just recycle once
-//
-//                    bitmapImage.recycle();
-//                    mtViewModel.updatePlanImgByte(
-//                        plan.planId!!,
-//                        outputStream.toByteArray()
-//                    )
-//
-//                }
-//            } else {
-//                Log.d("PhotoPicker", "No media selected")
-//            }
-//        }
-
     var showImgDelete by remember {
         mutableStateOf(false)
     }
@@ -237,21 +191,12 @@ fun PlanCardView(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 3.dp)
         ) {
-            IconButton(
-                modifier = Modifier
+            ImageAddButton(
+                Modifier
                     .size(36.dp)
                     .align(Alignment.TopEnd),
-                onClick = {
-//                    picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                },
-            ) {
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    painter = painterResource(resource = Res.drawable.add_photo),
-                    contentDescription = null,
-                    tint = match1
-                )
-            }
+                plan
+            )
             Column(
                 Modifier.fillMaxWidth(),
             ) {
@@ -269,36 +214,17 @@ fun PlanCardView(
                     fontFamily = maple()
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                val imageModifier = Modifier
+                PlanImageView(Modifier
                     .combinedClickable(
                         onClick = { },
                         onLongClick = {
                             showImgDelete = true
                         },
                     )
-                    .fillMaxWidth()
-//                if (plan.imgBytes != null) {
-//                    Image(
-//                        bitmap = BitmapFactory.decodeByteArray(
-//                            plan.imgBytes,
-//                            0,
-//                            plan.imgBytes.size
-//                        ).asImageBitmap(),
-//                        contentDescription = null,
-//                        modifier = imageModifier,
-//                        contentScale = ContentScale.Fit,
-//                        alignment = Alignment.Center
-//                    )
-//                } else if (plan.imgSrc.isNotEmpty()) {
-//                    Image(
-//                        painter = rememberAsyncImagePainter(
-//                            model = Uri.parse(plan.imgSrc)  // or ht
-//                        ),
-//                        contentDescription = "",
-//                        modifier = imageModifier,
-//                        alignment = Alignment.Center
-//                    )
-//                }
+                    .fillMaxWidth(),
+                    plan
+                )
+
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = plan.simpleText,
