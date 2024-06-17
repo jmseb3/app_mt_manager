@@ -124,11 +124,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    sourceSets {
-        getByName("main") {
-            this.assets.srcDir("$rootDir/assets")
-        }
-    }
 }
 
 room {

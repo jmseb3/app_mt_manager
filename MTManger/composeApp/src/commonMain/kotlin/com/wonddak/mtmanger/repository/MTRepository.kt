@@ -1,22 +1,19 @@
 package com.wonddak.mtmanger.repository
 
 import com.wonddak.mtmanger.model.Resource
+import com.wonddak.mtmanger.room.dao.BuyGoodDao
+import com.wonddak.mtmanger.room.dao.CategoryListDao
+import com.wonddak.mtmanger.room.dao.MtDataDao
+import com.wonddak.mtmanger.room.dao.PersonDao
+import com.wonddak.mtmanger.room.dao.PlanDao
 import com.wonddak.mtmanger.room.entity.BuyGood
 import com.wonddak.mtmanger.room.entity.MtData
 import com.wonddak.mtmanger.room.entity.Person
 import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.room.entity.categoryList
-import com.wonddak.mtmanger.room.dao.BuyGoodDao
-import com.wonddak.mtmanger.room.dao.CategoryListDao
-import com.wonddak.mtmanger.room.dao.MtDataDao
-import com.wonddak.mtmanger.room.dao.PersonDao
-import com.wonddak.mtmanger.room.dao.PlanDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
 
 class MTRepository(
     private val mtDataDao: MtDataDao,
@@ -34,9 +31,20 @@ class MTRepository(
 
     }
 
-    fun getCategoryList() = flow {
+    fun getCategoryList() : Flow<List<categoryList>> = flow {
         categoryListDao.getCategoryDataList().collect { categoryList ->
-            emit(categoryList)
+            if(categoryList.isEmpty()) {
+                val default = listOf(
+                    "식재료",
+                    "주류",
+                    "차비",
+                    "식사",
+                    "마트"
+                ).map { categoryList(null, it) }
+                categoryListDao.insertCategoryList(default)
+            } else {
+                emit(categoryList)
+            }
         }
     }
     suspend fun insertMtData(mtData: MtData): Long {
