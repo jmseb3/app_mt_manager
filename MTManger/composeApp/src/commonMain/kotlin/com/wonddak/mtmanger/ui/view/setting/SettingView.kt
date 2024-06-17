@@ -24,7 +24,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -92,7 +91,6 @@ fun SettingView(
                     containerColor = match2
                 )
             ) {
-                val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
                 var inputText by remember {
                     mutableStateOf("")
                 }
@@ -105,7 +103,7 @@ fun SettingView(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    items(categoryList) { category ->
+                    items(mtViewModel.settingCategoryList) { category ->
                         var showDeleteDialog by remember {
                             mutableStateOf(false)
                         }

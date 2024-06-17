@@ -21,10 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -52,11 +50,7 @@ class MTViewModel(
         MutableStateFlow(Resource.Loading)
 
 
-    val settingCategoryList: StateFlow<List<categoryList>>
-        get() = _categoryList
-
-    private var _categoryList: MutableStateFlow<List<categoryList>> = MutableStateFlow(emptyList())
-
+    var settingCategoryList by mutableStateOf(emptyList<categoryList>())
 
     init {
         viewModelScope.launch {
@@ -70,7 +64,7 @@ class MTViewModel(
             }
             launch {
                 mtRepository.getCategoryList().collect {
-                    _categoryList.value = it
+                    settingCategoryList = it
                 }
             }
         }
@@ -156,7 +150,7 @@ class MTViewModel(
             withContext(Dispatchers.IO) {
                 mtRepository.insertMtData(
                     MtData(
-                        mainMtId ?: 0,
+                        mainMtId,
                         title,
                         fee,
                         start,
@@ -278,9 +272,14 @@ class MTViewModel(
 
     fun deleteCategoryById(categoryId: Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                mtRepository.deleteCategoryById(categoryId)
+            if (settingCategoryList.size > 2) {
+                withContext(Dispatchers.IO) {
+                    mtRepository.deleteCategoryById(categoryId)
+                }
+            } else {
+                snackBarMsg = SnackBarMsg("적어도 하나는 존재해야 합니다.")
             }
         }
     }
+
 }

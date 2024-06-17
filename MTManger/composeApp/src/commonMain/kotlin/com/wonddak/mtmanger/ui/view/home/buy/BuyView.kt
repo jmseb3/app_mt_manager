@@ -192,11 +192,9 @@ fun BuyGoodPanel(
             },
         )
     }
-    val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
-
     if (showAddDialog) {
         BuyDialog(
-            categoryList = categoryList,
+            categoryList = mtViewModel.settingCategoryList,
             onDismiss = {
                 showAddDialog = false
             },
@@ -326,10 +324,9 @@ fun BuyItemView(
         )
     }
     if (showEditDialog) {
-        val categoryList by mtViewModel.settingCategoryList.collectAsState(emptyList())
         BuyDialog(
             buyGood = buyGood,
-            categoryList = categoryList,
+            categoryList = mtViewModel.settingCategoryList,
             onDismiss = {
                 showEditDialog = false
             },

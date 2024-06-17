@@ -28,7 +28,6 @@ class MTRepository(
         mtDataDao.getMtDataList(id).collect {
             emit(Resource.Success(it))
         }
-
     }
 
     fun getCategoryList() : Flow<List<categoryList>> = flow {
