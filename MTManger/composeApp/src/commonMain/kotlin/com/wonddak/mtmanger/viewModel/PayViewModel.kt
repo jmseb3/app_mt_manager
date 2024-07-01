@@ -10,12 +10,13 @@ import kotlinx.coroutines.launch
 
 class PayViewModel() : ViewModel() {
 
-    var removeAdStatus by mutableStateOf(true)
+    var removeAdStatus by mutableStateOf(false)
         private set
 
     init {
         viewModelScope.launch {
             removeAddStatus.collect {
+                println("removeAdStatus : $it")
                 this@PayViewModel.removeAdStatus = it
             }
         }

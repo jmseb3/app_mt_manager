@@ -7,4 +7,4 @@ expect class  BillingModule {
 
 }
 
-var removeAddStatus: MutableStateFlow<Boolean> = MutableStateFlow(true)
+var removeAddStatus: MutableStateFlow<Boolean> = MutableStateFlow(false)
