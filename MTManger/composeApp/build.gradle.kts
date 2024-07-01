@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 kotlin {
     androidTarget {
@@ -73,7 +75,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.uiTooling)
             implementation(libs.androidx.activity.compose)
-            implementation("com.google.android.gms:play-services-ads:23.1.0")
+            implementation("com.google.android.gms:play-services-ads:23.2.0")
             implementation(libs.billing)
             implementation(libs.billing.ktx)
 
@@ -81,7 +83,8 @@ kotlin {
             implementation(libs.datastore.preferences)
             implementation("io.coil-kt:coil-compose:2.6.0")
 
-
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.bundles.firebase)
         }
 
         iosMain.dependencies {

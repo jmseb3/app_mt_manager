@@ -8,17 +8,21 @@ kotlinxDatetime = "0.6.0"
 navigationCompose = "2.7.0-alpha07"
 room = "2.7.0-alpha04"
 sqlite = "2.5.0-alpha04"
-peekaboo = "0.5.2"
 
 billing = "7.0.0"
 datastore = "1.1.1"
 koin = "3.6.0-Beta4"
 koin2 = "1.2.0-Beta4"
 ksp = "2.0.0-1.0.22"
-androidx-uiTest = "1.6.7"
+androidx-uiTest = "1.6.8"
 
 [libraries]
 coil-compose = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
+
+firebase-bom = { module = "om.google.firebase:firebase-bom", version = "33.1.1" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -53,4 +57,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 koin-android = ["koin-core", "koin-android"]
-koin-shared = ["koin-compose","koin-compose-viewmodel"]
+koin-shared = ["koin-compose", "koin-compose-viewmodel"]
+firebase = ["firebase-analytics", "firebase-crashlytics"]
