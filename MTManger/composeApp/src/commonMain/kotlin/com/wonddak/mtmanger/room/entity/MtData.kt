@@ -20,6 +20,9 @@ data class MtData(
         mtStart,
         mtEnd
     )
+
+    val simpleTitle :String
+        get() = "$mtTitle\n$mtStart ~ $mtEnd"
 }
 
 data class MtDataList(

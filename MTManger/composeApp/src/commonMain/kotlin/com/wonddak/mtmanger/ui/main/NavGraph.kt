@@ -1,6 +1,7 @@
 package com.wonddak.mtmanger.ui.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -25,7 +26,6 @@ fun NavGraph(
     navController: NavHostController,
     mtViewModel: MTViewModel,
 ) {
-
     NavHost(navController = navController, startDestination = Const.HOME) {
         homeGraph(navController, mtViewModel)
 
@@ -33,8 +33,11 @@ fun NavGraph(
             SettingView()
         }
         composable(Const.MT_LIST) {
-            MtListView() {
-                navController.popBackStack()
+            MtListView { data ->
+                if(navController.popBackStack()) {
+                    mtViewModel.showSnackBarMsg("${data.mtTitle}로 변경했어요.")
+                    mtViewModel.setMtId(data.mtDataId!!)
+                }
             }
         }
     }

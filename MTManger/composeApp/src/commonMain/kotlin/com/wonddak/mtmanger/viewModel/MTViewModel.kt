@@ -34,7 +34,7 @@ class MTViewModel(
     var snackBarMsg: SnackBarMsg? by mutableStateOf(null)
 
     fun showSnackBarMsg(msg: String) {
-        snackBarMsg = SnackBarMsg(msg)
+        snackBarMsg = SnackBarMsg(msg,"확인") { closeSnackBar() }
     }
 
     fun closeSnackBar() {

@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,7 +36,7 @@ import org.koin.compose.koinInject
 @Composable
 fun MtListView(
     mtViewModel: MTViewModel = koinInject(),
-    close: () -> Unit
+    close: (MtData) -> Unit
 ) {
     val mtList by mtViewModel.getMtTotalLIst().collectAsState(initial = emptyList())
     Column(
@@ -72,11 +73,7 @@ fun MtListView(
             ) {
                 items(mtList) { mtData ->
                     MtListItem(mtData = mtData) {
-                        mtViewModel.snackBarMsg = SnackBarMsg(
-                            "${mtData.mtTitle}로 변경했어요."
-                        )
-                        mtViewModel.setMtId(mtData.mtDataId!!)
-                        close()
+                        close(mtData)
                     }
                     HorizontalDivider(
                         color = match2
@@ -92,18 +89,20 @@ fun MtListItem(
     mtData: MtData,
     onClick: () -> Unit
 ) {
-    Column(
+    TextButton(
         modifier = Modifier
             .fillMaxWidth()
             .noRippleClickable(onClick)
             .padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        onClick = onClick
     ) {
-        DefaultText(
-            text = mtData.mtTitle
-        )
-        DefaultText(
-            text = "${mtData.mtStart} ~ ${mtData.mtEnd}"
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            DefaultText(
+                text = mtData.simpleTitle
+            )
+        }
+
     }
 }
