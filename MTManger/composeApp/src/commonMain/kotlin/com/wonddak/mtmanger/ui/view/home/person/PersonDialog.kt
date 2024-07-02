@@ -59,22 +59,7 @@ fun PersonDialog(
                         personData = it
                         focusRequester.requestFocus()
                     }
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        DefaultText(
-                            text = "연락처에서 불러오기",
-                            color = match1
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Icon(
-                            painter = painterResource(resource = Res.drawable.ic_baseline_contact_phone_24),
-                            contentDescription = null,
-                            tint = match1
-                        )
-                    }
-                }
+                )
             }
 
             DialogTextField(

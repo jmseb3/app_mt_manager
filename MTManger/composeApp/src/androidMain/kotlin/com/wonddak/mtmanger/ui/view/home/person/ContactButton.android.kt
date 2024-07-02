@@ -19,8 +19,7 @@ import org.koin.compose.koinInject
 @Composable
 internal actual fun ContactButton(
     modifier: Modifier,
-    updateValue: (SimplePerson) -> Unit,
-    buttonContent: @Composable () -> Unit
+    updateValue: (SimplePerson) -> Unit
 ) {
     val mtViewModel: MTViewModel = koinInject()
     val context = LocalContext.current
@@ -78,6 +77,6 @@ internal actual fun ContactButton(
             }
         }
     ) {
-        buttonContent()
+        ContactButtonContent()
     }
 }
