@@ -28,15 +28,15 @@ data class BuyGood(
     val price: Int,
 ) {
     fun getCountString(): String {
-        return count.toPriceString()
+        return count.toLong().toPriceString()
     }
 
     fun getPriceString(): String {
-        return price.toPriceString()
+        return price.toLong().toPriceString()
     }
 
     fun getTotalString(): String {
-        return (price * count).toPriceString()
+        return (price.toLong() * count.toLong()).toPriceString()
     }
 
     fun getItemList() = listOf(

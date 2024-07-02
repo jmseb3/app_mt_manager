@@ -224,26 +224,19 @@ fun BuyItemList(
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Row(
+            BuyItemRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 5.dp)
-
-            ) {
+                    .padding(vertical = 5.dp),
                 listOf(
                     "분류",
                     "이름",
                     "수량",
                     "단가",
                     "합"
-                ).forEach {title ->
-                    BuyGoodItemText(
-                        Modifier.weight(1f),
-                        color = match1,
-                        text = title
-                    )
-                }
-            }
+                ),
+                match1
+            )
             Card(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -252,8 +245,7 @@ fun BuyItemList(
                 colors = CardDefaults.cardColors(
                     containerColor = match1
                 )
-            )
-            {
+            ) {
                 if (resource is Resource.Success) {
                     (resource as Resource.Success<MtDataList>).data?.let {
                         val buyGoodList = it.buyGoodList
@@ -290,10 +282,9 @@ fun BuyItemView(
     var showEditDialog by remember {
         mutableStateOf(false)
     }
-    Row(
+    BuyItemRow(
         modifier = Modifier
             .fillMaxWidth()
-            .height(25.dp)
             .combinedClickable(
                 onClick = {
                     showEditDialog = true
@@ -302,15 +293,8 @@ fun BuyItemView(
                     showItemDelete = true
                 },
             ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        buyGood.getItemList().forEach { title ->
-            BuyGoodItemText(
-                Modifier.weight(1f),
-                text = title
-            )
-        }
-    }
+        buyGood.getItemList()
+    )
 
     if (showItemDelete) {
         DeleteDialog(
@@ -338,6 +322,54 @@ fun BuyItemView(
                 showEditDialog = false
             }
         )
+    }
+}
+
+@Composable
+fun BuyItemRow(
+    modifier: Modifier = Modifier,
+    dataList: List<String>,
+    color: Color = match2
+) {
+    Row(
+        modifier = modifier
+            .height(50.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BuyGoodItemText(
+            Modifier.weight(1f),
+            text = dataList[0],
+            color = color
+        )
+        BuyGoodItemText(
+            Modifier.weight(1f),
+            text = dataList[1],
+            color = color
+        )
+        Column(
+            Modifier.weight(2f)
+        ) {
+            Row(
+                Modifier.fillMaxWidth()
+            ) {
+                BuyGoodItemText(
+                    Modifier.weight(1f),
+                    text = dataList[2],
+                    color = color
+                )
+                BuyGoodItemText(
+                    Modifier.weight(1f),
+                    text = dataList[3],
+                    color = color
+                )
+            }
+            HorizontalDivider(color = color.copy(0.5f))
+            BuyGoodItemText(
+                Modifier.fillMaxWidth(),
+                text = dataList[4],
+                color = color
+            )
+        }
     }
 }
 
