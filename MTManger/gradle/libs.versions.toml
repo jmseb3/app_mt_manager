@@ -19,7 +19,7 @@ androidx-uiTest = "1.6.8"
 [libraries]
 coil-compose = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
 
-firebase-bom = { module = "om.google.firebase:firebase-bom", version = "33.1.1" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.1.1" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
