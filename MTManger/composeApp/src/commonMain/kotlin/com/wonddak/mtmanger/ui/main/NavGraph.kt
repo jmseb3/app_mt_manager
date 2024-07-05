@@ -1,8 +1,9 @@
 package com.wonddak.mtmanger.ui.main
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -12,13 +13,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
+import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.ui.view.home.buy.BuyView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
 import com.wonddak.mtmanger.ui.view.home.main.MtListView
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
+import com.wonddak.mtmanger.ui.view.setting.CategoryView
 import com.wonddak.mtmanger.ui.view.setting.SettingView
-import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable
@@ -29,9 +31,8 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = Const.HOME) {
         homeGraph(navController, mtViewModel)
 
-        composable(Const.SETTING) {
-            SettingView()
-        }
+        settingGraph(navController,mtViewModel)
+
         composable(Const.MT_LIST) {
             MtListView { data ->
                 if(navController.popBackStack()) {
@@ -81,11 +82,40 @@ fun NavGraphBuilder.homeGraph(
     }
 }
 
+fun NavGraphBuilder.settingGraph(
+    navController: NavHostController,
+    mtViewModel: MTViewModel
+) {
+    navigation(startDestination = Const.SETTING_HOME, route = Const.SETTING) {
+        composable(Const.SETTING_HOME) {
+            SettingView() {
+                navController.navigate(Const.CATEGORY)
+            }
+        }
+        composable(Const.CATEGORY) {
+            CategoryView(
+                Modifier
+                    .fillMaxSize(),
+                mtViewModel.settingCategoryList,
+                update = {id,input ->
+                    mtViewModel.updateCategory(id,input)
+                },
+                delete = {
+                    mtViewModel.deleteCategoryById(it)
+                },
+                insert = {
+                    mtViewModel.insertCategory(it)
+                }
+            )
+        }
+    }
+}
+
 @Composable
 fun NavController.isSetting(): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute == Const.SETTING
+    return currentRoute == Const.CATEGORY || currentRoute == Const.SETTING_HOME
 }
 
 @Composable

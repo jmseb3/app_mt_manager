@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -63,7 +64,7 @@ fun CategoryView(
         }
         prevSize = list.size
     }
-    Box(modifier.imePadding()) {
+    Box(modifier.fillMaxSize().imePadding()) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = OutlinedTextFieldDefaults.MinHeight + 10.dp),
