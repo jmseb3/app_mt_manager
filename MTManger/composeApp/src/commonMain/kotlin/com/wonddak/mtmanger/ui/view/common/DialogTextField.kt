@@ -2,11 +2,11 @@ package com.wonddak.mtmanger.ui.view.common
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.ui.theme.maple
@@ -25,16 +25,17 @@ fun DialogTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
+    color : Color = match1,
     change: (value: String) -> Unit
 ) {
-    val color = OutlinedTextFieldDefaults.colors(
-        focusedBorderColor = match1,
-        focusedTextColor = match1,
-        unfocusedTextColor = match1,
-        disabledBorderColor = match1,
-        disabledTextColor = match1,
-        cursorColor = match1,
-        unfocusedBorderColor = match1.copy(alpha = 0.5f)
+    val colorSetting = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = color,
+        focusedTextColor = color,
+        unfocusedTextColor = color,
+        disabledBorderColor = color,
+        disabledTextColor = color,
+        cursorColor = color,
+        unfocusedBorderColor = color.copy(alpha = 0.5f)
     )
     OutlinedTextField(
         modifier = modifier,
@@ -43,7 +44,7 @@ fun DialogTextField(
         placeholder = {
             DefaultText(
                 text = placeHolder,
-                color = match1.copy(alpha = 0.5f),
+                color = color.copy(alpha = 0.5f),
                 fontSize = 13.sp
             )
         },
@@ -52,11 +53,11 @@ fun DialogTextField(
         label = {
             DefaultText(
                 text = label,
-                color = match1,
+                color = color,
                 fontSize = 13.sp
             )
         },
-        colors = color,
+        colors = colorSetting,
         trailingIcon = trailingIcon,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
