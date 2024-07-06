@@ -2,6 +2,8 @@ package com.wonddak.mtmanger
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,12 +43,13 @@ import org.koin.dsl.KoinAppDeclaration
 
 @Composable
 internal fun App(
-    init : KoinAppDeclaration = {}
+    init: KoinAppDeclaration = {}
 ) {
     KoinApplication(
         application = {
             init()
-            modules(sharedModule()) }
+            modules(sharedModule())
+        }
     ) {
         AppTheme {
             var showSplash by remember {
@@ -67,8 +70,8 @@ internal fun App(
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreen() {
-    val mtViewModel : MTViewModel = koinViewModel()
-    val payViewModel  : PayViewModel = koinViewModel()
+    val mtViewModel: MTViewModel = koinViewModel()
+    val payViewModel: PayViewModel = koinViewModel()
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(mtViewModel.snackBarMsg) {
@@ -105,8 +108,8 @@ fun HomeScreen() {
         bottomBar = {
             AnimatedVisibility(
                 !navController.isSetting() && !navController.isMTList(),
-                enter = expandVertically(),
-                exit = shrinkVertically(),
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut(),
             ) {
                 BottomNavigationBar(navController = navController)
             }
@@ -115,7 +118,7 @@ fun HomeScreen() {
     ) {
         Box(Modifier.padding(it)) {
             Column {
-                if (!payViewModel.removeAdStatus) {
+                if (!(navController.isMTList() || navController.isSetting()) && !payViewModel.removeAdStatus) {
                     AdvertView(Modifier.defaultMinSize(minHeight = 50.dp))
                 }
                 NavGraph(

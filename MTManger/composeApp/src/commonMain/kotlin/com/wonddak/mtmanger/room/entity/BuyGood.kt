@@ -28,7 +28,7 @@ data class BuyGood(
     val price: Int,
 ) {
     fun getCountString(): String {
-        return count.toLong().toPriceString()
+        return count.toLong().toPriceString("개")
     }
 
     fun getPriceString(): String {
