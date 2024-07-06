@@ -31,11 +31,11 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = Const.HOME) {
         homeGraph(navController, mtViewModel)
 
-        settingGraph(navController,mtViewModel)
+        settingGraph(navController, mtViewModel)
 
         composable(Const.MT_LIST) {
             MtListView { data ->
-                if(navController.popBackStack()) {
+                if (navController.popBackStack()) {
                     mtViewModel.showSnackBarMsg("${data.mtTitle}로 변경했어요.")
                     mtViewModel.setMtId(data.mtDataId!!)
                 }
@@ -97,8 +97,8 @@ fun NavGraphBuilder.settingGraph(
                 Modifier
                     .fillMaxSize(),
                 mtViewModel.settingCategoryList,
-                update = {id,input ->
-                    mtViewModel.updateCategory(id,input)
+                update = { id, input ->
+                    mtViewModel.updateCategory(id, input)
                 },
                 delete = {
                     mtViewModel.deleteCategoryById(it)
@@ -123,4 +123,15 @@ fun NavController.isMTList(): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     return currentRoute == Const.MT_LIST
+}
+
+@Composable
+fun NavController.getTitle(): String {
+    return if (this.isSetting()) {
+        "설정"
+    } else if (this.isMTList()) {
+        "MT 리스트"
+    } else {
+        "MT 매니저"
+    }
 }

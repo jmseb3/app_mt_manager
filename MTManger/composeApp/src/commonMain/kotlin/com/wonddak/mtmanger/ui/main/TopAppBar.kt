@@ -1,6 +1,9 @@
 package com.wonddak.mtmanger.ui.main
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,12 +27,10 @@ import org.jetbrains.compose.resources.painterResource
 fun TopAppContent(
     navController: NavController
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
     TopAppBar(
         title = {
             DefaultText(
-                text = "MT 매니저",
+                text = navController.getTitle(),
                 color = match1
             )
         },
@@ -37,14 +38,18 @@ fun TopAppContent(
             containerColor = match2,
         ),
         actions = {
-            AnimatedVisibility(visible = currentRoute != Const.MT_LIST) {
+            AnimatedVisibility(
+                visible = !navController.isMTList() && !navController.isSetting(),
+                enter = slideInHorizontally(),
+                exit = slideOutHorizontally()
+            ) {
                 IconButton(
                     onClick = {
                         navController.navigate(Const.SETTING) {
                             this.launchSingleTop = true
                         }
                     },
-                    enabled = currentRoute != Const.SETTING
+                    enabled = !navController.isSetting()
                 ) {
                     Icon(
                         painter = painterResource(resource = Res.drawable.ic_baseline_settings_24),

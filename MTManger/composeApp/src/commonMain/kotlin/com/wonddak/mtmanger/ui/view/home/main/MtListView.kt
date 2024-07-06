@@ -49,22 +49,6 @@ fun MtListView(
         Column(
             Modifier.weight(1f)
         ) {
-            Spacer(
-                modifier = Modifier
-                    .height(10.dp)
-            )
-            Text(
-                text = "MT 리스트",
-                color = match2,
-                fontSize = 30.sp,
-                fontFamily = maple(),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(10.dp)
-            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
