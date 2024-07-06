@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -64,7 +65,12 @@ fun CategoryView(
         }
         prevSize = list.size
     }
-    Box(modifier.fillMaxSize().imePadding()) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .imePadding()
+            .padding(horizontal = 10.dp)
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = OutlinedTextFieldDefaults.MinHeight + 10.dp),
@@ -145,8 +151,7 @@ fun CategoryView(
             change = { inputText = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomStart)
-                .padding(10.dp),
+                .align(Alignment.BottomStart),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
             ),
@@ -160,7 +165,12 @@ fun CategoryView(
                         }
                     }
                 }
-            )
+            ),
+            trailingIcon = {
+                IconButton(onClick = { focusManager.clearFocus() }) {
+                    Icon(Icons.Filled.KeyboardArrowDown, null)
+                }
+            }
         )
     }
 }
