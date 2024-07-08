@@ -20,7 +20,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.wonddak.mtmanger.BuildConfig
-import com.wonddak.mtmanger.R
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.banner_ad_unit_id
 import mtmanger.composeapp.generated.resources.banner_ad_unit_id_test
@@ -40,7 +39,7 @@ actual fun AdvertView(modifier: Modifier) {
         }
     }
 
-    if (isInEditMode || id == "") {
+    if (isInEditMode) {
         Text(
             modifier = modifier
                 .fillMaxWidth()
