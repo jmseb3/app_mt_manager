@@ -21,8 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.entity.*
+import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.toPriceString
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
@@ -31,7 +32,7 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 @Composable
 fun MainView(
     mtViewModel: MTViewModel,
-    showMTList: () -> Unit
+    route: (route:String) -> Unit,
 ) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     var showAddDialog by remember {
@@ -183,14 +184,19 @@ fun MainView(
                     }
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { showMTList() },
+                        onClick = {
+                            route(Const.MT_LIST)
+                                  },
                         border = BorderStroke(2.dp, match2),
                     ) {
                         DefaultText(text = "MT 목록")
                     }
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { showAddDialog = true },
+                        onClick = {
+                            route(Const.MT_START)
+//                            showAddDialog = true
+                                  },
                         border = BorderStroke(2.dp, match2),
                     ) {
                         DefaultText(text = "다른 여행 떠나기")

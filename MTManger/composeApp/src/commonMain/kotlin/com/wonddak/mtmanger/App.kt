@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -22,14 +21,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.wonddak.mtmanger.di.sharedModule
 import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
 import com.wonddak.mtmanger.ui.main.TopAppContent
-import com.wonddak.mtmanger.ui.main.isMTList
-import com.wonddak.mtmanger.ui.main.isSetting
+import com.wonddak.mtmanger.ui.main.notHome
 import com.wonddak.mtmanger.ui.theme.AppTheme
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.AdvertView
@@ -69,9 +66,10 @@ internal fun App(
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-fun HomeScreen() {
-    val mtViewModel: MTViewModel = koinViewModel()
-    val payViewModel: PayViewModel = koinViewModel()
+fun HomeScreen(
+    mtViewModel: MTViewModel = koinViewModel(),
+    payViewModel: PayViewModel = koinViewModel()
+) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(mtViewModel.snackBarMsg) {
@@ -107,7 +105,7 @@ fun HomeScreen() {
         },
         bottomBar = {
             AnimatedVisibility(
-                !navController.isSetting() && !navController.isMTList(),
+                !navController.notHome(),
                 enter = expandVertically() + fadeIn(),
                 exit = shrinkVertically() + fadeOut(),
             ) {
@@ -118,8 +116,8 @@ fun HomeScreen() {
     ) {
         Box(Modifier.padding(it)) {
             Column {
-                if (!(navController.isMTList() || navController.isSetting()) && !payViewModel.removeAdStatus) {
-                    AdvertView(Modifier.defaultMinSize(minHeight = 50.dp))
+                if (!navController.notHome() && !payViewModel.removeAdStatus) {
+                    AdvertView(Modifier)
                 }
                 NavGraph(
                     navController = navController,

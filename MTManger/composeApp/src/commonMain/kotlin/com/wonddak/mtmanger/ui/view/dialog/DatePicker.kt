@@ -23,27 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.wonddak.mtmanger.toDateString
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
-import kotlinx.datetime.toLocalDateTime
-
-@OptIn(FormatStringsInDatetimeFormats::class)
-private fun Long?.toDateString(): String {
-    this ?: return ""
-    val date =
-        Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.of("Asia/Seoul")).date
-    val formatPattern = "yyyy.MM.dd"
-    val dateTimeFormat = LocalDate.Format {
-        byUnicodePattern(formatPattern)
-    }
-    return date.format(dateTimeFormat)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

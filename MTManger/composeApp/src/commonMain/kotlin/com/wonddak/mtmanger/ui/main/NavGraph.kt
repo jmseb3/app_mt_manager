@@ -17,6 +17,7 @@ import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.ui.view.home.buy.BuyView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
 import com.wonddak.mtmanger.ui.view.home.main.MtListView
+import com.wonddak.mtmanger.ui.view.home.main.MtStart
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
 import com.wonddak.mtmanger.ui.view.setting.CategoryView
@@ -41,6 +42,9 @@ fun NavGraph(
                 }
             }
         }
+        composable(Const.MT_START) {
+            MtStart()
+        }
     }
 }
 
@@ -50,11 +54,9 @@ fun NavGraphBuilder.homeGraph(
 ) {
     navigation(startDestination = BottomNavItem.Main.screenRoute, route = Const.HOME) {
         composable(BottomNavItem.Main.screenRoute) {
-            NoDataBase(
-                mtViewModel
-            ) {
-                MainView(mtViewModel = mtViewModel) {
-                    navController.navigate(Const.MT_LIST) {
+            NoDataBase(mtViewModel) {
+                MainView(mtViewModel = mtViewModel) { routeString ->
+                    navController.navigate(routeString) {
                         launchSingleTop = true
                     }
                 }
@@ -123,6 +125,18 @@ fun NavController.isMTList(): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     return currentRoute == Const.MT_LIST
+}
+
+@Composable
+fun NavController.isMTStart(): Boolean {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return currentRoute == Const.MT_START
+}
+
+@Composable
+fun NavController.notHome() :Boolean {
+    return isSetting() || isMTStart() || isMTList()
 }
 
 @Composable
