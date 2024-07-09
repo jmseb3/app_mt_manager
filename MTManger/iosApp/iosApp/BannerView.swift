@@ -21,7 +21,11 @@ struct BannerView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         
         let viewController = UIViewController()
+        #if DEBUG
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        #else
+        bannerView.adUnitID = "ca-app-pub-2369897242309575/2080103235"
+        #endif
         bannerView.rootViewController = viewController
         bannerView.delegate = context.coordinator
 
