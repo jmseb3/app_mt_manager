@@ -20,12 +20,15 @@ import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.queryProductDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent
 
-actual class BillingModule(
-    private val context: Context,
-) : PurchasesUpdatedListener {
+actual class BillingModule : PurchasesUpdatedListener {
+
+    private val context: Context = KoinJavaComponent.getKoin().get()
 
     companion object {
         const val TAG = "BillingClient"
@@ -143,7 +146,7 @@ actual class BillingModule(
 
     override fun onPurchasesUpdated(
         billingResult: BillingResult,
-        purchases: MutableList<Purchase>?
+        purchases: MutableList<Purchase>?,
     ) {
         Log.d(TAG, "${billingResult.responseCode}")
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
@@ -195,13 +198,17 @@ actual class BillingModule(
                 withContext(Dispatchers.IO) {
                     billingClient.acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
                         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                            removeAddStatus.value = true
+                            _removeAdStatus.value = true
                         }
                     }
                 }
             } else {
-                removeAddStatus.value = true
+                _removeAdStatus.value = true
             }
         }
     }
+
+    private val _removeAdStatus = MutableStateFlow(false)
+    actual val removeAdStatus: StateFlow<Boolean>
+        get() = _removeAdStatus
 }

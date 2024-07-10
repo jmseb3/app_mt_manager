@@ -1,15 +1,14 @@
 package com.wonddak.mtmanger
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.wonddak.mtmanger.di.billingModule
 import com.wonddak.mtmanger.di.sharedModule
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,6 +17,7 @@ class MainActivity : ComponentActivity() {
     private var backKeyPressedTime: Long = 0
 
     private val mtViewModel: MTViewModel by viewModel()
+    private val payViewModel: PayViewModel by viewModel()
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 // Reference Android context
                 androidContext(this@MainActivity)
                 // Load modules
-                modules(billingModule + sharedModule())
+                modules(sharedModule())
             }
         }
     }

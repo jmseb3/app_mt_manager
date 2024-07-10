@@ -9,6 +9,7 @@ import com.wonddak.mtmanger.room.dao.MtDataDao
 import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 import com.wonddak.mtmanger.room.getRoomDatabase
+import com.wonddak.mtmanger.util.BillingModule
 import com.wonddak.mtmanger.util.DataStoreProvider
 import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.util.Storage
@@ -62,6 +63,9 @@ val repositoryModule = module {
 val deviceModule = module {
     single<DeviceActionHelper> {
         DeviceActionHelper()
+    }
+    single<BillingModule> {
+        BillingModule()
     }
 }
 

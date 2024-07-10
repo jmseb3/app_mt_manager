@@ -1,10 +1,8 @@
 package com.wonddak.mtmanger.util
 
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
-expect class  BillingModule {
-
+expect class  BillingModule() {
+    val removeAdStatus : StateFlow<Boolean>
 }
-
-var removeAddStatus: MutableStateFlow<Boolean> = MutableStateFlow(false)

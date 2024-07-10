@@ -5,17 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wonddak.mtmanger.util.removeAddStatus
+import com.wonddak.mtmanger.util.BillingModule
 import kotlinx.coroutines.launch
 
-class PayViewModel() : ViewModel() {
+class PayViewModel(
+    private val billingModule: BillingModule
+) : ViewModel() {
 
     var removeAdStatus by mutableStateOf(false)
         private set
 
     init {
         viewModelScope.launch {
-            removeAddStatus.collect {
+            billingModule.removeAdStatus.collect {
                 println("removeAdStatus : $it")
                 this@PayViewModel.removeAdStatus = it
             }
