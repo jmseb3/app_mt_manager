@@ -23,7 +23,6 @@ import mtmanger.composeapp.generated.resources.app_name
 import mtmanger.composeapp.generated.resources.icon
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SplashView(
@@ -41,7 +40,7 @@ fun SplashView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(resource = Res.drawable.icon),
+            painter = painterResource(Res.drawable.icon),
             contentDescription = null,
             modifier = Modifier.size(250.dp, 300.dp)
         )
