@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.wonddak.mtmanger.di.sharedModule
 import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
 import com.wonddak.mtmanger.ui.main.TopAppContent
@@ -36,21 +35,13 @@ import com.wonddak.mtmanger.ui.view.AdvertView
 import com.wonddak.mtmanger.ui.view.SplashView
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel
-import org.koin.compose.KoinApplication
+import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.dsl.KoinAppDeclaration
 
 @Composable
-internal fun App(
-    init: KoinAppDeclaration = {}
-) {
-    KoinApplication(
-        application = {
-            init()
-            modules(sharedModule())
-        }
-    ) {
+internal fun App() {
+    KoinContext() {
         AppTheme {
             var showSplash by remember {
                 mutableStateOf(true)

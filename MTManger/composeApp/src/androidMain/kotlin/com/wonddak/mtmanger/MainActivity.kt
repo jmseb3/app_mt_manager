@@ -37,14 +37,7 @@ class MainActivity : ComponentActivity() {
         this.onBackPressedDispatcher.addCallback(this, callback)
         enableEdgeToEdge()
         setContent {
-            App() {
-                // Log Koin into Android logger
-                androidLogger()
-                // Reference Android context
-                androidContext(this@MainActivity)
-                // Load modules
-                modules(sharedModule())
-            }
+            App()
         }
     }
 }
