@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
-import kotlinx.coroutines.delay
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.app_name
 import mtmanger.composeapp.generated.resources.icon
@@ -25,13 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun SplashView(
-    removeSplash: () -> Unit = {}
-) {
-    LaunchedEffect(true) {
-        delay(2_000)
-        removeSplash()
-    }
+fun SplashView() {
     Column(
         modifier = Modifier
             .fillMaxSize()

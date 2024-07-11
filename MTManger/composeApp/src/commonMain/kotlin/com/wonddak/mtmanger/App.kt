@@ -17,10 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -39,20 +36,12 @@ import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 internal fun App() {
     KoinContext() {
         AppTheme {
-            var showSplash by remember {
-                mutableStateOf(true)
-            }
-            if (showSplash) {
-                SplashView() {
-                    showSplash = false
-                }
-            } else {
-                HomeScreen()
-            }
+            HomeScreen()
         }
     }
 }
@@ -85,6 +74,7 @@ fun HomeScreen() {
             }
         }
     }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
@@ -118,5 +108,8 @@ fun HomeScreen() {
                 )
             }
         }
+    }
+    if (mtViewModel.showSplash) {
+        SplashView()
     }
 }

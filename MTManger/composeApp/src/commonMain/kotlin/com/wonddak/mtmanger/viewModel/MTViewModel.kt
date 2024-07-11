@@ -1,5 +1,6 @@
 package com.wonddak.mtmanger.viewModel
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,6 +20,7 @@ import com.wonddak.mtmanger.room.entity.categoryList
 import com.wonddak.mtmanger.util.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,6 +43,10 @@ class MTViewModel(
         snackBarMsg = null
     }
 
+    var init by mutableStateOf(false)
+    var timeFinish by mutableStateOf(false)
+    val showSplash by derivedStateOf { !init || !timeFinish}
+
     var mainMtId by mutableStateOf(0)
 
     val nowMtDataList: StateFlow<Resource<MtDataList>>
@@ -52,10 +58,12 @@ class MTViewModel(
 
     var settingCategoryList by mutableStateOf(emptyList<categoryList>())
 
+
     init {
         viewModelScope.launch {
             launch {
                 storage.id.collectLatest {
+                    init = true
                     mainMtId = it
                     mtRepository.getMtDataList(it).collectLatest { mtDataList ->
                         _nowMtDataList.value = mtDataList
@@ -66,6 +74,10 @@ class MTViewModel(
                 mtRepository.getCategoryList().collect {
                     settingCategoryList = it
                 }
+            }
+            launch {
+                delay(2000)
+                timeFinish = true
             }
         }
     }
