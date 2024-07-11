@@ -13,4 +13,6 @@ object Const {
 
     const val MT_LIST = "nav_mt_list"
 
+    const val ATT = "nav_Att"
+
 }

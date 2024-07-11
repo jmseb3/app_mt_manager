@@ -2,6 +2,7 @@ package com.wonddak.mtmanger.ui.main
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -13,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
+import com.wonddak.mtmanger.ui.view.ADTrackingView
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.ui.view.home.buy.BuyView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
@@ -21,6 +23,7 @@ import com.wonddak.mtmanger.ui.view.home.person.PersonView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
 import com.wonddak.mtmanger.ui.view.setting.CategoryView
 import com.wonddak.mtmanger.ui.view.setting.SettingView
+import com.wonddak.mtmanger.ui.view.useADT
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable
@@ -28,6 +31,13 @@ fun NavGraph(
     navController: NavHostController,
     mtViewModel: MTViewModel,
 ) {
+    if (useADT) {
+        LaunchedEffect(true) {
+            mtViewModel.isFirst {
+                navController.navigate(Const.ATT)
+            }
+        }
+    }
     NavHost(navController = navController, startDestination = Const.HOME) {
         homeGraph(navController, mtViewModel)
 
@@ -41,12 +51,18 @@ fun NavGraph(
                 }
             }
         }
+        composable(Const.ATT) {
+            ADTrackingView {
+                mtViewModel.clearFirst()
+                navController.popBackStack()
+            }
+        }
     }
 }
 
 fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
-    mtViewModel: MTViewModel
+    mtViewModel: MTViewModel,
 ) {
     navigation(startDestination = BottomNavItem.Main.screenRoute, route = Const.HOME) {
         composable(BottomNavItem.Main.screenRoute) {
@@ -84,7 +100,7 @@ fun NavGraphBuilder.homeGraph(
 
 fun NavGraphBuilder.settingGraph(
     navController: NavHostController,
-    mtViewModel: MTViewModel
+    mtViewModel: MTViewModel,
 ) {
     navigation(startDestination = Const.SETTING_HOME, route = Const.SETTING) {
         composable(Const.SETTING_HOME) {
@@ -109,6 +125,13 @@ fun NavGraphBuilder.settingGraph(
             )
         }
     }
+}
+
+@Composable
+fun NavController.isATT(): Boolean {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return currentRoute == Const.ATT
 }
 
 @Composable

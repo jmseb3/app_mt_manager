@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -43,9 +44,9 @@ class MTViewModel(
         snackBarMsg = null
     }
 
-    var init by mutableStateOf(false)
-    var timeFinish by mutableStateOf(false)
-    val showSplash by derivedStateOf { !init || !timeFinish}
+    private var initId by mutableStateOf(false)
+    private var timeFinish by mutableStateOf(false)
+    val showSplash by derivedStateOf { !initId || !timeFinish }
 
     var mainMtId by mutableStateOf(0)
 
@@ -63,7 +64,7 @@ class MTViewModel(
         viewModelScope.launch {
             launch {
                 storage.id.collectLatest {
-                    init = true
+                    initId = true
                     mainMtId = it
                     mtRepository.getMtDataList(it).collectLatest { mtDataList ->
                         _nowMtDataList.value = mtDataList
@@ -79,6 +80,20 @@ class MTViewModel(
                 delay(2000)
                 timeFinish = true
             }
+        }
+    }
+
+    fun isFirst(onFirst:() -> Unit) {
+        viewModelScope.launch {
+            if(storage.isFirst.first()) {
+                onFirst()
+            }
+        }
+    }
+
+    fun clearFirst() {
+        viewModelScope.launch {
+            storage.let {  }
         }
     }
 

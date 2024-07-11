@@ -350,7 +350,7 @@
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "MT 매니저";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "개인에게 최적화된 광고를 제공하기위해 사용자의 광고 활동 정보를 수집합니다.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
@@ -385,7 +385,7 @@
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "MT 매니저";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "개인에게 최적화된 광고를 제공하기위해 사용자의 광고 활동 정보를 수집합니다.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
