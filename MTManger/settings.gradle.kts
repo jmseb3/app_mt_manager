@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include(":app")
+include(":composeApp")
 rootProject.name = "MTManger"
