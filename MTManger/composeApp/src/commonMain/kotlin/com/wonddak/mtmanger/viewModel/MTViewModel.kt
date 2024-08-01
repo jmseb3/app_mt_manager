@@ -93,7 +93,7 @@ class MTViewModel(
 
     fun clearFirst() {
         viewModelScope.launch {
-            storage.let {  }
+            storage.clearFirst()
         }
     }
 

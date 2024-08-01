@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
@@ -102,8 +104,8 @@ fun HomeScreen() {
     ) {
         Box(Modifier.padding(it)) {
             Column {
-                if (!(navController.isMTList() || navController.isSetting()) && !payViewModel.removeAdStatus) {
-                    AdvertView(Modifier.wrapContentSize())
+                if (!(navController.isMTList() || navController.isSetting() || navController.isATT()) && !payViewModel.removeAdStatus) {
+                    AdvertView(Modifier.wrapContentSize().defaultMinSize(minHeight = 50.dp))
                 }
                 NavGraph(
                     navController = navController,
