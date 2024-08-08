@@ -1,7 +1,9 @@
 package com.wonddak.mtmanger.room
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabaseConstructor
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
@@ -15,11 +17,14 @@ import com.wonddak.mtmanger.room.entity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
+expect object MyDatabaseCtor : RoomDatabaseConstructor<AppDatabase>
+
 @Database(
     entities = [MtData::class, Person::class, BuyGood::class, categoryList::class, Plan::class],
     version = 7,
     exportSchema = true
 )
+@ConstructedBy(MyDatabaseCtor::class) // NEW
 abstract class AppDatabase : RoomDatabase() {
     abstract fun MtDataDao(): MtDataDao
     abstract fun PlanDao(): PlanDao
