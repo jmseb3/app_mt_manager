@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -69,150 +68,160 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
     val captureController = rememberScreenCaptureController()
 
     Column(
-        modifier = Modifier.fillMaxSize().imePadding()
+        modifier = Modifier.fillMaxSize()
     ) {
         if (resource is Resource.Success) {
             (resource as Resource.Success<MtDataList>).data?.let { mtData ->
-                if (
-                    if (!equalDistribution) {
-                        personPerDistribution.values.sum() == abs(mtData.availableAmount)
-                    } else
-                        true
-                ) {
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            captureController.capture()
-                        },
-                        border = BorderStroke(2.dp, match2),
-                    ) {
-                        DefaultText(text = "공유하기")
-                    }
-                }
-                Column(modifier = Modifier.fillMaxSize().verticalScroll(scroll)) {
-                    ScreenCaptureComposable(
-                        modifier = Modifier,
-                        screenCaptureController = captureController,
-                        shareImage = true,
-                        onCaptured = { img, throwable ->
+                ScreenCaptureComposable(
+                    modifier = Modifier,
+                    screenCaptureController = captureController,
+                    shareImage = true,
+                    onCaptured = { img, throwable ->
 
-                        }
-                    ) {
-                        ResultContent(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp)
-                                .wrapContentSize(),
-                            mtData,
-                            showMtTitle,
-                            showMtPerson,
-                            equalDistribution,
-                            personPerDistribution,
-                            editMessage,
-                            addMessage
-                        )
                     }
-                    HorizontalDivider()
-                    Column(
-                        modifier = Modifier
-                            .padding(10.dp)
+                ) {
+                    ResultContent(
+                        Modifier
                             .fillMaxWidth()
-                    ) {
-                        OptionButton(showMtTitle, "Title 숨기기 / 보이기") {
-                            showMtTitle = it
+                            .padding(10.dp)
+                            .wrapContentSize(),
+                        mtData,
+                        showMtTitle,
+                        showMtPerson,
+                        equalDistribution,
+                        personPerDistribution,
+                        editMessage,
+                        addMessage
+                    )
+                }
+                val enabled = if (!equalDistribution) {
+                    personPerDistribution.values.sum() == abs(mtData.availableAmount)
+                } else {
+                    true
+                }
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        captureController.capture()
+                    },
+                    border = BorderStroke(2.dp, match2),
+                    enabled = enabled
+                ) {
+                    DefaultText(
+                        text = "공유하기",
+                        color = if(enabled) match2 else match2.copy(alpha = 0.5f)
+                    )
+                }
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(10.dp)
+                        .verticalScroll(scroll)
+                ) {
+                    HorizontalDivider()
+                    OptionButton(showMtTitle, "Title 숨기기 / 보이기") {
+                        showMtTitle = it
+                    }
+                    OptionButton(showMtPerson, "참여 인원 전체 숨기기 / 보이기") {
+                        showMtPerson = it
+                    }
+                    OptionButton(equalDistribution, "초과/남은 금액 균등 분배") {
+                        equalDistribution = it
+                        if (equalDistribution) {
+                            personPerDistribution = mapOf()
                         }
-                        OptionButton(showMtPerson, "참여 인원 전체 숨기기 / 보이기") {
-                            showMtPerson = it
-                        }
-                        OptionButton(equalDistribution, "초과/남은 금액 균등 분배") {
-                            equalDistribution = it
-                            if (equalDistribution) {
-                                personPerDistribution = mapOf()
-                            }
-                        }
-                        if (!equalDistribution) {
-                            val pattern = remember { Regex("^\\d+\$") }
-                            Card(
+                    }
+                    if (!equalDistribution) {
+                        val pattern = remember { Regex("^\\d+\$") }
+                        Card(
+                            modifier = Modifier.padding(10.dp).fillMaxWidth()
+                        ) {
+                            Column(
                                 modifier = Modifier.padding(10.dp).fillMaxWidth()
                             ) {
-                                Column(
-                                    modifier = Modifier.padding(10.dp).fillMaxWidth()
-                                ) {
-                                    if (personPerDistribution.values.sum() == abs(mtData.availableAmount)) {
-                                        Text("남은 금액이 모두 정상적으로 분배 되었습니다.")
-                                    } else {
-                                        Text("금액이 초과되었거나 부족합니다.")
-                                        Text("초과/부족 금액 : ${abs(mtData.availableAmount) - personPerDistribution.values.sum()}")
-                                    }
-                                    mtData.personList.forEach { person ->
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            var payFee by remember { mutableStateOf("") }
-                                            Text(
-                                                person.name,
-                                                modifier = Modifier.weight(1f),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            TextField(
-                                                value = payFee,
-                                                onValueChange = {
-                                                    if (it.isEmpty()) {
-                                                        payFee = it
-                                                        val temp =
-                                                            personPerDistribution.toMutableMap()
-                                                        if (temp.containsKey(person)) {
-                                                            temp.remove(person)
-                                                            personPerDistribution = temp
-                                                        }
-                                                    } else if (it.matches(pattern)) {
-                                                        payFee = it
-                                                        val temp =
-                                                            personPerDistribution.toMutableMap()
-                                                        temp[person] = payFee.toInt()
+                                val price =
+                                    abs(mtData.availableAmount) - personPerDistribution.values.sum()
+                                if (price > 0) {
+                                    Text(
+                                        "부족 금액 : ${price.toPriceString()}",
+                                        color = Color.Blue
+                                    )
+                                } else if (price < 0) {
+                                    Text(
+                                        "초과 금액 : ${(-price).toPriceString()}",
+                                        color = Color.Red
+                                    )
+                                } else {
+                                    Text("남은 금액이 모두 정상적으로 분배 되었습니다.")
+                                }
+
+                                mtData.personList.forEach { person ->
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        var payFee by remember { mutableStateOf("") }
+                                        Text(
+                                            person.name,
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center
+                                        )
+                                        TextField(
+                                            value = payFee,
+                                            onValueChange = {
+                                                if (it.isEmpty()) {
+                                                    payFee = it
+                                                    val temp =
+                                                        personPerDistribution.toMutableMap()
+                                                    if (temp.containsKey(person)) {
+                                                        temp.remove(person)
                                                         personPerDistribution = temp
                                                     }
-                                                },
-                                                modifier = Modifier.weight(1f),
-                                                maxLines = 1,
-                                                keyboardOptions = KeyboardOptions.Default.copy(
-                                                    keyboardType = KeyboardType.Number,
-                                                    imeAction = ImeAction.Next
-                                                )
+                                                } else if (it.matches(pattern)) {
+                                                    payFee = it
+                                                    val temp =
+                                                        personPerDistribution.toMutableMap()
+                                                    temp[person] = payFee.toInt()
+                                                    personPerDistribution = temp
+                                                }
+                                            },
+                                            modifier = Modifier.weight(1f),
+                                            maxLines = 1,
+                                            keyboardOptions = KeyboardOptions.Default.copy(
+                                                keyboardType = KeyboardType.Text,
+                                                imeAction = ImeAction.Done
                                             )
-                                        }
+                                        )
                                     }
                                 }
                             }
                         }
-                        OptionButton(editMessage, "추가 메세지 작성") {
-                            editMessage = it
-                        }
-                        if (editMessage) {
-                            TextField(
-                                addMessage,
-                                {
-                                    addMessage = it
-                                },
-                                trailingIcon = {
-                                    if (addMessage.isNotEmpty()) {
-                                        IconButton(
-                                            onClick = {
-                                                addMessage = ""
-                                            }
-                                        ) {
-                                            Icon(Icons.Default.Clear, null)
+                    }
+                    OptionButton(editMessage, "추가 메세지 작성") {
+                        editMessage = it
+                    }
+                    if (editMessage) {
+                        TextField(
+                            addMessage,
+                            {
+                                addMessage = it
+                            },
+                            trailingIcon = {
+                                if (addMessage.isNotEmpty()) {
+                                    IconButton(
+                                        onClick = {
+                                            addMessage = ""
                                         }
+                                    ) {
+                                        Icon(Icons.Default.Clear, null)
                                     }
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Text,
-                                    imeAction = ImeAction.Done
-                                )
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Done
                             )
-                        }
+                        )
                     }
                 }
             }
