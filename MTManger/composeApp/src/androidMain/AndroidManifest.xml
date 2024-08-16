@@ -13,6 +13,7 @@
         android:label="MT 매니저"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        tools:replace="android:icon"
         android:theme="@android:style/Theme.Material.NoActionBar">
 
         <meta-data
@@ -47,6 +48,16 @@
                 android:name="photopicker_activity:0:required"
                 android:value="" />
         </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="network.chaintech.cmp.screenshot.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

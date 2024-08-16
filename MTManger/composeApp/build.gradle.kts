@@ -68,6 +68,8 @@ kotlin {
             implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
             implementation(libs.datastore.preferences.core)
+
+            implementation("network.chaintech:compose-multiplatform-screen-capture:1.0.1")
         }
 
         commonTest.dependencies {

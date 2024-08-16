@@ -49,6 +49,8 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.viewModel.MTViewModel
+import network.chaintech.composeMultiplatformScreenCapture.ScreenCaptureComposable
+import network.chaintech.composeMultiplatformScreenCapture.rememberScreenCaptureController
 import kotlin.math.abs
 
 @Composable
@@ -64,109 +66,51 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
     var editMessage by remember { mutableStateOf(false) }
     var addMessage by remember { mutableStateOf("") }
 
+    val captureController = rememberScreenCaptureController()
+
     Column(
         modifier = Modifier.fillMaxSize().imePadding()
     ) {
         if (resource is Resource.Success) {
             (resource as Resource.Success<MtDataList>).data?.let { mtData ->
-                val availableAmount = mtData.availableAmount
-                if(if (!equalDistribution) {personPerDistribution.values.sum() == abs(mtData.availableAmount)} else true) {
+                if (
+                    if (!equalDistribution) {
+                        personPerDistribution.values.sum() == abs(mtData.availableAmount)
+                    } else
+                        true
+                ) {
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = {  },
+                        onClick = {
+                            captureController.capture()
+                        },
                         border = BorderStroke(2.dp, match2),
                     ) {
-                        DefaultText(text = "이미지 만들기")
+                        DefaultText(text = "공유하기")
                     }
                 }
                 Column(modifier = Modifier.fillMaxSize().verticalScroll(scroll)) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                            .wrapContentSize()
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(10.dp)
-                        ) {
-                            if (showMtTitle) {
-                                Text(
-                                    mtData.mtdata.mtTitle + " 정산 보고",
-                                    modifier = Modifier.fillMaxWidth(),
-                                    textAlign = TextAlign.Center,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Spacer(Modifier.height(20.dp))
-                            }
-                            Column {
-                                Text(
-                                    text = "참여 인원",
-                                    fontWeight = FontWeight.Bold
-                                )
-                                if (mtData.isEmptyPerson) {
-                                    Text("참여 인원 정보가 없습니다.")
-                                } else {
-                                    if (showMtPerson) {
-                                        Text("--- ${mtData.totalPersonCount}명 ---")
-                                        mtData.personList.forEachIndexed { index, person ->
-                                            Text("[${index + 1}] ${person.name}")
-                                        }
-                                    } else {
-                                        Text("${mtData.personList.first().name} 외 ${mtData.totalPersonCount - 1}명")
-                                    }
-                                }
-                                Spacer(Modifier.height(20.dp))
-                            }
-                            Column {
-                                Text(
-                                    text = if (availableAmount >= 0) "남은 금액" else "초과 금액",
-                                    fontWeight = FontWeight.Bold
-                                )
-                                if (availableAmount >= 0) {
-                                    Text(availableAmount.toPriceString())
-                                } else {
-                                    Text(
-                                        (-availableAmount).toPriceString(),
-                                        color = Color.Red
-                                    )
-                                }
-                                if (availableAmount != 0) {
-                                    Text(
-                                        text = if (availableAmount >= 0) "분배 금액" else "추가 지불 금액",
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    if (equalDistribution) {
-                                        val distributionPrice = mtData.getDistributionPrice
-                                        Text("1인당 ${distributionPrice.first.toPriceString()}")
-                                        if (distributionPrice.second > 0) {
-                                            Text("남은 금액 ${distributionPrice.second.toPriceString()}")
-                                        }
-                                    } else {
-                                        mtData.personList.forEach { person ->
-                                            Row {
-                                                Text(
-                                                    person.name,
-                                                    modifier = Modifier.weight(1f)
-                                                )
-                                                Text(
-                                                    (personPerDistribution[person]
-                                                        ?: 0).toPriceString(),
-                                                    modifier = Modifier.weight(1f),
-                                                    color = if (availableAmount >= 0) Color.Black else Color.Red
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (editMessage && addMessage.isNotEmpty()) {
-                                Column {
-                                    Spacer(Modifier.height(20.dp))
-                                    Text(addMessage)
-                                }
-                            }
+                    ScreenCaptureComposable(
+                        modifier = Modifier,
+                        screenCaptureController = captureController,
+                        shareImage = true,
+                        onCaptured = { img, throwable ->
+
                         }
+                    ) {
+                        ResultContent(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp)
+                                .wrapContentSize(),
+                            mtData,
+                            showMtTitle,
+                            showMtPerson,
+                            equalDistribution,
+                            personPerDistribution,
+                            editMessage,
+                            addMessage
+                        )
                     }
                     HorizontalDivider()
                     Column(
@@ -306,3 +250,101 @@ fun OptionButton(
     }
 }
 
+@Composable
+fun ResultContent(
+    modifier: Modifier,
+    mtData: MtDataList,
+    showMtTitle: Boolean,
+    showMtPerson: Boolean,
+    equalDistribution: Boolean,
+    personPerDistribution: Map<Person, Int>,
+    editMessage: Boolean,
+    addMessage: String,
+) {
+    val availableAmount = mtData.availableAmount
+    Card(
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(10.dp)
+        ) {
+            if (showMtTitle) {
+                Text(
+                    mtData.mtdata.mtTitle + " 정산서",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(Modifier.height(20.dp))
+            }
+            Column {
+                Text(
+                    text = "참여 인원",
+                    fontWeight = FontWeight.Bold
+                )
+                if (mtData.isEmptyPerson) {
+                    Text("참여 인원 정보가 없습니다.")
+                } else {
+                    if (showMtPerson) {
+                        Text("--- ${mtData.totalPersonCount}명 ---")
+                        mtData.personList.forEachIndexed { index, person ->
+                            Text("[${index + 1}] ${person.name}")
+                        }
+                    } else {
+                        Text("${mtData.personList.first().name} 외 ${mtData.totalPersonCount - 1}명")
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
+            }
+            Column {
+                Text(
+                    text = if (availableAmount >= 0) "남은 금액" else "초과 금액",
+                    fontWeight = FontWeight.Bold
+                )
+                if (availableAmount >= 0) {
+                    Text(availableAmount.toPriceString())
+                } else {
+                    Text(
+                        (-availableAmount).toPriceString(),
+                        color = Color.Red
+                    )
+                }
+                if (availableAmount != 0) {
+                    Text(
+                        text = if (availableAmount >= 0) "분배 금액" else "추가 지불 금액",
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (equalDistribution) {
+                        val distributionPrice = mtData.getDistributionPrice
+                        Text("1인당 ${distributionPrice.first.toPriceString()}")
+                        if (distributionPrice.second > 0) {
+                            Text("남은 금액 ${distributionPrice.second.toPriceString()}")
+                        }
+                    } else {
+                        mtData.personList.forEach { person ->
+                            Row {
+                                Text(
+                                    person.name,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Text(
+                                    (personPerDistribution[person]
+                                        ?: 0).toPriceString(),
+                                    modifier = Modifier.weight(1f),
+                                    color = if (availableAmount >= 0) Color.Black else Color.Red
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            if (editMessage && addMessage.isNotEmpty()) {
+                Column {
+                    Spacer(Modifier.height(20.dp))
+                    Text(addMessage)
+                }
+            }
+        }
+    }
+}
