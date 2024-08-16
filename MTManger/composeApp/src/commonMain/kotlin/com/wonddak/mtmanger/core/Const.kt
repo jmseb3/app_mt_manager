@@ -12,6 +12,7 @@ object Const {
     const val SETTING_HOME = "nav_setting"
 
     const val MT_LIST = "nav_mt_list"
+    const val MT_ADJUSTMENT = "nav_mt_adjustment"
 
     const val ATT = "nav_Att"
 
