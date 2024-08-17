@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,6 +52,9 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 import network.chaintech.composeMultiplatformScreenCapture.ScreenCaptureComposable
 import network.chaintech.composeMultiplatformScreenCapture.rememberScreenCaptureController
 import kotlin.math.abs
+
+expect val useShare :Boolean
+expect fun shareImage(bitmap: ImageBitmap?)
 
 @Composable
 fun AdjustmentView(mtViewModel: MTViewModel) {
@@ -75,9 +79,9 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
                 ScreenCaptureComposable(
                     modifier = Modifier,
                     screenCaptureController = captureController,
-                    shareImage = true,
+                    shareImage = useShare,
                     onCaptured = { img, throwable ->
-
+                        shareImage(img)
                     }
                 ) {
                     ResultContent(
