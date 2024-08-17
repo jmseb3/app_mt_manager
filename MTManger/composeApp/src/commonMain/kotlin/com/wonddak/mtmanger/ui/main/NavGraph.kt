@@ -17,6 +17,7 @@ import com.wonddak.mtmanger.model.BottomNavItem
 import com.wonddak.mtmanger.ui.view.ADTrackingView
 import com.wonddak.mtmanger.ui.view.common.NoDataBase
 import com.wonddak.mtmanger.ui.view.home.buy.BuyView
+import com.wonddak.mtmanger.ui.view.home.main.AdjustmentView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
 import com.wonddak.mtmanger.ui.view.home.main.MtListView
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
@@ -51,6 +52,9 @@ fun NavGraph(
                 }
             }
         }
+        composable(Const.MT_ADJUSTMENT) {
+            AdjustmentView(mtViewModel)
+        }
         composable(Const.ATT) {
             ADTrackingView {
                 mtViewModel.clearFirst()
@@ -69,11 +73,19 @@ fun NavGraphBuilder.homeGraph(
             NoDataBase(
                 mtViewModel
             ) {
-                MainView(mtViewModel = mtViewModel) {
-                    navController.navigate(Const.MT_LIST) {
-                        launchSingleTop = true
+                MainView(
+                    mtViewModel = mtViewModel,
+                    showMTList = {
+                        navController.navigate(Const.MT_LIST) {
+                            launchSingleTop = true
+                        }
+                    },
+                    showAdjustment = {
+                        navController.navigate(Const.MT_ADJUSTMENT) {
+                            launchSingleTop = true
+                        }
                     }
-                }
+                )
             }
         }
         composable(BottomNavItem.Person.screenRoute) {
@@ -149,11 +161,20 @@ fun NavController.isMTList(): Boolean {
 }
 
 @Composable
+fun NavController.isAdjustment(): Boolean {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return currentRoute == Const.MT_ADJUSTMENT
+}
+
+@Composable
 fun NavController.getTitle(): String {
     return if (this.isSetting()) {
         "설정"
     } else if (this.isMTList()) {
         "MT 리스트"
+    } else if (this.isAdjustment()) {
+        "정산하기"
     } else {
         "MT 매니저"
     }

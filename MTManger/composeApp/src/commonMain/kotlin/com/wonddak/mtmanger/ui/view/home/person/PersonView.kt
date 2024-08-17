@@ -36,7 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.model.Resource
-import com.wonddak.mtmanger.room.entity.*
+import com.wonddak.mtmanger.room.entity.MtDataList
+import com.wonddak.mtmanger.room.entity.Person
 import com.wonddak.mtmanger.toPriceString
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
@@ -151,7 +152,7 @@ fun PersonPanel(
                         )
                         FeeInfo(modifier,
                             text = "받은 금액",
-                            fee = mtData.personList.sumOf { it.paymentFee })
+                            fee = mtData.getAllPersonPayFee)
                     }
                     Column(
                         Modifier.weight(2f), horizontalAlignment = Alignment.CenterHorizontally

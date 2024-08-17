@@ -140,18 +140,16 @@ fun BuyGoodPanel(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
-                        val sumOfGoodsFee = mtData.buyGoodList.sumOf { it.price * it.count }
-                        val sumOfPersonPayFee = mtData.personList.sumOf { it.paymentFee }
                         val modifier = Modifier.padding(3.dp)
                         FeeInfo(
                             modifier,
                             text = "지출 금액",
-                            fee = sumOfGoodsFee
+                            fee = mtData.sumOfGoodsFee
                         )
                         FeeInfo(
                             modifier,
                             text = "남은 금액",
-                            fee = sumOfPersonPayFee - sumOfGoodsFee
+                            fee = mtData.availableAmount
                         )
                     }
                     Column(

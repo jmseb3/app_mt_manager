@@ -6,20 +6,20 @@ compose = "1.6.11"
 
 kotlinxDatetime = "0.6.0"
 navigationCompose = "2.7.0-alpha07"
-room = "2.7.0-alpha04"
-sqlite = "2.5.0-alpha04"
+room = "2.7.0-alpha06"
+sqlite = "2.5.0-alpha06"
 
 billing = "7.0.0"
 datastore = "1.1.1"
 koin = "3.6.0-Beta4"
 koin2 = "1.2.0-Beta4"
-ksp = "2.0.0-1.0.22"
+ksp = "2.0.0-1.0.24"
 androidx-uiTest = "1.6.8"
 
 [libraries]
 coil-compose = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
 
-firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.1.1" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.1.2" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
@@ -30,11 +30,11 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.0" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.1" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
 
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.0" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.1" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 

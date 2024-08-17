@@ -6,11 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.wonddak.mtmanger.di.sharedModule
+import com.wonddak.mtmanger.ui.view.home.main.AppContext
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         this.onBackPressedDispatcher.addCallback(this, callback)
         enableEdgeToEdge()
+        AppContext.apply { set(this@MainActivity) }
         setContent {
             App()
         }

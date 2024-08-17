@@ -46,6 +46,10 @@ kotlin {
         }
     }
 
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -64,6 +68,8 @@ kotlin {
             implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
             implementation(libs.datastore.preferences.core)
+
+            implementation("network.chaintech:compose-multiplatform-screen-capture:1.0.1")
         }
 
         commonTest.dependencies {
@@ -102,8 +108,8 @@ android {
         applicationId = "com.wonddak.mtmanger"
         minSdk = 24
         targetSdk = 34
-        versionCode = 17
-        versionName = "3.0.4"
+        versionCode = 18
+        versionName = "3.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

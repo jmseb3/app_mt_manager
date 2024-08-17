@@ -2,17 +2,15 @@ package com.wonddak.mtmanger.ui.view.home.person
 
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.wonddak.mtmanger.room.entity.SimplePerson
 import platform.Contacts.CNContact
 import platform.Contacts.CNContactFamilyNameKey
 import platform.Contacts.CNContactGivenNameKey
 import platform.Contacts.CNContactPhoneNumbersKey
-import platform.Contacts.CNContactProperty
-import platform.Contacts.CNContactStore
 import platform.Contacts.CNLabeledValue
 import platform.Contacts.CNPhoneNumber
-import platform.Contacts.predicateForContactsWithIdentifiers
 import platform.ContactsUI.CNContactPickerDelegateProtocol
 import platform.ContactsUI.CNContactPickerViewController
 import platform.Foundation.NSPredicate
@@ -22,42 +20,36 @@ import platform.UIKit.UIAlertController
 import platform.UIKit.UIAlertControllerStyleAlert
 import platform.UIKit.UIApplication
 import platform.darwin.NSObject
-import platform.posix.open
 
 @Composable
 internal actual fun ContactButton(
     modifier: Modifier,
     updateValue: (SimplePerson) -> Unit
 ) {
+    val contactPicker = remember { CNContactPickerViewController() }
     OutlinedButton(
         modifier = modifier,
         onClick = {
-            openPicker {
-                updateValue(it)
-            }
+            contactPicker.delegate = ContactDelegate(updateValue)
+            contactPicker.displayedPropertyKeys =
+                listOf(CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey)
+            contactPicker.predicateForEnablingContact =
+                NSPredicate.predicateWithFormat("phoneNumbers.@count > 0")
+            contactPicker.predicateForSelectionOfContact =
+                NSPredicate.predicateWithFormat("phoneNumbers.@count >= 1")
+//    contactPicker.predicateForSelectionOfProperty =
+//        NSPredicate.predicateWithFormat("key == 'phoneNumbers'")
+            UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
+                contactPicker,
+                true,
+                null,
+            )
         }
     ) {
         ContactButtonContent()
     }
 }
 
-fun openPicker(onSelected: (SimplePerson) -> Unit) {
-    val contactPicker = CNContactPickerViewController()
-    contactPicker.delegate = ContactDelegate(onSelected)
-    contactPicker.displayedPropertyKeys =
-        listOf(CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey)
-    contactPicker.predicateForEnablingContact =
-        NSPredicate.predicateWithFormat("phoneNumbers.@count > 0")
-//    contactPicker.predicateForSelectionOfContact =
-//        NSPredicate.predicateWithFormat("phoneNumbers.@count == 1")
-//    contactPicker.predicateForSelectionOfProperty =
-//        NSPredicate.predicateWithFormat("key == 'phoneNumbers'")
-    UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
-        contactPicker,
-        true,
-        null,
-    )
-}
 
 class ContactDelegate(
     private val onSelected: (SimplePerson) -> Unit
@@ -68,9 +60,12 @@ class ContactDelegate(
         handleContact(picker, didSelectContact)
     }
 
+
     private fun handleContact(picker: CNContactPickerViewController, contact: CNContact) {
+        println(">> $contact")
         val name = contact.givenName + " " + contact.familyName
         val numbers = contact.phoneNumbers as List<CNLabeledValue>
+        println(">> $name : [${numbers.size == 1}] ${numbers.joinToString("/")}")
         if (numbers.size == 1) {
             val number = (numbers.first().value) as CNPhoneNumber
             picker.dismissViewControllerAnimated(false) {
