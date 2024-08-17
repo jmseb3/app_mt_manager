@@ -43,4 +43,30 @@ data class MtDataList(
         entityColumn = "mtId"
     )
     val planList: List<Plan>
-)
+
+) {
+    //회비 총합
+    val getAllPersonPayFee
+        get() = personList.sumOf { it.paymentFee }
+
+    //지출 총합
+    val sumOfGoodsFee
+        get() = buyGoodList.sumOf { it.price * it.count }
+
+    //가용 금액
+    val availableAmount
+        get() = getAllPersonPayFee - sumOfGoodsFee
+
+    val isEmptyPerson
+        get() = personList.isEmpty()
+
+    val totalPersonCount
+        get() = personList.size
+
+    val getDistributionPrice : Pair<Int,Int>
+        get() = if(availableAmount >= 0) {
+            availableAmount / totalPersonCount to availableAmount % totalPersonCount
+        } else {
+            -availableAmount / totalPersonCount to -availableAmount % totalPersonCount
+        }
+}

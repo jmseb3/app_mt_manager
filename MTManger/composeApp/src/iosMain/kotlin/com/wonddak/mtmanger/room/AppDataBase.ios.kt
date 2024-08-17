@@ -1,5 +1,7 @@
 package com.wonddak.mtmanger.room
 
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSLibraryDirectory
@@ -16,4 +18,8 @@ internal fun providePath() :String {
         error = null,
     )
     return (requireNotNull(documentDirectory).path + "/$DB_NAME")
+}
+
+actual fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
+    return Room.databaseBuilder<AppDatabase>(name = providePath())
 }
