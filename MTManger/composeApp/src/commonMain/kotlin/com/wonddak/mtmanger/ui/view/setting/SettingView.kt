@@ -10,12 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.noRippleClickable
+import com.wonddak.mtmanger.ui.dialog.OptionSheet
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
@@ -51,17 +57,48 @@ fun SettingView(
             }
         }
         Column {
-            val removeAdStatus = payViewModel.removeAdStatus
-            SettingAdFooter(removeAdStatus)
-            OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    AppUtil.sendMail()
-                },
-                border = BorderStroke(2.dp, match2),
-            ) {
-                DefaultText(text = "문의하기")
+            Column {
+                val removeAdStatus = payViewModel.removeAdStatus
+                SettingAdFooter(removeAdStatus)
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        AppUtil.sendMail()
+                    },
+                    border = BorderStroke(2.dp, match2),
+                ) {
+                    DefaultText(text = "문의하기")
+                }
+                var dd by remember {
+                    mutableStateOf(false)
+                }
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        dd = true
+                    },
+                    border = BorderStroke(2.dp, match2),
+                ) {
+                    DefaultText(text = "Test")
+                }
+                if (dd) {
+                    OptionSheet() {
+                        dd = false
+                    }
+                }
+            }
+            HorizontalDivider()
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    DefaultText(text = "버전 정보")
+                    DefaultText(text = getVersion())
+                }
             }
         }
     }
 }
+
+expect fun getVersion(): String
