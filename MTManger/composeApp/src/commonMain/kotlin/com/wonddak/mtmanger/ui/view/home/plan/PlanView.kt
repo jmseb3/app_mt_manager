@@ -40,6 +40,7 @@ import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
 import com.wonddak.mtmanger.ui.view.sheet.OptionSheetItem
+import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_image
@@ -158,6 +159,11 @@ fun PlanCardView(
     var showPlanDialog by remember {
         mutableStateOf(false)
     }
+    val photoPickerLauncher = rememberPhotoPickerLauncher(
+        onResult = {
+            mtViewModel.updatePlanImgByte(plan.planId!!, it)
+        }
+    )
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -209,15 +215,34 @@ fun PlanCardView(
     }
     if (showOptionSheet) {
         OptionSheet(
-            onDismissRequest = {showOptionSheet = false},
-            listOf(
-                OptionSheetItem.OptionEdit("계획 수정") {showPlanDialog = true},
-                OptionSheetItem.OptionDelete("계획 삭제") {showItemDelete = true},
-                OptionSheetItem.OptionEdit("사진 수정") {
-
+            onDismissRequest = { showOptionSheet = false },
+            arrayListOf(
+                OptionSheetItem.OptionEdit("계획 수정") {
+                    showPlanDialog = true
                 },
-                OptionSheetItem.OptionDelete("사진 삭제") {showImgDelete = true}
-            )
+                OptionSheetItem.OptionDelete("계획 삭제") {
+                    showItemDelete = true
+                }
+            ).also {
+                if (plan.imageExist) {
+                    it.add(
+                        OptionSheetItem.OptionEdit("사진 수정") {
+                            photoPickerLauncher.launch()
+                        }
+                    )
+                    it.add(
+                        OptionSheetItem.OptionDelete("사진 삭제") {
+                            showImgDelete = true
+                        }
+                    )
+                } else {
+                    it.add(
+                        OptionSheetItem.OptionEdit("사진 추가") {
+                            photoPickerLauncher.launch()
+                        }
+                    )
+                }
+            }
         )
     }
     if (showImgDelete) {
