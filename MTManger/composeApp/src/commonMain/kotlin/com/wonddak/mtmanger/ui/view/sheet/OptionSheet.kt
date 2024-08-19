@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -17,19 +18,18 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
-import mtmanger.composeapp.generated.resources.Res
-import mtmanger.composeapp.generated.resources.icon
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 sealed class OptionSheetItem<T>(
-    val image :T,
+    open val image :T,
     open val title :String,
     open val action : () -> Unit
 ) {
@@ -50,6 +50,12 @@ sealed class OptionSheetItem<T>(
         title = title,
         action = action
     )
+
+    data class Drawable(
+        override val image : DrawableResource,
+        override val title: String,
+        override val action: () -> Unit
+    ): OptionSheetItem<DrawableResource>(image, title, action)
 }
 
 
@@ -91,13 +97,22 @@ fun OptionSheet(
                 }) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(20.dp)
+                        horizontalArrangement = Arrangement.spacedBy(20.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         with(optionItem.image) {
                             if (this is ImageVector) {
-                                Image(this, null)
+                                Image(
+                                    this,
+                                    null,
+                                    Modifier.size(24.dp)
+                                )
                             } else if (this is DrawableResource) {
-                                Image(painter = painterResource(this),null)
+                                Image(
+                                    painter = painterResource(this),
+                                    null,
+                                    Modifier.size(24.dp)
+                                )
                             }
                         }
                         DefaultText(text = optionItem.title)

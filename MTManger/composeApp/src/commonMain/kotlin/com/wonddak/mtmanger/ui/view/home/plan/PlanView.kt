@@ -43,6 +43,7 @@ import com.wonddak.mtmanger.ui.view.sheet.OptionSheetItem
 import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
+import mtmanger.composeapp.generated.resources.add_photo
 import mtmanger.composeapp.generated.resources.dialog_delete_image
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -216,7 +217,7 @@ fun PlanCardView(
     if (showOptionSheet) {
         OptionSheet(
             onDismissRequest = { showOptionSheet = false },
-            arrayListOf(
+            arrayListOf<OptionSheetItem<*>>(
                 OptionSheetItem.OptionEdit("계획 수정") {
                     showPlanDialog = true
                 },
@@ -237,7 +238,10 @@ fun PlanCardView(
                     )
                 } else {
                     it.add(
-                        OptionSheetItem.OptionEdit("사진 추가") {
+                        OptionSheetItem.Drawable(
+                            image = Res.drawable.add_photo,
+                            title = "사진 추가"
+                        ) {
                             photoPickerLauncher.launch()
                         }
                     )
