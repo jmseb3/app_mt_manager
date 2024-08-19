@@ -36,7 +36,7 @@ fun TopAppContent(
         ),
         actions = {
             AnimatedVisibility(
-                visible = !navController.isMTList() && !navController.isAdjustment() && !navController.isSetting(),
+                visible = navController.showSettingIcon(),
                 enter = slideInHorizontally(),
                 exit = slideOutHorizontally()
             ) {
@@ -57,7 +57,7 @@ fun TopAppContent(
             }
         },
         navigationIcon = {
-            AnimatedVisibility(navController.isSetting() || navController.isMTList() || navController.isAdjustment()) {
+            AnimatedVisibility(navController.showNavigationIcon()) {
                 IconButton(
                     onClick = {
                         navController.popBackStack()

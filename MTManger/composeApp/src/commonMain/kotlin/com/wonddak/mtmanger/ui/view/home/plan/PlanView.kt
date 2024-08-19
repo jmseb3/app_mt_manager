@@ -19,8 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,15 +42,14 @@ import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
-import mtmanger.composeapp.generated.resources.add_photo
 import mtmanger.composeapp.generated.resources.dialog_delete_image
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 @Composable
 fun PlanView(
     mtViewModel: MTViewModel = koinInject(),
+    navigateNew: () -> Unit,
 ) {
     var showPlanDialog by remember {
         mutableStateOf(false)
@@ -90,7 +87,7 @@ fun PlanView(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth(),
-            onClick = { showPlanDialog = true },
+            onClick = { navigateNew() },
             border = BorderStroke(2.dp, match2)
         ) {
             Text(
@@ -157,7 +154,7 @@ fun PlanCardView(
     mtViewModel: MTViewModel,
     plan: Plan,
     startDate: String,
-    endDate: String
+    endDate: String,
 ) {
     var showImgDelete by remember {
         mutableStateOf(false)
@@ -214,14 +211,15 @@ fun PlanCardView(
                     fontFamily = maple()
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                PlanImageView(Modifier
-                    .combinedClickable(
-                        onClick = { },
-                        onLongClick = {
-                            showImgDelete = true
-                        },
-                    )
-                    .fillMaxWidth(),
+                PlanImageView(
+                    Modifier
+                        .combinedClickable(
+                            onClick = { },
+                            onLongClick = {
+                                showImgDelete = true
+                            },
+                        )
+                        .fillMaxWidth(),
                     plan
                 )
 

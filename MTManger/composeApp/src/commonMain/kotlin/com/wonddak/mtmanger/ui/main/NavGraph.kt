@@ -21,6 +21,7 @@ import com.wonddak.mtmanger.ui.view.home.main.AdjustmentView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
 import com.wonddak.mtmanger.ui.view.home.main.MtListView
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
+import com.wonddak.mtmanger.ui.view.home.plan.PlanAddView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
 import com.wonddak.mtmanger.ui.view.setting.CategoryView
 import com.wonddak.mtmanger.ui.view.setting.SettingView
@@ -104,8 +105,13 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(BottomNavItem.Plan.screenRoute) {
             NoDataBase(mtViewModel) {
-                PlanView()
+                PlanView() {
+                    navController.navigate(Const.NEW_PLAN)
+                }
             }
+        }
+        composable(Const.NEW_PLAN) {
+            PlanAddView()
         }
     }
 }
@@ -165,6 +171,29 @@ fun NavController.isAdjustment(): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     return currentRoute == Const.MT_ADJUSTMENT
+}
+
+@Composable
+fun NavController.isPlanNew(): Boolean {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return currentRoute == Const.NEW_PLAN
+}
+
+@Composable
+fun NavController.showSettingIcon(): Boolean {
+    return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
+}
+
+@Composable
+fun NavController.showNavigationIcon(): Boolean {
+    return isSetting() || isMTList() || isAdjustment() || isPlanNew()
+}
+
+@Composable
+fun NavController.showBottomNavigation(): Boolean {
+    return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
+
 }
 
 @Composable

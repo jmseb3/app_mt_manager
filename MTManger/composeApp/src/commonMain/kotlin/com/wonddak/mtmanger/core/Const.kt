@@ -7,6 +7,8 @@ object Const {
     const val BUY = "nav_buy"
     const val PLAN = "nav_plan"
 
+    const val NEW_PLAN = "nav_plan_new"
+
     const val SETTING = "host_setting"
     const val CATEGORY = "nav_category"
     const val SETTING_HOME = "nav_setting"
