@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -75,14 +75,9 @@ fun PlanAddView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 50.dp, start = 10.dp, end = 10.dp)
+                .padding(bottom = 60.dp, start = 10.dp, end = 10.dp, top = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            DefaultText(
-                Modifier.fillMaxWidth(),
-                text = "계획 작성",
-            )
-
             DialogTextField(
                 value = date,
                 placeHolder = "일자를 선택해 주세요",
@@ -161,9 +156,10 @@ fun PlanAddView(
                 )
             }
             imageByte?.let {
-                ByteArrayImageView(Modifier.wrapContentSize(), it)
+                ByteArrayImageView(Modifier.fillMaxWidth().wrapContentHeight(), it)
             }
         }
+        val enabled = date.isNotEmpty() && title.isNotEmpty() && planText.isNotEmpty()
         OutlinedButton(
             modifier = Modifier.fillMaxWidth().height(50.dp).align(Alignment.BottomCenter),
             onClick = {
@@ -176,10 +172,10 @@ fun PlanAddView(
                     )
                 )
             },
-            enabled = date.isNotEmpty() && title.isNotEmpty() && planText.isNotEmpty(),
+            enabled = enabled,
             border = BorderStroke(2.dp, match2),
         ) {
-            DefaultText(text = "추가")
+            DefaultText(text = "추가", color = if (enabled) match2 else match2.copy(0.5f))
         }
     }
 

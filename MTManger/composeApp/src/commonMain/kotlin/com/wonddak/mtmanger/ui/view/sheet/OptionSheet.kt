@@ -69,7 +69,7 @@ fun DefaultOptionSheet(
        onDismissRequest,
        listOf(
            OptionSheetItem.OptionEdit(action = onEdit),
-           OptionSheetItem.OptionEdit(action = onDelete),
+           OptionSheetItem.OptionDelete(action = onDelete),
        )
    )
 }
