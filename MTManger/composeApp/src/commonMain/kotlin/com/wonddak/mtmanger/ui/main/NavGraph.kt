@@ -107,7 +107,7 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(BottomNavItem.Plan.screenRoute) {
             NoDataBase(mtViewModel) {
-                PlanView() { start,end ->
+                PlanView() { start, end ->
                     navController.navigate(Const.NEW_PLAN + "?start=$start&end=$end")
                 }
             }
@@ -124,11 +124,15 @@ fun NavGraphBuilder.homeGraph(
                     defaultValue = ""
                 }
             )
-        ) {backStackEntry ->
+        ) { backStackEntry ->
             PlanAddView(
                 backStackEntry.arguments?.getString("start")!!,
                 backStackEntry.arguments?.getString("end")!!,
-            )
+            ) {
+                mtViewModel.addPlan(it) {
+                    navController.popBackStack()
+                }
+            }
         }
     }
 }

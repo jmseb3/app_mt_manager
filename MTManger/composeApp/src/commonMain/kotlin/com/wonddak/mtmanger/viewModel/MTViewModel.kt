@@ -14,6 +14,7 @@ import com.wonddak.mtmanger.room.entity.MtData
 import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.room.entity.Person
 import com.wonddak.mtmanger.room.entity.Plan
+import com.wonddak.mtmanger.room.entity.PlanData
 import com.wonddak.mtmanger.room.entity.SimpleBuyGood
 import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.room.entity.categoryList
@@ -238,6 +239,24 @@ class MTViewModel(
                     )
                 )
             }
+        }
+    }
+
+    fun addPlan(planData: PlanData,onFinish:() -> Unit) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mtRepository.insertPlan(
+                    Plan(
+                        null,
+                        mainMtId,
+                        nowDay = planData.nowDay,
+                        nowPlanTitle = planData.nowPlanTitle,
+                        simpleText = planData.simpleText,
+                        imgBytes =  planData.imgBytes
+                    )
+                )
+            }
+            onFinish()
         }
     }
 

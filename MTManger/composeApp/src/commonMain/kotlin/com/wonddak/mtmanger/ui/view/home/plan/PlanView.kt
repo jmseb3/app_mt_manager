@@ -2,7 +2,7 @@ package com.wonddak.mtmanger.ui.view.home.plan
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
@@ -40,6 +38,8 @@ import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
+import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
+import com.wonddak.mtmanger.ui.view.sheet.OptionSheetItem
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_image
@@ -146,6 +146,9 @@ fun PlanCardView(
     startDate: String,
     endDate: String,
 ) {
+    var showOptionSheet by remember {
+        mutableStateOf(false)
+    }
     var showImgDelete by remember {
         mutableStateOf(false)
     }
@@ -158,14 +161,9 @@ fun PlanCardView(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .combinedClickable(
-                onClick = {
-                    showPlanDialog = true
-                },
-                onLongClick = {
-                    showItemDelete = true
-                },
-            ),
+            .clickable {
+                showOptionSheet = true
+            },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
         ),
@@ -178,13 +176,6 @@ fun PlanCardView(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 3.dp)
         ) {
-            ImageAddButton(
-                Modifier
-                    .size(36.dp)
-                    .align(Alignment.TopEnd)
-            ) {
-                mtViewModel.updatePlanImgByte(plan.planId!!,it)
-            }
             Column(
                 Modifier.fillMaxWidth(),
             ) {
@@ -204,16 +195,9 @@ fun PlanCardView(
                 Spacer(modifier = Modifier.height(5.dp))
                 PlanImageView(
                     Modifier
-                        .combinedClickable(
-                            onClick = { },
-                            onLongClick = {
-                                showImgDelete = true
-                            },
-                        )
                         .fillMaxWidth(),
                     plan
                 )
-
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = plan.simpleText,
@@ -222,6 +206,19 @@ fun PlanCardView(
                 )
             }
         }
+    }
+    if (showOptionSheet) {
+        OptionSheet(
+            onDismissRequest = {showOptionSheet = false},
+            listOf(
+                OptionSheetItem.OptionEdit("계획 수정") {showPlanDialog = true},
+                OptionSheetItem.OptionDelete("계획 삭제") {showItemDelete = true},
+                OptionSheetItem.OptionEdit("사진 수정") {
+
+                },
+                OptionSheetItem.OptionDelete("사진 삭제") {showImgDelete = true}
+            )
+        )
     }
     if (showImgDelete) {
         DeleteDialog(

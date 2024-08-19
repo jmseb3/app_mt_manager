@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.wonddak.mtmanger.room.entity.PlanData
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.ByteArrayImageView
 import com.wonddak.mtmanger.ui.view.common.DefaultText
@@ -43,6 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 fun PlanAddView(
     startDate: String,
     endDate: String,
+    onAdd : (PlanData) -> Unit
 ) {
     var showDatePicker by remember {
         mutableStateOf(false)
@@ -147,7 +149,16 @@ fun PlanAddView(
         }
         OutlinedButton(
             modifier = Modifier.fillMaxWidth().height(50.dp).align(Alignment.BottomCenter),
-            onClick = { },
+            onClick = {
+                onAdd(
+                    PlanData(
+                        nowDay = date,
+                        nowPlanTitle = title,
+                        simpleText = planText,
+                        imgBytes = imageByte
+                    )
+                )
+            },
             enabled = date.isNotEmpty() && title.isNotEmpty() && planText.isNotEmpty(),
             border = BorderStroke(2.dp, match2),
         ) {
