@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import com.wonddak.mtmanger.ui.view.home.main.AppContext
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.onBackPressedDispatcher.addCallback(this, callback)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
         AppContext.apply { set(this@MainActivity) }
         setContent {

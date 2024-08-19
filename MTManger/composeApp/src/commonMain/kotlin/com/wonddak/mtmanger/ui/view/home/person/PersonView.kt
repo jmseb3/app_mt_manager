@@ -2,7 +2,6 @@ package com.wonddak.mtmanger.ui.view.home.person
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,6 +45,7 @@ import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.home.buy.BuyGoodItemText
+import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
 import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
@@ -150,9 +151,11 @@ fun PersonPanel(
                         FeeInfo(
                             modifier, text = "총 참여자", fee = mtData.personList.size, feeIndex = "명"
                         )
-                        FeeInfo(modifier,
+                        FeeInfo(
+                            modifier,
                             text = "받은 금액",
-                            fee = mtData.getAllPersonPayFee)
+                            fee = mtData.getAllPersonPayFee
+                        )
                     }
                     Column(
                         Modifier.weight(2f), horizontalAlignment = Alignment.CenterHorizontally
@@ -275,47 +278,53 @@ fun PersonItemView(
     person: Person,
     mtViewModel: MTViewModel,
 ) {
+    var showOptionSheet by remember {
+        mutableStateOf(false)
+    }
     var showItemDelete by remember {
         mutableStateOf(false)
     }
     var showEditDialog by remember {
         mutableStateOf(false)
     }
-    val deviceActionHelper : DeviceActionHelper = koinInject()
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(25.dp)
-            .combinedClickable(
-                onClick = {
-                    showEditDialog = true
-                },
-                onLongClick = {
-                    showItemDelete = true
-                },
-            ), verticalAlignment = Alignment.CenterVertically
-    ) {
-        val weight1 = Modifier.weight(1f)
-        BuyGoodItemText(
-            weight1, text = person.name
-        )
-        BuyGoodItemText(
-            weight1, text = person.paymentFee.toPriceString()
-        )
-        IconButton(
-            modifier = weight1,
-            onClick = {
-                deviceActionHelper.makeCall(person.phoneNumber)
-            }
+    val deviceActionHelper: DeviceActionHelper = koinInject()
+    TextButton(onClick = {
+        showOptionSheet = true
+    }) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(25.dp), verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(resource = Res.drawable.ic_baseline_phone_24),
-                contentDescription = null,
-                tint = match2
+            val weight1 = Modifier.weight(1f)
+            BuyGoodItemText(
+                weight1, text = person.name
             )
+            BuyGoodItemText(
+                weight1, text = person.paymentFee.toPriceString()
+            )
+            IconButton(
+                modifier = weight1,
+                onClick = {
+                    deviceActionHelper.makeCall(person.phoneNumber)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(resource = Res.drawable.ic_baseline_phone_24),
+                    contentDescription = null,
+                    tint = match2
+                )
+            }
         }
     }
 
+    if (showOptionSheet) {
+        OptionSheet(
+            onDismissRequest = { showOptionSheet = false },
+            onEdit = { showEditDialog = true },
+            onDelete = { showItemDelete = true }
+        )
+    }
     if (showItemDelete) {
         DeleteDialog(
             onDelete = {

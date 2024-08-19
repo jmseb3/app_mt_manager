@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -28,12 +31,15 @@ fun OptionSheet(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
 ) {
+    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         containerColor = match1,
+        windowInsets = WindowInsets(0.dp,0.dp,0.dp,0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(15.dp)
+            modifier = Modifier.padding(top = 0.dp, bottom = bottomPadding, start = 10.dp, end = 10.dp)
         ) {
             TextButton({
                 onEdit()
