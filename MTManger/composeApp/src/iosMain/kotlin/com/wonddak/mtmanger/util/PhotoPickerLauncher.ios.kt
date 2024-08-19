@@ -1,15 +1,14 @@
-package com.wonddak.mtmanger.ui.view.home.plan
+package com.wonddak.mtmanger.util
 
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.refTo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import platform.PhotosUI.PHPickerConfiguration
 import platform.PhotosUI.PHPickerConfigurationSelectionOrdered
 import platform.PhotosUI.PHPickerFilter
@@ -22,24 +21,29 @@ import platform.UIKit.UIImageJPEGRepresentation
 import platform.darwin.NSObject
 import platform.posix.memcpy
 
-@Composable
-internal actual fun ImageAddButton(modifier: Modifier, color: Color, action : (ByteArray) -> Unit) {
-    val launcher = remember {
-        PhotoPicker()
-    }
-
-    IconButton(
-        modifier = modifier,
-        onClick = {
-            launcher.onLaunch() {
-                action(it)
-            }
-        },
-    ) {
-        ImageAddButtonIcon(color)
+actual class PhotoPickerLauncher actual constructor(
+    private val onLaunch: () -> Unit
+) {
+    actual fun launch() {
+        onLaunch()
     }
 }
 
+@Composable
+actual fun rememberPhotoPickerLauncher(onResult: (ByteArray) -> Unit): PhotoPickerLauncher {
+    val photoPickerLauncher: PhotoPickerLauncher
+    val launcher = remember {
+        PhotoPicker()
+    }
+    photoPickerLauncher = remember {
+        PhotoPickerLauncher(
+            onLaunch = {
+                launcher.onLaunch(onResult)
+            }
+        )
+    }
+    return photoPickerLauncher
+}
 
 class PhotoPicker() {
 
@@ -72,8 +76,10 @@ class PhotoPicker() {
                     ) { nsData, _ ->
                         CoroutineScope(Dispatchers.Main).launch {
                             nsData?.let {
-                                val image = UIImage.imageWithData(it)
-                                val bytes = image?.toByteArray(1.0)
+                                val bytes = withContext(Dispatchers.IO) {
+                                    val image = UIImage.imageWithData(it)
+                                    image?.toByteArray(1.0)
+                                }
                                 if (bytes != null) {
                                     onResult(bytes)
                                 }
