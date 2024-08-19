@@ -49,11 +49,10 @@ import org.koin.compose.koinInject
 @Composable
 fun PlanView(
     mtViewModel: MTViewModel = koinInject(),
-    navigateNew: () -> Unit,
+    navigateNew: (start: String, end: String) -> Unit,
 ) {
-    var showPlanDialog by remember {
-        mutableStateOf(false)
-    }
+    val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
+
     Column(
         Modifier
             .fillMaxSize()
@@ -87,7 +86,16 @@ fun PlanView(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth(),
-            onClick = { navigateNew() },
+            onClick = {
+                if (planResource is Resource.Success) {
+                    (planResource as Resource.Success<MtDataList>).data?.let {
+                        navigateNew(
+                            it.mtdata.mtStart,
+                            it.mtdata.mtEnd
+                        )
+                    }
+                }
+            },
             border = BorderStroke(2.dp, match2)
         ) {
             Text(
@@ -96,24 +104,6 @@ fun PlanView(
                 fontFamily = maple(),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
-            )
-        }
-    }
-    val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
-
-    if (showPlanDialog && planResource is Resource.Success) {
-        (planResource as Resource.Success<MtDataList>).data?.let {
-            PlanDialog(
-                startDate = it.mtdata.mtStart,
-                endDate = it.mtdata.mtEnd,
-                plan = null,
-                onDismiss = {
-                    showPlanDialog = false
-                },
-                onAdd = { title, day, text ->
-                    mtViewModel.addPlan(title, day, text)
-                    showPlanDialog = false
-                }
             )
         }
     }
@@ -191,9 +181,10 @@ fun PlanCardView(
             ImageAddButton(
                 Modifier
                     .size(36.dp)
-                    .align(Alignment.TopEnd),
-                plan
-            )
+                    .align(Alignment.TopEnd)
+            ) {
+                mtViewModel.updatePlanImgByte(plan.planId!!,it)
+            }
             Column(
                 Modifier.fillMaxWidth(),
             ) {

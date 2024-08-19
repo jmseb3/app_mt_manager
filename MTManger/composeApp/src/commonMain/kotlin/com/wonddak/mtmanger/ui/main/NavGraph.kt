@@ -8,9 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
@@ -105,13 +107,28 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(BottomNavItem.Plan.screenRoute) {
             NoDataBase(mtViewModel) {
-                PlanView() {
-                    navController.navigate(Const.NEW_PLAN)
+                PlanView() { start,end ->
+                    navController.navigate(Const.NEW_PLAN + "?start=$start&end=$end")
                 }
             }
         }
-        composable(Const.NEW_PLAN) {
-            PlanAddView()
+        composable(
+            Const.NEW_PLAN + "?start={start}&end={end}",
+            arguments = listOf(
+                navArgument("start") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("end") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ) {backStackEntry ->
+            PlanAddView(
+                backStackEntry.arguments?.getString("start")!!,
+                backStackEntry.arguments?.getString("end")!!,
+            )
         }
     }
 }
@@ -177,7 +194,7 @@ fun NavController.isAdjustment(): Boolean {
 fun NavController.isPlanNew(): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute == Const.NEW_PLAN
+    return currentRoute?.startsWith(Const.NEW_PLAN) ?: false
 }
 
 @Composable

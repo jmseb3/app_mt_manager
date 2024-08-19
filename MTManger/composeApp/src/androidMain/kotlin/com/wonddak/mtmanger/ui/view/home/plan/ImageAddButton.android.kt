@@ -9,14 +9,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import org.koin.compose.koinInject
 import java.io.ByteArrayOutputStream
 
 @Composable
-internal actual fun ImageAddButton(modifier: Modifier, plan: Plan) {
+internal actual fun ImageAddButton(modifier: Modifier, color : Color, action : (ByteArray) -> Unit) {
     val mtViewModel: MTViewModel = koinInject()
     val context = LocalContext.current
     val picker =
@@ -25,14 +25,6 @@ internal actual fun ImageAddButton(modifier: Modifier, plan: Plan) {
             // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
-//                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-//                context.contentResolver.takePersistableUriPermission(uri, flag)
-                mtViewModel.updatePlanImgSrc(
-                    plan.planId!!,
-                    uri.toString()
-                )
-
-
                 context.contentResolver.openInputStream(uri)?.use { fis ->
 
                     val byteBuffer = ByteArrayOutputStream()
@@ -54,11 +46,7 @@ internal actual fun ImageAddButton(modifier: Modifier, plan: Plan) {
                     } // else they are the same, just recycle once
 
                     bitmapImage.recycle();
-                    mtViewModel.updatePlanImgByte(
-                        plan.planId!!,
-                        outputStream.toByteArray()
-                    )
-
+                    action(outputStream.toByteArray())
                 }
             } else {
                 Log.d("PhotoPicker", "No media selected")
@@ -71,6 +59,6 @@ internal actual fun ImageAddButton(modifier: Modifier, plan: Plan) {
             picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         },
     ) {
-        ImageAddButtonIcon()
+        ImageAddButtonIcon(color)
     }
 }

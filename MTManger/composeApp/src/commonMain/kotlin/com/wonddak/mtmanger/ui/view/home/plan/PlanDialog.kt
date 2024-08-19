@@ -27,7 +27,7 @@ import kotlinx.datetime.Instant
 fun PlanDialog(
     startDate: String,
     endDate: String,
-    plan: Plan?,
+    plan: Plan,
     onAdd: (
         title: String,
         day: String,
@@ -37,13 +37,13 @@ fun PlanDialog(
 ) {
 
     var title by remember {
-        mutableStateOf(plan?.nowPlanTitle ?: "")
+        mutableStateOf(plan.nowPlanTitle)
     }
     var date by remember {
-        mutableStateOf(plan?.nowDay ?: "")
+        mutableStateOf(plan.nowDay)
     }
     var planText by remember {
-        mutableStateOf(plan?.simpleText ?: "")
+        mutableStateOf(plan.simpleText)
     }
     val focusManager = LocalFocusManager.current
 
@@ -51,8 +51,8 @@ fun PlanDialog(
         mutableStateOf(false)
     }
     DialogBase(
-        titleText = if (plan != null) "계획 수정" else "계획 작성",
-        confirmText = if (plan != null) "수정" else "추가",
+        titleText = "계획 수정",
+        confirmText = "수정",
         onConfirm = {
             onAdd(title, date, planText)
         },

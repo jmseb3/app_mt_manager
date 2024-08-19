@@ -3,16 +3,13 @@ package com.wonddak.mtmanger.ui.view.home.plan
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.wonddak.mtmanger.room.entity.Plan
-import com.wonddak.mtmanger.viewModel.MTViewModel
+import androidx.compose.ui.graphics.Color
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.refTo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.compose.koinInject
 import platform.PhotosUI.PHPickerConfiguration
 import platform.PhotosUI.PHPickerConfigurationSelectionOrdered
 import platform.PhotosUI.PHPickerFilter
@@ -26,9 +23,7 @@ import platform.darwin.NSObject
 import platform.posix.memcpy
 
 @Composable
-internal actual fun ImageAddButton(modifier: Modifier, plan: Plan) {
-    val mtViewModel: MTViewModel = koinInject()
-
+internal actual fun ImageAddButton(modifier: Modifier, color: Color, action : (ByteArray) -> Unit) {
     val launcher = remember {
         PhotoPicker()
     }
@@ -37,11 +32,11 @@ internal actual fun ImageAddButton(modifier: Modifier, plan: Plan) {
         modifier = modifier,
         onClick = {
             launcher.onLaunch() {
-                mtViewModel.updatePlanImgByte(plan.planId!!,it)
+                action(it)
             }
         },
     ) {
-        ImageAddButtonIcon()
+        ImageAddButtonIcon(color)
     }
 }
 

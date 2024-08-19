@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -20,12 +18,13 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.wonddak.mtmanger.room.entity.*
+import com.wonddak.mtmanger.room.entity.MtData
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.common.DialogBase
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import com.wonddak.mtmanger.ui.view.dialog.DateRangePickerDialog
 import mtmanger.composeapp.generated.resources.Res
+import mtmanger.composeapp.generated.resources.calendar
 import mtmanger.composeapp.generated.resources.ic_won
 import org.jetbrains.compose.resources.painterResource
 
@@ -33,7 +32,7 @@ import org.jetbrains.compose.resources.painterResource
 fun MTDialog(
     mtData: MtData? = null,
     onDismiss: () -> Unit = {},
-    onAdd: (mtData: MtData) -> Unit
+    onAdd: (mtData: MtData) -> Unit,
 ) {
 
     var title by remember {
@@ -94,7 +93,11 @@ fun MTDialog(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Icon(Icons.Default.Notifications, contentDescription = null)
+                    Icon(
+                        painterResource(Res.drawable.calendar),
+                        null,
+                        tint = match1
+                    )
                 }
             }
             DialogTextField(
