@@ -21,7 +21,7 @@ data class MtData(
         mtEnd
     )
 
-    val simpleTitle :String
+    val simpleTitle: String
         get() = "$mtTitle\n$mtStart ~ $mtEnd"
 }
 
@@ -42,9 +42,9 @@ data class MtDataList(
         parentColumn = "mtDataId",
         entityColumn = "mtId"
     )
-    val planList: List<Plan>
+    val planList: List<Plan>,
 
-) {
+    ) {
     //회비 총합
     val getAllPersonPayFee
         get() = personList.sumOf { it.paymentFee }
@@ -58,15 +58,19 @@ data class MtDataList(
         get() = getAllPersonPayFee - sumOfGoodsFee
 
     val isEmptyPerson
-        get() = personList.isEmpty()
+        get() = totalPersonCount == 0
 
     val totalPersonCount
         get() = personList.size
 
-    val getDistributionPrice : Pair<Int,Int>
-        get() = if(availableAmount >= 0) {
-            availableAmount / totalPersonCount to availableAmount % totalPersonCount
+    val getDistributionPrice: Pair<Int, Int>
+        get() = if (totalPersonCount > 0) {
+            if (availableAmount >= 0) {
+                availableAmount / totalPersonCount to availableAmount % totalPersonCount
+            } else {
+                -availableAmount / totalPersonCount to -availableAmount % totalPersonCount
+            }
         } else {
-            -availableAmount / totalPersonCount to -availableAmount % totalPersonCount
+            0 to 0
         }
 }

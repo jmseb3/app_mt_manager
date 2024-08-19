@@ -53,7 +53,7 @@ import network.chaintech.composeMultiplatformScreenCapture.ScreenCaptureComposab
 import network.chaintech.composeMultiplatformScreenCapture.rememberScreenCaptureController
 import kotlin.math.abs
 
-expect val useShare :Boolean
+expect val useShare: Boolean
 expect fun shareImage(bitmap: ImageBitmap?)
 
 @Composable
@@ -98,10 +98,14 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
                         addMessage
                     )
                 }
-                val enabled = if (!equalDistribution) {
-                    personPerDistribution.values.sum() == abs(mtData.availableAmount)
+                val enabled = if (mtData.isEmptyPerson) {
+                    false
                 } else {
-                    true
+                    if (!equalDistribution) {
+                        personPerDistribution.values.sum() == abs(mtData.availableAmount)
+                    } else {
+                        true
+                    }
                 }
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -113,7 +117,7 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
                 ) {
                     DefaultText(
                         text = "공유하기",
-                        color = if(enabled) match2 else match2.copy(alpha = 0.5f)
+                        color = if (enabled) match2 else match2.copy(alpha = 0.5f)
                     )
                 }
                 Column(
@@ -310,43 +314,45 @@ fun ResultContent(
                 }
                 Spacer(Modifier.height(20.dp))
             }
-            Column {
-                Text(
-                    text = if (availableAmount >= 0) "남은 금액" else "초과 금액",
-                    fontWeight = FontWeight.Bold
-                )
-                if (availableAmount >= 0) {
-                    Text(availableAmount.toPriceString())
-                } else {
+            if (!mtData.isEmptyPerson) {
+                Column {
                     Text(
-                        (-availableAmount).toPriceString(),
-                        color = Color.Red
-                    )
-                }
-                if (availableAmount != 0) {
-                    Text(
-                        text = if (availableAmount >= 0) "분배 금액" else "추가 지불 금액",
+                        text = if (availableAmount >= 0) "남은 금액" else "초과 금액",
                         fontWeight = FontWeight.Bold
                     )
-                    if (equalDistribution) {
-                        val distributionPrice = mtData.getDistributionPrice
-                        Text("1인당 ${distributionPrice.first.toPriceString()}")
-                        if (distributionPrice.second > 0) {
-                            Text("남은 금액 ${distributionPrice.second.toPriceString()}")
-                        }
+                    if (availableAmount >= 0) {
+                        Text(availableAmount.toPriceString())
                     } else {
-                        mtData.personList.forEach { person ->
-                            Row {
-                                Text(
-                                    person.name,
-                                    modifier = Modifier.weight(1f)
-                                )
-                                Text(
-                                    (personPerDistribution[person]
-                                        ?: 0).toPriceString(),
-                                    modifier = Modifier.weight(1f),
-                                    color = if (availableAmount >= 0) Color.Black else Color.Red
-                                )
+                        Text(
+                            (-availableAmount).toPriceString(),
+                            color = Color.Red
+                        )
+                    }
+                    if (availableAmount != 0) {
+                        Text(
+                            text = if (availableAmount >= 0) "분배 금액" else "추가 지불 금액",
+                            fontWeight = FontWeight.Bold
+                        )
+                        if (equalDistribution) {
+                            val distributionPrice = mtData.getDistributionPrice
+                            Text("1인당 ${distributionPrice.first.toPriceString()}")
+                            if (distributionPrice.second > 0) {
+                                Text("남은 금액 ${distributionPrice.second.toPriceString()}")
+                            }
+                        } else {
+                            mtData.personList.forEach { person ->
+                                Row {
+                                    Text(
+                                        person.name,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Text(
+                                        (personPerDistribution[person]
+                                            ?: 0).toPriceString(),
+                                        modifier = Modifier.weight(1f),
+                                        color = if (availableAmount >= 0) Color.Black else Color.Red
+                                    )
+                                }
                             }
                         }
                     }
