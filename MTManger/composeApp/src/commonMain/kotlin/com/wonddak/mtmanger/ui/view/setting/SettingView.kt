@@ -14,14 +14,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.noRippleClickable
-import com.wonddak.mtmanger.ui.dialog.OptionSheet
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
@@ -68,23 +63,6 @@ fun SettingView(
                     border = BorderStroke(2.dp, match2),
                 ) {
                     DefaultText(text = "문의하기")
-                }
-                var dd by remember {
-                    mutableStateOf(false)
-                }
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        dd = true
-                    },
-                    border = BorderStroke(2.dp, match2),
-                ) {
-                    DefaultText(text = "Test")
-                }
-                if (dd) {
-                    OptionSheet() {
-                        dd = false
-                    }
                 }
             }
             HorizontalDivider()

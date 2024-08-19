@@ -2,7 +2,6 @@ package com.wonddak.mtmanger.ui.view.home.buy
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,6 +44,7 @@ import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
+import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_reset
@@ -274,26 +275,34 @@ fun BuyItemView(
     buyGood: BuyGood,
     mtViewModel: MTViewModel,
 ) {
+    var showOptionSheet by remember {
+        mutableStateOf(false)
+    }
     var showItemDelete by remember {
         mutableStateOf(false)
     }
     var showEditDialog by remember {
         mutableStateOf(false)
     }
-    BuyItemRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = {
-                    showEditDialog = true
-                },
-                onLongClick = {
-                    showItemDelete = true
-                },
-            ),
-        buyGood.getItemList()
-    )
-
+    TextButton(
+        {
+            showOptionSheet = true
+        },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        BuyItemRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            buyGood.getItemList()
+        )
+    }
+    if (showOptionSheet) {
+        OptionSheet(
+            onDismissRequest = { showOptionSheet = false },
+            onEdit = { showEditDialog = true },
+            onDelete = { showItemDelete = true }
+        )
+    }
     if (showItemDelete) {
         DeleteDialog(
             onDelete = {
@@ -327,7 +336,7 @@ fun BuyItemView(
 fun BuyItemRow(
     modifier: Modifier = Modifier,
     dataList: List<String>,
-    color: Color = match2
+    color: Color = match2,
 ) {
     Row(
         modifier = modifier
