@@ -43,6 +43,9 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
             linkerOpts.add("-lsqlite3")
+            if (System.getenv("XCODE_VERSION_MAJOR") == "1500") {
+                linkerOpts += "-ld64"
+            }
         }
     }
 
@@ -108,8 +111,8 @@ android {
         applicationId = "com.wonddak.mtmanger"
         minSdk = 24
         targetSdk = 34
-        versionCode = 18
-        versionName = "3.1.0"
+        versionCode = 19
+        versionName = "3.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

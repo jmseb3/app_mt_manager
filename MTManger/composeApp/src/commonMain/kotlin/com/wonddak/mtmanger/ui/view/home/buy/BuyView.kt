@@ -44,7 +44,7 @@ import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
-import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
+import com.wonddak.mtmanger.ui.view.sheet.DefaultOptionSheet
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_reset
@@ -297,7 +297,7 @@ fun BuyItemView(
         )
     }
     if (showOptionSheet) {
-        OptionSheet(
+        DefaultOptionSheet(
             onDismissRequest = { showOptionSheet = false },
             onEdit = { showEditDialog = true },
             onDelete = { showItemDelete = true }

@@ -26,9 +26,9 @@ import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
 import com.wonddak.mtmanger.ui.main.TopAppContent
 import com.wonddak.mtmanger.ui.main.isATT
-import com.wonddak.mtmanger.ui.main.isAdjustment
 import com.wonddak.mtmanger.ui.main.isMTList
 import com.wonddak.mtmanger.ui.main.isSetting
+import com.wonddak.mtmanger.ui.main.showBottomNavigation
 import com.wonddak.mtmanger.ui.theme.AppTheme
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.AdvertView
@@ -93,7 +93,7 @@ fun HomeScreen() {
         bottomBar = {
             if (!navController.isATT()) {
                 AnimatedVisibility(
-                    !navController.isSetting() && !navController.isMTList() && !navController.isAdjustment(),
+                    navController.showBottomNavigation(),
                     enter = expandVertically() + fadeIn(),
                     exit = shrinkVertically() + fadeOut(),
                 ) {

@@ -8,9 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
@@ -21,6 +23,7 @@ import com.wonddak.mtmanger.ui.view.home.main.AdjustmentView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
 import com.wonddak.mtmanger.ui.view.home.main.MtListView
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
+import com.wonddak.mtmanger.ui.view.home.plan.PlanAddView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
 import com.wonddak.mtmanger.ui.view.setting.CategoryView
 import com.wonddak.mtmanger.ui.view.setting.SettingView
@@ -104,7 +107,31 @@ fun NavGraphBuilder.homeGraph(
         }
         composable(BottomNavItem.Plan.screenRoute) {
             NoDataBase(mtViewModel) {
-                PlanView()
+                PlanView() { start, end ->
+                    navController.navigate(Const.NEW_PLAN + "?start=$start&end=$end")
+                }
+            }
+        }
+        composable(
+            Const.NEW_PLAN + "?start={start}&end={end}",
+            arguments = listOf(
+                navArgument("start") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                },
+                navArgument("end") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )
+        ) { backStackEntry ->
+            PlanAddView(
+                backStackEntry.arguments?.getString("start")!!,
+                backStackEntry.arguments?.getString("end")!!,
+            ) {
+                mtViewModel.addPlan(it) {
+                    navController.popBackStack()
+                }
             }
         }
     }
@@ -165,6 +192,29 @@ fun NavController.isAdjustment(): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     return currentRoute == Const.MT_ADJUSTMENT
+}
+
+@Composable
+fun NavController.isPlanNew(): Boolean {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return currentRoute?.startsWith(Const.NEW_PLAN) ?: false
+}
+
+@Composable
+fun NavController.showSettingIcon(): Boolean {
+    return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
+}
+
+@Composable
+fun NavController.showNavigationIcon(): Boolean {
+    return isSetting() || isMTList() || isAdjustment() || isPlanNew()
+}
+
+@Composable
+fun NavController.showBottomNavigation(): Boolean {
+    return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
+
 }
 
 @Composable

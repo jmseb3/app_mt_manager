@@ -2,7 +2,7 @@ package com.wonddak.mtmanger.ui.view.home.plan
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,8 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
@@ -42,21 +38,25 @@ import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
+import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
+import com.wonddak.mtmanger.ui.view.sheet.OptionSheetItem
+import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.add_photo
+import mtmanger.composeapp.generated.resources.camera_switch
 import mtmanger.composeapp.generated.resources.dialog_delete_image
-import org.jetbrains.compose.resources.painterResource
+import mtmanger.composeapp.generated.resources.no_photography
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 @Composable
 fun PlanView(
     mtViewModel: MTViewModel = koinInject(),
+    navigateNew: (start: String, end: String) -> Unit,
 ) {
-    var showPlanDialog by remember {
-        mutableStateOf(false)
-    }
+    val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
+
     Column(
         Modifier
             .fillMaxSize()
@@ -90,7 +90,16 @@ fun PlanView(
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth(),
-            onClick = { showPlanDialog = true },
+            onClick = {
+                if (planResource is Resource.Success) {
+                    (planResource as Resource.Success<MtDataList>).data?.let {
+                        navigateNew(
+                            it.mtdata.mtStart,
+                            it.mtdata.mtEnd
+                        )
+                    }
+                }
+            },
             border = BorderStroke(2.dp, match2)
         ) {
             Text(
@@ -99,24 +108,6 @@ fun PlanView(
                 fontFamily = maple(),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
-            )
-        }
-    }
-    val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
-
-    if (showPlanDialog && planResource is Resource.Success) {
-        (planResource as Resource.Success<MtDataList>).data?.let {
-            PlanDialog(
-                startDate = it.mtdata.mtStart,
-                endDate = it.mtdata.mtEnd,
-                plan = null,
-                onDismiss = {
-                    showPlanDialog = false
-                },
-                onAdd = { title, day, text ->
-                    mtViewModel.addPlan(title, day, text)
-                    showPlanDialog = false
-                }
             )
         }
     }
@@ -157,8 +148,11 @@ fun PlanCardView(
     mtViewModel: MTViewModel,
     plan: Plan,
     startDate: String,
-    endDate: String
+    endDate: String,
 ) {
+    var showOptionSheet by remember {
+        mutableStateOf(false)
+    }
     var showImgDelete by remember {
         mutableStateOf(false)
     }
@@ -168,17 +162,17 @@ fun PlanCardView(
     var showPlanDialog by remember {
         mutableStateOf(false)
     }
+    val photoPickerLauncher = rememberPhotoPickerLauncher(
+        onResult = {
+            mtViewModel.updatePlanImgByte(plan.planId!!, it)
+        }
+    )
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .combinedClickable(
-                onClick = {
-                    showPlanDialog = true
-                },
-                onLongClick = {
-                    showItemDelete = true
-                },
-            ),
+            .clickable {
+                showOptionSheet = true
+            },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
         ),
@@ -191,12 +185,6 @@ fun PlanCardView(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 3.dp)
         ) {
-            ImageAddButton(
-                Modifier
-                    .size(36.dp)
-                    .align(Alignment.TopEnd),
-                plan
-            )
             Column(
                 Modifier.fillMaxWidth(),
             ) {
@@ -214,17 +202,11 @@ fun PlanCardView(
                     fontFamily = maple()
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                PlanImageView(Modifier
-                    .combinedClickable(
-                        onClick = { },
-                        onLongClick = {
-                            showImgDelete = true
-                        },
-                    )
-                    .fillMaxWidth(),
+                PlanImageView(
+                    Modifier
+                        .fillMaxWidth(),
                     plan
                 )
-
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = plan.simpleText,
@@ -233,6 +215,47 @@ fun PlanCardView(
                 )
             }
         }
+    }
+    if (showOptionSheet) {
+        OptionSheet(
+            onDismissRequest = { showOptionSheet = false },
+            arrayListOf<OptionSheetItem<*>>(
+                OptionSheetItem.OptionEdit("계획 수정") {
+                    showPlanDialog = true
+                },
+                OptionSheetItem.OptionDelete("계획 삭제") {
+                    showItemDelete = true
+                }
+            ).also {
+                if (plan.imageExist) {
+                    it.add(
+                        OptionSheetItem.Drawable(
+                            Res.drawable.camera_switch,
+                            "사진 변경"
+                        ) {
+                            photoPickerLauncher.launch()
+                        }
+                    )
+                    it.add(
+                        OptionSheetItem.Drawable(
+                            Res.drawable.no_photography,
+                            "사진 삭제"
+                        ) {
+                            showImgDelete = true
+                        }
+                    )
+                } else {
+                    it.add(
+                        OptionSheetItem.Drawable(
+                            image = Res.drawable.add_photo,
+                            title = "사진 추가"
+                        ) {
+                            photoPickerLauncher.launch()
+                        }
+                    )
+                }
+            }
+        )
     }
     if (showImgDelete) {
         DeleteDialog(
