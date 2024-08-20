@@ -28,8 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.entity.PlanData
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.ByteArrayImageView
@@ -72,7 +74,16 @@ fun PlanAddView(
         }
     )
     val textFiledModifier = Modifier.fillMaxWidth()
-    Box(Modifier.fillMaxSize().padding(10.dp)) {
+    val focusManager = LocalFocusManager.current
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .noRippleClickable {
+                focusManager.clearFocus()
+            }
+            .padding(10.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
