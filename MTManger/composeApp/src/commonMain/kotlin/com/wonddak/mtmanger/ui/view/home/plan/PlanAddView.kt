@@ -3,6 +3,7 @@ package com.wonddak.mtmanger.ui.view.home.plan
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -71,7 +72,7 @@ fun PlanAddView(
         }
     )
     val textFiledModifier = Modifier.fillMaxWidth()
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().padding(10.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -143,23 +144,40 @@ fun PlanAddView(
             ) {
                 planText = it
             }
-            IconButton(
-                onClick = {
-                    photoPickerLauncher.launch()
-                },
-            ) {
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    painter = painterResource(resource = Res.drawable.add_photo),
-                    contentDescription = null,
-                    tint = match2
-                )
+            Row {
+                IconButton(
+                    onClick = {
+                        photoPickerLauncher.launch()
+                    },
+                ) {
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(resource = Res.drawable.add_photo),
+                        contentDescription = null,
+                        tint = match2
+                    )
+                }
+                if (imageByte != null) {
+                    IconButton(
+                        onClick = {
+                            imageByte = null
+                        },
+                    ) {
+                        Icon(
+                            Icons.Default.Clear,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                            tint = match2
+                        )
+                    }
+                }
             }
             imageByte?.let {
                 ByteArrayImageView(Modifier.fillMaxWidth().wrapContentHeight(), it)
             }
         }
         val enabled = date.isNotEmpty() && title.isNotEmpty() && planText.isNotEmpty()
+        val color = if (enabled) match2 else match2.copy(0.5f)
         OutlinedButton(
             modifier = Modifier.fillMaxWidth().height(50.dp).align(Alignment.BottomCenter),
             onClick = {
@@ -173,9 +191,9 @@ fun PlanAddView(
                 )
             },
             enabled = enabled,
-            border = BorderStroke(2.dp, match2),
+            border = BorderStroke(2.dp, color),
         ) {
-            DefaultText(text = "추가", color = if (enabled) match2 else match2.copy(0.5f))
+            DefaultText(text = "추가", color = color)
         }
     }
 

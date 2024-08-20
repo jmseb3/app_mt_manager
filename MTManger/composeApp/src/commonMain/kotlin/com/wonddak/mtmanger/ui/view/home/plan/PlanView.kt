@@ -44,7 +44,9 @@ import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.add_photo
+import mtmanger.composeapp.generated.resources.camera_switch
 import mtmanger.composeapp.generated.resources.dialog_delete_image
+import mtmanger.composeapp.generated.resources.no_photography
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
@@ -227,12 +229,18 @@ fun PlanCardView(
             ).also {
                 if (plan.imageExist) {
                     it.add(
-                        OptionSheetItem.OptionEdit("사진 수정") {
+                        OptionSheetItem.Drawable(
+                            Res.drawable.camera_switch,
+                            "사진 변경"
+                        ) {
                             photoPickerLauncher.launch()
                         }
                     )
                     it.add(
-                        OptionSheetItem.OptionDelete("사진 삭제") {
+                        OptionSheetItem.Drawable(
+                            Res.drawable.no_photography,
+                            "사진 삭제"
+                        ) {
                             showImgDelete = true
                         }
                     )
