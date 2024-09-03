@@ -26,19 +26,23 @@ import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.toPriceString
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
+import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable
 fun MainView(
     mtViewModel: MTViewModel,
     showMTList: () -> Unit,
-    showAdjustment :() -> Unit
+    showAdjustment: () -> Unit
 ) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     var showAddDialog by remember {
         mutableStateOf(false)
     }
     var showEditDialog by remember {
+        mutableStateOf(false)
+    }
+    var showDeleteDialog by remember {
         mutableStateOf(false)
     }
     Column(
@@ -56,13 +60,13 @@ fun MainView(
                     .padding(vertical = 5.dp)
             )
             if (resource is Resource.Success) {
-                (resource as Resource.Success<MtDataList>).data?.let { mtData ->
+                (resource as Resource.Success<MtDataList>).data?.let { mtDataList ->
                     DefaultText(
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(2.dp, match2, RoundedCornerShape(10.dp))
                             .padding(vertical = 5.dp),
-                        text = mtData.mtdata.mtTitle,
+                        text = mtDataList.mtdata.mtTitle,
                         fontSize = 30.sp
                     )
                     Spacer(
@@ -82,7 +86,7 @@ fun MainView(
                         ) {
                             DefaultText(
                                 modifier = Modifier.weight(4f),
-                                text = mtData.mtdata.mtStart,
+                                text = mtDataList.mtdata.mtStart,
                                 fontSize = 23.sp
                             )
                             DefaultText(
@@ -102,7 +106,7 @@ fun MainView(
                         ) {
                             DefaultText(
                                 modifier = Modifier.weight(4f),
-                                text = mtData.mtdata.mtEnd,
+                                text = mtDataList.mtdata.mtEnd,
                                 fontSize = 23.sp
                             )
                             DefaultText(
@@ -132,7 +136,7 @@ fun MainView(
                         )
                         DefaultText(
                             modifier = Modifier.weight(2f),
-                            text = mtData.mtdata.fee.toPriceString(""),
+                            text = mtDataList.mtdata.fee.toPriceString(""),
                             fontSize = 23.sp
                         )
                         DefaultText(
@@ -161,7 +165,7 @@ fun MainView(
                         )
                         DefaultText(
                             modifier = Modifier.weight(2f),
-                            text = mtData.personList.size.toString(),
+                            text = mtDataList.personList.size.toString(),
                             fontSize = 23.sp
                         )
                         DefaultText(
@@ -175,12 +179,21 @@ fun MainView(
                             .height(10.dp)
                             .padding(vertical = 5.dp)
                     )
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { showEditDialog = true },
-                        border = BorderStroke(2.dp, match2),
-                    ) {
-                        DefaultText(text = "수정")
+                    Row {
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth().weight(1f),
+                            onClick = { showEditDialog = true },
+                            border = BorderStroke(2.dp, match2),
+                        ) {
+                            DefaultText(text = "수정")
+                        }
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth().weight(1f),
+                            onClick = { showDeleteDialog = true },
+                            border = BorderStroke(2.dp, match2),
+                        ) {
+                            DefaultText(text = "삭제")
+                        }
                     }
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -205,7 +218,7 @@ fun MainView(
                     }
                     if (showEditDialog) {
                         MTDialog(
-                            mtData.mtdata,
+                            mtDataList.mtdata,
                             onDismiss = {
                                 showEditDialog = false
                             },
@@ -227,6 +240,18 @@ fun MainView(
                                 mtViewModel.insertMtData(data)
                                 mtViewModel.showSnackBarMsg("${data.mtTitle}로 변경했어요")
                                 showAddDialog = false
+                            }
+                        )
+                    }
+
+                    if (showDeleteDialog) {
+                        DeleteDialog(
+                            onDelete = {
+                                mtViewModel.deleteMtData(mtDataList.mtdata)
+                                showDeleteDialog = false
+                            },
+                            onDismiss = {
+                                showDeleteDialog = false
                             }
                         )
                     }

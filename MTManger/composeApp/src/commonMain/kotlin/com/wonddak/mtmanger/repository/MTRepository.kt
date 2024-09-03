@@ -49,6 +49,31 @@ class MTRepository(
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
     }
+    suspend fun deleteMtData(mtData: MtData) : Int {
+        val preList = mtDataDao.getMtDatadata().toList()
+        var findIndex  = -1
+        for (idx in preList.indices){
+            val item = preList[idx]
+            if (item == mtData) {
+                findIndex = idx
+                break
+            }
+        }
+        mtDataDao.deleteMtData(mtData)
+        return if (findIndex == -1) {
+            -1
+        } else {
+            if (preList.size <= 1) {
+                -1
+            } else {
+                if (findIndex >=1) {
+                    preList[findIndex -1].mtDataId!!
+                } else {
+                    preList.first().mtDataId!!
+                }
+            }
+        }
+    }
 
     suspend fun updatePerson(personId: Int, simplePerson: SimplePerson) {
         personDao.updatePersonData(

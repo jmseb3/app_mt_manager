@@ -67,7 +67,7 @@ class MTViewModel(
                 storage.id.collectLatest {
                     initId = true
                     mainMtId = it
-                    mtRepository.getMtDataList(it).collectLatest { mtDataList ->
+                    mtRepository.getMtDataList(it).collect { mtDataList ->
                         _nowMtDataList.value = mtDataList
                     }
                 }
@@ -100,6 +100,7 @@ class MTViewModel(
 
     fun setMtId(id: Int) {
         viewModelScope.launch {
+            println("setMt Id :$id")
             storage.updateId(id)
         }
     }
@@ -110,6 +111,14 @@ class MTViewModel(
                 mtRepository.insertMtData(mtData).toInt()
             }
             setMtId(newId)
+        }
+    }
+
+    fun deleteMtData(mtData: MtData) {
+        viewModelScope.launch {
+            mtRepository.deleteMtData(mtData).also {
+                setMtId(it)
+            }
         }
     }
 

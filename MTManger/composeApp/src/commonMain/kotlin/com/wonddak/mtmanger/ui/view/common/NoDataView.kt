@@ -34,7 +34,7 @@ fun NoDataBase(
             .fillMaxSize()
             .background(match1)
     ) {
-        if (mtViewModel.mainMtId == 0) {
+        if (mtViewModel.mainMtId <= 0) {
             NoDataView(mtViewModel)
         } else {
             content()

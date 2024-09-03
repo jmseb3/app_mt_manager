@@ -61,7 +61,11 @@ fun MTDialog(
         confirmText = if (mtData == null) "추가" else "수정",
         confirmEnabled = title.isNotEmpty() && fee.isNotEmpty() && startDate.isNotEmpty() && endDate.isNotEmpty(),
         onConfirm = {
-            onAdd(MtData(title, fee.toInt(), startDate, endDate))
+            if (mtData == null) {
+                onAdd(MtData(title, fee.toInt(), startDate, endDate))
+            } else {
+                onAdd(mtData.copy(mtTitle = title, fee = fee.toInt(), mtStart = startDate, mtEnd = endDate))
+            }
         },
         onDismiss = onDismiss
     ) {
