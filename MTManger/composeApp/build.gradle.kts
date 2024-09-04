@@ -111,7 +111,7 @@ android {
         applicationId = "com.wonddak.mtmanger"
         minSdk = 24
         targetSdk = 34
-        versionCode = 19
+        versionCode = 20
         versionName = "3.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
