@@ -69,11 +69,7 @@ class MTRepository(
             if (preList.size <= 1) {
                 -1
             } else {
-                if (findIndex >=1) {
-                    preList[findIndex -1].mtDataId!!
-                } else {
-                    preList.first().mtDataId!!
-                }
+                preList[(findIndex-1).takeIf { it >=0 }  ?: 1 ].mtDataId!!
             }
         }
     }

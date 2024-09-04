@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -239,20 +240,6 @@ fun MainView(
                         )
                     }
 
-                    if (showAddDialog) {
-                        MTDialog(
-                            null,
-                            onDismiss = {
-                                showAddDialog = false
-                            },
-                            onAdd = { data ->
-                                mtViewModel.insertMtData(data)
-                                mtViewModel.showSnackBarMsg("${data.mtTitle}로 변경했어요")
-                                showAddDialog = false
-                            }
-                        )
-                    }
-
                     if (showDeleteDialog) {
                         DeleteDialog(
                             onDelete = {
@@ -265,6 +252,40 @@ fun MainView(
                         )
                     }
                 }
+                    ?:
+                    Column {
+                        Text("현재 설정된 데이터가 유효하지 않아요.. 확인부탁드립니다.")
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { showMTList() },
+                            border = BorderStroke(2.dp, match2),
+                        ) {
+                            DefaultText(text = "MT 목록")
+                        }
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { showAddDialog = true },
+                            border = BorderStroke(2.dp, match2),
+                        ) {
+                            DefaultText(text = "다른 여행 떠나기")
+                        }
+                    }
+
+            }
+
+
+            if (showAddDialog) {
+                MTDialog(
+                    null,
+                    onDismiss = {
+                        showAddDialog = false
+                    },
+                    onAdd = { data ->
+                        mtViewModel.insertMtData(data)
+                        mtViewModel.showSnackBarMsg("${data.mtTitle}로 변경했어요")
+                        showAddDialog = false
+                    }
+                )
             }
         }
     }
