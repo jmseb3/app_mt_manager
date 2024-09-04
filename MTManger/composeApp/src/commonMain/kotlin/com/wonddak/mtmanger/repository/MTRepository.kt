@@ -46,6 +46,9 @@ class MTRepository(
             }
         }
     }
+    suspend fun checkMtDataOver2() :Boolean {
+        return mtDataDao.getMtDatadata().size >=2
+    }
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
     }

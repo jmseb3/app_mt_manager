@@ -36,6 +36,7 @@ fun MainView(
     showAdjustment: () -> Unit
 ) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
+    val totalMtList by mtViewModel.totalMtList.collectAsState()
     var showAddDialog by remember {
         mutableStateOf(false)
     }
@@ -66,7 +67,7 @@ fun MainView(
                             .fillMaxWidth()
                             .border(2.dp, match2, RoundedCornerShape(10.dp))
                             .padding(vertical = 5.dp),
-                        text = mtDataList.mtdata.mtTitle,
+                        text = mtDataList.mtData.mtTitle,
                         fontSize = 30.sp
                     )
                     Spacer(
@@ -86,7 +87,7 @@ fun MainView(
                         ) {
                             DefaultText(
                                 modifier = Modifier.weight(4f),
-                                text = mtDataList.mtdata.mtStart,
+                                text = mtDataList.mtData.mtStart,
                                 fontSize = 23.sp
                             )
                             DefaultText(
@@ -106,7 +107,7 @@ fun MainView(
                         ) {
                             DefaultText(
                                 modifier = Modifier.weight(4f),
-                                text = mtDataList.mtdata.mtEnd,
+                                text = mtDataList.mtData.mtEnd,
                                 fontSize = 23.sp
                             )
                             DefaultText(
@@ -136,7 +137,7 @@ fun MainView(
                         )
                         DefaultText(
                             modifier = Modifier.weight(2f),
-                            text = mtDataList.mtdata.fee.toPriceString(""),
+                            text = mtDataList.mtData.fee.toPriceString(""),
                             fontSize = 23.sp
                         )
                         DefaultText(
@@ -179,7 +180,9 @@ fun MainView(
                             .height(10.dp)
                             .padding(vertical = 5.dp)
                     )
-                    Row {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ){
                         OutlinedButton(
                             modifier = Modifier.fillMaxWidth().weight(1f),
                             onClick = { showEditDialog = true },
@@ -187,12 +190,18 @@ fun MainView(
                         ) {
                             DefaultText(text = "수정")
                         }
+                        val enabled = totalMtList.size >=2
+                        val enabledColor = if (enabled) match2 else match2.copy(0.5f)
                         OutlinedButton(
                             modifier = Modifier.fillMaxWidth().weight(1f),
                             onClick = { showDeleteDialog = true },
-                            border = BorderStroke(2.dp, match2),
+                            border = BorderStroke(2.dp, enabledColor),
+                            enabled = enabled,
                         ) {
-                            DefaultText(text = "삭제")
+                            DefaultText(
+                                text = "삭제",
+                                color = enabledColor
+                            )
                         }
                     }
                     OutlinedButton(
@@ -218,7 +227,7 @@ fun MainView(
                     }
                     if (showEditDialog) {
                         MTDialog(
-                            mtDataList.mtdata,
+                            mtDataList.mtData,
                             onDismiss = {
                                 showEditDialog = false
                             },
@@ -247,7 +256,7 @@ fun MainView(
                     if (showDeleteDialog) {
                         DeleteDialog(
                             onDelete = {
-                                mtViewModel.deleteMtData(mtDataList.mtdata)
+                                mtViewModel.deleteMtData(mtDataList.mtData)
                                 showDeleteDialog = false
                             },
                             onDismiss = {

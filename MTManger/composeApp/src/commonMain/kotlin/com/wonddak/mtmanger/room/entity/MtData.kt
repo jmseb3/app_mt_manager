@@ -26,7 +26,7 @@ data class MtData(
 }
 
 data class MtDataList(
-    @Embedded val mtdata: MtData,
+    @Embedded val mtData: MtData,
     @Relation(
         parentColumn = "mtDataId",
         entityColumn = "mtId"
@@ -42,9 +42,8 @@ data class MtDataList(
         parentColumn = "mtDataId",
         entityColumn = "mtId"
     )
-    val planList: List<Plan>,
-
-    ) {
+    val planList: List<Plan>
+) {
     //회비 총합
     val getAllPersonPayFee
         get() = personList.sumOf { it.paymentFee }

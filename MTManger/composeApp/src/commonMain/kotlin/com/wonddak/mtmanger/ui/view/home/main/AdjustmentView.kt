@@ -287,7 +287,7 @@ fun ResultContent(
         ) {
             if (showMtTitle) {
                 Text(
-                    mtData.mtdata.mtTitle + " 정산서",
+                    mtData.mtData.mtTitle + " 정산서",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp,

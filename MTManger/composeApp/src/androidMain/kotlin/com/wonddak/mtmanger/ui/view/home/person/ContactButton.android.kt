@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import com.wonddak.mtmanger.model.SnackBarMsg
 import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import org.koin.compose.koinInject
@@ -53,14 +52,10 @@ internal actual fun ContactButton(
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                mtViewModel.snackBarMsg = SnackBarMsg(
-                    "연락처 권한을 승인했습니다."
-                )
+                mtViewModel.showSnackBarMsg("연락처 권한을 승인했습니다")
                 getContentInfo()
             } else {
-                mtViewModel.snackBarMsg = SnackBarMsg(
-                    "연락처 권한이 필요합니다."
-                )
+                mtViewModel.showSnackBarMsg("연락처 권한이 필요합니다.")
             }
         }
     OutlinedButton(

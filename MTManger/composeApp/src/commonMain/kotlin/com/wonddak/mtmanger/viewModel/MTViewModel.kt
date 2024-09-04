@@ -21,12 +21,14 @@ import com.wonddak.mtmanger.room.entity.categoryList
 import com.wonddak.mtmanger.util.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -36,9 +38,10 @@ class MTViewModel(
 ) : ViewModel() {
 
     var snackBarMsg: SnackBarMsg? by mutableStateOf(null)
+        private set
 
     fun showSnackBarMsg(msg: String) {
-        snackBarMsg = SnackBarMsg(msg,"확인") { closeSnackBar() }
+        snackBarMsg = SnackBarMsg(msg, "확인") { closeSnackBar() }
     }
 
     fun closeSnackBar() {
@@ -51,6 +54,13 @@ class MTViewModel(
 
     var mainMtId by mutableStateOf(0)
 
+    val totalMtList :StateFlow<List<MtData>> =
+        mtRepository.getMtTotalList().stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            emptyList()
+        )
+
     val nowMtDataList: StateFlow<Resource<MtDataList>>
         get() = _nowMtDataList
 
@@ -60,6 +70,7 @@ class MTViewModel(
 
     var settingCategoryList by mutableStateOf(emptyList<categoryList>())
 
+    private var observeJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -67,8 +78,11 @@ class MTViewModel(
                 storage.id.collectLatest {
                     initId = true
                     mainMtId = it
-                    mtRepository.getMtDataList(it).collect { mtDataList ->
-                        _nowMtDataList.value = mtDataList
+                    observeJob?.cancel()
+                    observeJob = launch {
+                        mtRepository.getMtDataList(it).collect { mtDataList ->
+                            _nowMtDataList.value = mtDataList
+                        }
                     }
                 }
             }
@@ -84,9 +98,9 @@ class MTViewModel(
         }
     }
 
-    fun isFirst(onFirst:() -> Unit) {
+    fun isFirst(onFirst: () -> Unit) {
         viewModelScope.launch {
-            if(storage.isFirst.first()) {
+            if (storage.isFirst.first()) {
                 onFirst()
             }
         }
@@ -124,7 +138,7 @@ class MTViewModel(
 
 
     fun insertPerson(
-        simplePerson: SimplePerson
+        simplePerson: SimplePerson,
     ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -144,7 +158,7 @@ class MTViewModel(
 
     fun updatePerson(
         personId: Int,
-        simplePerson: SimplePerson
+        simplePerson: SimplePerson,
     ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -159,7 +173,7 @@ class MTViewModel(
 
     fun insertBuyGood(
         simpleBuyGood: SimpleBuyGood,
-        buyGoodId: Int? = null
+        buyGoodId: Int? = null,
     ) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -175,32 +189,6 @@ class MTViewModel(
                 )
             }
         }
-    }
-
-    suspend fun updateMtData(
-        title: String,
-        fee: Int,
-        start: String,
-        end: String
-    ) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                mtRepository.insertMtData(
-                    MtData(
-                        mainMtId,
-                        title,
-                        fee,
-                        start,
-                        end
-                    )
-                )
-            }
-        }
-
-    }
-
-    fun getMtTotalLIst(): Flow<List<MtData>> {
-        return mtRepository.getMtTotalList()
     }
 
     fun deletePerson(personId: Int) {
@@ -251,7 +239,7 @@ class MTViewModel(
         }
     }
 
-    fun addPlan(planData: PlanData,onFinish:() -> Unit) {
+    fun addPlan(planData: PlanData, onFinish: () -> Unit) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mtRepository.insertPlan(
@@ -261,7 +249,7 @@ class MTViewModel(
                         nowDay = planData.nowDay,
                         nowPlanTitle = planData.nowPlanTitle,
                         simpleText = planData.simpleText,
-                        imgBytes =  planData.imgBytes
+                        imgBytes = planData.imgBytes
                     )
                 )
             }

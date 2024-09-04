@@ -94,8 +94,8 @@ fun PlanView(
                 if (planResource is Resource.Success) {
                     (planResource as Resource.Success<MtDataList>).data?.let {
                         navigateNew(
-                            it.mtdata.mtStart,
-                            it.mtdata.mtEnd
+                            it.mtData.mtStart,
+                            it.mtData.mtEnd
                         )
                     }
                 }
@@ -130,8 +130,8 @@ fun PlanListView(
                         PlanCardView(
                             plan = plan,
                             mtViewModel = mtViewModel,
-                            startDate = it.mtdata.mtStart,
-                            endDate = it.mtdata.mtEnd
+                            startDate = it.mtData.mtStart,
+                            endDate = it.mtData.mtEnd
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                     }

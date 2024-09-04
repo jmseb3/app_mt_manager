@@ -58,6 +58,7 @@ fun HomeScreen() {
 
     LaunchedEffect(mtViewModel.snackBarMsg) {
         mtViewModel.snackBarMsg?.let { snackBarMsg ->
+            snackbarHostState.currentSnackbarData?.dismiss()
             val snackbarResult = snackbarHostState.showSnackbar(
                 message = snackBarMsg.msg,
                 actionLabel = snackBarMsg.label,
@@ -66,12 +67,12 @@ fun HomeScreen() {
             )
             when (snackbarResult) {
                 SnackbarResult.Dismissed -> {
-                    mtViewModel.snackBarMsg = null
+                    mtViewModel.closeSnackBar()
                 }
 
                 SnackbarResult.ActionPerformed -> {
                     snackBarMsg.action.invoke()
-                    mtViewModel.snackBarMsg = null
+                    mtViewModel.closeSnackBar()
                 }
             }
         }
