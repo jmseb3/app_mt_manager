@@ -33,7 +33,7 @@ fun SettingView(
         Modifier
             .fillMaxSize()
             .background(match1)
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(10.dp)
             .noRippleClickable(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -51,7 +51,9 @@ fun SettingView(
                 Icon(Icons.AutoMirrored.Filled.ArrowForward, null, tint = match2)
             }
         }
-        Column {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             Column {
                 val removeAdStatus = payViewModel.removeAdStatus
                 SettingAdFooter(removeAdStatus)
@@ -65,7 +67,9 @@ fun SettingView(
                     DefaultText(text = "문의하기")
                 }
             }
-            HorizontalDivider()
+            HorizontalDivider(
+                color = match2
+            )
             Column {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),

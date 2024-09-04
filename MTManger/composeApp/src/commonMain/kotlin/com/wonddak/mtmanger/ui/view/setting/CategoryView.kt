@@ -69,7 +69,7 @@ fun CategoryView(
         modifier
             .fillMaxSize()
             .imePadding()
-            .padding(horizontal = 10.dp)
+            .padding(10.dp)
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
