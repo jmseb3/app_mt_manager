@@ -45,7 +45,6 @@ import com.wonddak.mtmanger.ui.view.sheet.DefaultOptionSheet
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_reset
-import mtmanger.composeapp.generated.resources.info_text
 import org.jetbrains.compose.resources.stringResource
 
 
@@ -62,12 +61,6 @@ fun BuyView(
         Column(
             Modifier.weight(1f)
         ) {
-            BuyGoodItemText(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(resource = Res.string.info_text),
-                color = match2
-            )
-            Spacer(modifier = Modifier.height(3.dp))
             BuyItemList(
                 Modifier.fillMaxHeight(),
                 mtViewModel

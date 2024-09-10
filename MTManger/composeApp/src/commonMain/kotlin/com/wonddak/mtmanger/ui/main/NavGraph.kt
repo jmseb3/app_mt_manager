@@ -17,7 +17,7 @@ import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.BottomNavItem
 import com.wonddak.mtmanger.ui.view.ADTrackingView
-import com.wonddak.mtmanger.ui.view.common.NoDataBase
+import com.wonddak.mtmanger.ui.view.common.InsertDataView
 import com.wonddak.mtmanger.ui.view.home.buy.BuyView
 import com.wonddak.mtmanger.ui.view.home.main.AdjustmentView
 import com.wonddak.mtmanger.ui.view.home.main.MainView
@@ -73,8 +73,8 @@ fun NavGraphBuilder.homeGraph(
 ) {
     navigation(startDestination = BottomNavItem.Main.screenRoute, route = Const.HOME) {
         composable(BottomNavItem.Main.screenRoute) {
-            NoDataBase(
-                mtViewModel
+            InsertDataView(
+                mtViewModel, navController
             ) {
                 MainView(
                     mtViewModel = mtViewModel,
@@ -92,21 +92,27 @@ fun NavGraphBuilder.homeGraph(
             }
         }
         composable(BottomNavItem.Person.screenRoute) {
-            NoDataBase(mtViewModel) {
+            InsertDataView(
+                mtViewModel, navController
+            ) {
                 PersonView(
                     mtViewModel = mtViewModel
                 )
             }
         }
         composable(BottomNavItem.Buy.screenRoute) {
-            NoDataBase(mtViewModel) {
+            InsertDataView(
+                mtViewModel, navController
+            ) {
                 BuyView(
                     mtViewModel = mtViewModel
                 )
             }
         }
         composable(BottomNavItem.Plan.screenRoute) {
-            NoDataBase(mtViewModel) {
+            InsertDataView(
+                mtViewModel, navController
+            ) {
                 PlanView() { start, end ->
                     navController.navigate(Const.NEW_PLAN + "?start=$start&end=$end")
                 }
@@ -165,9 +171,10 @@ fun NavGraphBuilder.settingGraph(
         }
     }
 }
+
 @Composable
-private inline fun<T> NavController.checkRout(
-    route : (String?) -> T
+private inline fun <T> NavController.checkRout(
+    route: (String?) -> T
 ): T {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -176,7 +183,7 @@ private inline fun<T> NavController.checkRout(
 
 @Composable
 private inline fun NavController.checkRout(
-    route : (String) -> Boolean
+    route: (String) -> Boolean
 ): Boolean {
     val navBackStackEntry by this.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -237,7 +244,7 @@ fun NavController.getTitle(): String {
             BottomNavItem.Buy,
             BottomNavItem.Plan,
         )
-        checkRout<String> {route ->
+        checkRout<String> { route ->
             items.find { it.screenRoute == route }?.title ?: "MT 매니저"
         }
     }

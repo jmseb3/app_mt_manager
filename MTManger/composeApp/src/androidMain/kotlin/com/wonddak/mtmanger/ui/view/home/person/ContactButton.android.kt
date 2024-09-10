@@ -13,14 +13,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 internal actual fun ContactButton(
     modifier: Modifier,
     updateValue: (SimplePerson) -> Unit
 ) {
-    val mtViewModel: MTViewModel = koinInject()
+    val mtViewModel: MTViewModel = koinViewModel()
     val context = LocalContext.current
     val contentLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

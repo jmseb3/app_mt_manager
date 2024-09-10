@@ -24,11 +24,11 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MtListView(
-    mtViewModel: MTViewModel = koinInject(),
+    mtViewModel: MTViewModel = koinViewModel(),
     close: (MtData) -> Unit
 ) {
     val mtList by mtViewModel.totalMtList.collectAsState()

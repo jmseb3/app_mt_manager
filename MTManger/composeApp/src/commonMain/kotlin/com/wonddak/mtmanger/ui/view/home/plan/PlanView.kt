@@ -45,11 +45,11 @@ import mtmanger.composeapp.generated.resources.camera_switch
 import mtmanger.composeapp.generated.resources.dialog_delete_image
 import mtmanger.composeapp.generated.resources.no_photography
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PlanView(
-    mtViewModel: MTViewModel = koinInject(),
+    mtViewModel: MTViewModel = koinViewModel(),
     navigateNew: (start: String, end: String) -> Unit,
 ) {
     val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)

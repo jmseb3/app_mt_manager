@@ -47,7 +47,6 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.dialog_delete_reset
 import mtmanger.composeapp.generated.resources.ic_baseline_phone_24
-import mtmanger.composeapp.generated.resources.info_text
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -65,12 +64,6 @@ fun PersonView(
         Column(
             Modifier.weight(1f)
         ) {
-            BuyGoodItemText(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(resource = Res.string.info_text),
-                color = match2
-            )
-            Spacer(modifier = Modifier.height(3.dp))
             PersonItemList(
                 Modifier.fillMaxHeight(), mtViewModel
             )
@@ -85,7 +78,6 @@ fun PersonView(
 fun PersonPanel(
     mtViewModel: MTViewModel,
 ) {
-//    val context = LocalContext.current
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
     var showItemReset by remember {
         mutableStateOf(false)

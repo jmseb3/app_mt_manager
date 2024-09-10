@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">MT 매니저</string>
-    <string name="info_text">짧게 눌러서 수정/ 길게 눌러서 삭제 가능합니다.</string>
 
     <string name="dialog_error_field">모든 항목을 입력해 주세요.</string>
     <string name="dialog_delete_reset">정말 초기화 하시겠습니까?</string>
