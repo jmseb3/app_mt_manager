@@ -21,7 +21,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,14 +31,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.room.entity.Person
 import com.wonddak.mtmanger.toPriceString
-import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
@@ -69,27 +65,6 @@ fun PersonView(
         Column(
             Modifier.weight(1f)
         ) {
-            Spacer(
-                modifier = Modifier
-                    .height(10.dp)
-                    .padding(vertical = 5.dp)
-            )
-            Text(
-                text = "참여자 명단",
-                color = match2,
-                fontSize = 30.sp,
-                fontFamily = maple(),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-            HorizontalDivider(
-                modifier = Modifier
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                thickness = 4.dp,
-                color = match2
-            )
-            Spacer(modifier = Modifier.height(3.dp))
             BuyGoodItemText(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(resource = Res.string.info_text),

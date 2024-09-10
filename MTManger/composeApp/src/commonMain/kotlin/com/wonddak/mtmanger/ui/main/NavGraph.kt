@@ -165,40 +165,47 @@ fun NavGraphBuilder.settingGraph(
         }
     }
 }
+@Composable
+private inline fun<T> NavController.checkRout(
+    route : (String?) -> T
+): T {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return route(currentRoute)
+}
+
+@Composable
+private inline fun NavController.checkRout(
+    route : (String) -> Boolean
+): Boolean {
+    val navBackStackEntry by this.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    return currentRoute?.let { route(it) } ?: false
+}
 
 @Composable
 fun NavController.isATT(): Boolean {
-    val navBackStackEntry by this.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute == Const.ATT
+    return checkRout { it == Const.ATT }
 }
 
 @Composable
 fun NavController.isSetting(): Boolean {
-    val navBackStackEntry by this.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute == Const.CATEGORY || currentRoute == Const.SETTING_HOME
+    return checkRout { it == Const.CATEGORY || it == Const.SETTING_HOME }
 }
 
 @Composable
 fun NavController.isMTList(): Boolean {
-    val navBackStackEntry by this.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute == Const.MT_LIST
+    return checkRout { it == Const.MT_LIST }
 }
 
 @Composable
 fun NavController.isAdjustment(): Boolean {
-    val navBackStackEntry by this.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute == Const.MT_ADJUSTMENT
+    return checkRout { it == Const.MT_ADJUSTMENT }
 }
 
 @Composable
 fun NavController.isPlanNew(): Boolean {
-    val navBackStackEntry by this.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    return currentRoute?.startsWith(Const.NEW_PLAN) ?: false
+    return checkRout { it.startsWith(Const.NEW_PLAN) }
 }
 
 @Composable
@@ -214,7 +221,6 @@ fun NavController.showNavigationIcon(): Boolean {
 @Composable
 fun NavController.showBottomNavigation(): Boolean {
     return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
-
 }
 
 @Composable
@@ -226,6 +232,13 @@ fun NavController.getTitle(): String {
     } else if (this.isAdjustment()) {
         "정산하기"
     } else {
-        "MT 매니저"
+        val items = listOf(
+            BottomNavItem.Person,
+            BottomNavItem.Buy,
+            BottomNavItem.Plan,
+        )
+        checkRout<String> {route ->
+            items.find { it.screenRoute == route }?.title ?: "MT 매니저"
+        }
     }
 }
