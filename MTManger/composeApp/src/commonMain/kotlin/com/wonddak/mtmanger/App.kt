@@ -7,7 +7,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Scaffold
@@ -102,9 +106,16 @@ fun HomeScreen() {
                 }
             }
         },
-        containerColor = match1
+        containerColor = match1,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) {
-        Box(Modifier.padding(it)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(it)
+                .consumeWindowInsets(it)
+                .navigationBarsPadding()
+        ) {
             Column {
                 if (!(navController.isMTList() || navController.isSetting() || navController.isATT()) && !payViewModel.removeAdStatus) {
                     AdvertView(Modifier.wrapContentSize().defaultMinSize(minHeight = 50.dp))
