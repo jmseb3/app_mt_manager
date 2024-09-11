@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.noRippleClickable
+import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.room.entity.PlanData
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.ByteArrayImageView
@@ -50,23 +51,24 @@ import org.jetbrains.compose.resources.painterResource
 fun PlanAddView(
     startDate: String,
     endDate: String,
+    plan: Plan? = null,
     onAdd: (PlanData) -> Unit,
 ) {
     var showDatePicker by remember {
         mutableStateOf(false)
     }
     var date by remember {
-        mutableStateOf("")
+        mutableStateOf(plan?.nowDay ?: "")
     }
     var title by remember {
-        mutableStateOf("")
+        mutableStateOf(plan?.nowPlanTitle ?: "")
     }
     var planText by remember {
-        mutableStateOf("")
+        mutableStateOf(plan?.simpleText ?: "")
     }
 
     var imageByte: ByteArray? by remember {
-        mutableStateOf(null)
+        mutableStateOf(plan?.imgBytes)
     }
     val photoPickerLauncher = rememberPhotoPickerLauncher(
         onResult = {
@@ -204,7 +206,7 @@ fun PlanAddView(
             enabled = enabled,
             border = BorderStroke(2.dp, color),
         ) {
-            DefaultText(text = "추가", color = color)
+            DefaultText(text = plan?.let { "수정" } ?: "추가", color = color)
         }
     }
 

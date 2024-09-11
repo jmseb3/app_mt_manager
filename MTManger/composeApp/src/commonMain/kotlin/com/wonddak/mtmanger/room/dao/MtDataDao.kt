@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.room.entity.MtData
+import com.wonddak.mtmanger.room.entity.MtDataList
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,16 +22,10 @@ interface MtDataDao {
     fun getMtData(): Flow<List<MtData>>
 
     @Query("SELECT * FROM MtData ORDER BY mtDataId")
-    suspend fun getMtDatadata(): List<MtData>
+    suspend fun getMtDataData(): List<MtData>
 
-    @Query("SELECT * FROM MtData WHERE mtDataId= :MtDataId")
-    suspend fun getMtDataById(MtDataId: Int?): MtData
-
-    @Query("SELECT * FROM MtData WHERE mtTitle= :MtTitle")
-    suspend fun getMtDataByTitle(MtTitle: String): MtData
-
-    @Query("DELETE FROM MtData WHERE mtTitle= :MtTitle")
-    suspend fun deleteMtDataByTitle(MtTitle: String)
+    @Query("SELECT * FROM MtData WHERE mtDataId= :mtDataId")
+    suspend fun getMtDataById(mtDataId: Int?): MtData
 
     @Query("DELETE From MtData")
     suspend fun clearMtDataS()

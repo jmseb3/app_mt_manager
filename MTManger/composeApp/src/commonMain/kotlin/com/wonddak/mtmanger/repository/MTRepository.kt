@@ -47,13 +47,13 @@ class MTRepository(
         }
     }
     suspend fun checkMtDataOver2() :Boolean {
-        return mtDataDao.getMtDatadata().size >=2
+        return mtDataDao.getMtDataData().size >=2
     }
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
     }
     suspend fun deleteMtData(mtData: MtData) : Int {
-        val preList = mtDataDao.getMtDatadata().toList()
+        val preList = mtDataDao.getMtDataData().toList()
         var findIndex  = -1
         for (idx in preList.indices){
             val item = preList[idx]

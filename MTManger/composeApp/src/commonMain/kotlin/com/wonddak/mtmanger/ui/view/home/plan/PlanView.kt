@@ -1,7 +1,6 @@
 package com.wonddak.mtmanger.ui.view.home.plan
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,6 +50,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun PlanView(
     mtViewModel: MTViewModel = koinViewModel(),
     navigateNew: (start: String, end: String) -> Unit,
+    navigateEdit: (start: String, end: String,plan :Int) -> Unit,
 ) {
     val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
 
@@ -60,76 +60,63 @@ fun PlanView(
             .padding(horizontal = 10.dp, vertical = 5.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(
-            Modifier.weight(1f)
-        ) {
-            PlanListView(
-                mtViewModel = mtViewModel
-            )
-        }
-        OutlinedButton(
-            modifier = Modifier
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            onClick = {
-                if (planResource is Resource.Success) {
-                    (planResource as Resource.Success<MtDataList>).data?.let {
-                        navigateNew(
-                            it.mtData.mtStart,
-                            it.mtData.mtEnd
-                        )
+        if (planResource is Resource.Success) {
+            (planResource as Resource.Success<MtDataList>).data?.let { mtDataList ->
+                Column(
+                    Modifier.weight(1f)
+                ) {
+                    mtDataList.planList.let { planList ->
+                        LazyColumn(
+                            modifier = Modifier.padding(10.dp)
+                        ) {
+                            items(planList) { plan ->
+                                PlanCardView(
+                                    plan = plan,
+                                    mtViewModel = mtViewModel,
+                                    navigateEdit = {
+                                        navigateEdit(
+                                            mtDataList.mtData.mtStart,
+                                            mtDataList.mtData.mtEnd,
+                                            plan.planId!!
+                                        )
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(5.dp))
+                            }
+                        }
                     }
                 }
-            },
-            border = BorderStroke(2.dp, match2)
-        ) {
-            Text(
-                text = "계획 추가하기",
-                color = match2,
-                fontFamily = maple(),
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Composable
-fun PlanListView(
-    modifier: Modifier = Modifier,
-    mtViewModel: MTViewModel,
-) {
-    val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
-
-    if (planResource is Resource.Success) {
-        (planResource as Resource.Success<MtDataList>).data?.let {
-            it.planList.let { planList ->
-                LazyColumn(
-                    modifier = modifier.padding(10.dp)
-                ) {
-                    items(planList) { plan ->
-                        PlanCardView(
-                            plan = plan,
-                            mtViewModel = mtViewModel,
-                            startDate = it.mtData.mtStart,
-                            endDate = it.mtData.mtEnd
+                OutlinedButton(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .fillMaxWidth(),
+                    onClick = {
+                        navigateNew(
+                            mtDataList.mtData.mtStart,
+                            mtDataList.mtData.mtEnd
                         )
-                        Spacer(modifier = Modifier.height(5.dp))
-                    }
+                    },
+                    border = BorderStroke(2.dp, match2)
+                ) {
+                    Text(
+                        text = "계획 추가하기",
+                        color = match2,
+                        fontFamily = maple(),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlanCardView(
     modifier: Modifier = Modifier,
     mtViewModel: MTViewModel,
     plan: Plan,
-    startDate: String,
-    endDate: String,
+    navigateEdit: () -> Unit
 ) {
     var showOptionSheet by remember {
         mutableStateOf(false)
@@ -138,9 +125,6 @@ fun PlanCardView(
         mutableStateOf(false)
     }
     var showItemDelete by remember {
-        mutableStateOf(false)
-    }
-    var showPlanDialog by remember {
         mutableStateOf(false)
     }
     val photoPickerLauncher = rememberPhotoPickerLauncher(
@@ -202,7 +186,7 @@ fun PlanCardView(
             onDismissRequest = { showOptionSheet = false },
             arrayListOf<OptionSheetItem<*>>(
                 OptionSheetItem.OptionEdit("계획 수정") {
-                    showPlanDialog = true
+                    navigateEdit()
                 },
                 OptionSheetItem.OptionDelete("계획 삭제") {
                     showItemDelete = true
@@ -261,24 +245,4 @@ fun PlanCardView(
             }
         )
     }
-    if (showPlanDialog) {
-        PlanDialog(
-            startDate = startDate,
-            endDate = endDate,
-            plan = plan,
-            onDismiss = {
-                showPlanDialog = false
-            },
-            onAdd = { title, day, text ->
-                mtViewModel.updatePlanById(
-                    plan.planId!!,
-                    day,
-                    title,
-                    text
-                )
-                showPlanDialog = false
-            }
-        )
-    }
-
 }

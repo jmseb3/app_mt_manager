@@ -1,6 +1,7 @@
 package com.wonddak.mtmanger.ui.main
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,70 +71,105 @@ fun NavGraph(
 fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
     mtViewModel: MTViewModel,
-) {
-    navigation(startDestination = BottomNavItem.Main.screenRoute, route = Const.HOME) {
-        composable(BottomNavItem.Main.screenRoute) {
-            InsertDataView(
-                mtViewModel, navController
-            ) {
-                MainView(
-                    mtViewModel = mtViewModel,
-                    showMTList = {
-                        navController.navigate(Const.MT_LIST) {
-                            launchSingleTop = true
-                        }
-                    },
-                    showAdjustment = {
-                        navController.navigate(Const.MT_ADJUSTMENT) {
-                            launchSingleTop = true
-                        }
+) = navigation(startDestination = BottomNavItem.Main.screenRoute, route = Const.HOME) {
+    composable(BottomNavItem.Main.screenRoute) {
+        InsertDataView(
+            mtViewModel, navController
+        ) {
+            MainView(
+                mtViewModel = mtViewModel,
+                showMTList = {
+                    navController.navigate(Const.MT_LIST) {
+                        launchSingleTop = true
                     }
-                )
-            }
-        }
-        composable(BottomNavItem.Person.screenRoute) {
-            InsertDataView(
-                mtViewModel, navController
-            ) {
-                PersonView(
-                    mtViewModel = mtViewModel
-                )
-            }
-        }
-        composable(BottomNavItem.Buy.screenRoute) {
-            InsertDataView(
-                mtViewModel, navController
-            ) {
-                BuyView(
-                    mtViewModel = mtViewModel
-                )
-            }
-        }
-        composable(BottomNavItem.Plan.screenRoute) {
-            InsertDataView(
-                mtViewModel, navController
-            ) {
-                PlanView() { start, end ->
-                    navController.navigate(Const.NEW_PLAN + "?start=$start&end=$end")
-                }
-            }
-        }
-        composable(
-            Const.NEW_PLAN + "?start={start}&end={end}",
-            arguments = listOf(
-                navArgument("start") {
-                    type = NavType.StringType
-                    defaultValue = ""
                 },
-                navArgument("end") {
-                    type = NavType.StringType
-                    defaultValue = ""
+                showAdjustment = {
+                    navController.navigate(Const.MT_ADJUSTMENT) {
+                        launchSingleTop = true
+                    }
                 }
             )
-        ) { backStackEntry ->
+        }
+    }
+    composable(BottomNavItem.Person.screenRoute) {
+        InsertDataView(
+            mtViewModel, navController
+        ) {
+            PersonView(
+                mtViewModel = mtViewModel
+            )
+        }
+    }
+    composable(BottomNavItem.Buy.screenRoute) {
+        InsertDataView(
+            mtViewModel, navController
+        ) {
+            BuyView(
+                mtViewModel = mtViewModel
+            )
+        }
+    }
+    composable(BottomNavItem.Plan.screenRoute) {
+        InsertDataView(
+            mtViewModel, navController
+        ) {
+            PlanView(
+                navigateNew = { start, end ->
+                    navController.navigate(Const.navigationNewPlan(start, end))
+                },
+                navigateEdit = { start, end, id ->
+                    navController.navigate(Const.navigationEditPlan(start, end, id))
+                }
+            )
+        }
+    }
+    composable(
+        Const.navigationNewPlanRout(),
+        arguments = listOf(
+            navArgument(Const.PLAN_ARG_START) {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument(Const.PLAN_ARG_END) {
+                type = NavType.StringType
+                defaultValue = ""
+            }
+        )
+    ) { backStackEntry ->
+        PlanAddView(
+            backStackEntry.arguments?.getString(Const.PLAN_ARG_START)!!,
+            backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
+        ) {
+            mtViewModel.addPlan(it) {
+                navController.popBackStack()
+            }
+        }
+    }
+    composable(
+        Const.navigationEditPlanRout(),
+        arguments = listOf(
+            navArgument(Const.PLAN_ARG_START) {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument(Const.PLAN_ARG_END) {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument(Const.PLAN_ARG_ID) {
+                type = NavType.IntType
+            }
+        )
+    ) { backStackEntry ->
+        val planId = backStackEntry.arguments?.getInt(Const.PLAN_ARG_ID)
+        val plan = mtViewModel.getPlanById(planId)
+        if (plan == null) {
+            Text("Error")
+        } else {
             PlanAddView(
-                backStackEntry.arguments?.getString("start")!!,
-                backStackEntry.arguments?.getString("end")!!,
+                backStackEntry.arguments?.getString(Const.PLAN_ARG_START)!!,
+                backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
+                plan
             ) {
                 mtViewModel.addPlan(it) {
                     navController.popBackStack()
@@ -141,7 +177,9 @@ fun NavGraphBuilder.homeGraph(
             }
         }
     }
+
 }
+
 
 fun NavGraphBuilder.settingGraph(
     navController: NavHostController,
@@ -201,51 +239,65 @@ fun NavController.isSetting(): Boolean {
 }
 
 @Composable
-fun NavController.isMTList(): Boolean {
-    return checkRout { it == Const.MT_LIST }
-}
-
-@Composable
-fun NavController.isAdjustment(): Boolean {
-    return checkRout { it == Const.MT_ADJUSTMENT }
-}
-
-@Composable
-fun NavController.isPlanNew(): Boolean {
-    return checkRout { it.startsWith(Const.NEW_PLAN) }
+fun NavController.showAd(): Boolean {
+    return !checkRout {
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.ATT
+    }
 }
 
 @Composable
 fun NavController.showSettingIcon(): Boolean {
-    return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
+    return !checkRout {
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(Const.NEW_PLAN) || it.startsWith(Const.EDIT_PLAN)
+    }
 }
 
 @Composable
 fun NavController.showNavigationIcon(): Boolean {
-    return isSetting() || isMTList() || isAdjustment() || isPlanNew()
+    return checkRout {
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(Const.NEW_PLAN) || it.startsWith(Const.EDIT_PLAN)
+    }
 }
 
 @Composable
 fun NavController.showBottomNavigation(): Boolean {
-    return !isSetting() && !isMTList() && !isAdjustment() && !isPlanNew()
+    return !checkRout {
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(Const.NEW_PLAN) || it.startsWith(Const.EDIT_PLAN)
+    }
 }
 
 @Composable
 fun NavController.getTitle(): String {
-    return if (this.isSetting()) {
-        "설정"
-    } else if (this.isMTList()) {
-        "MT 리스트"
-    } else if (this.isAdjustment()) {
-        "정산하기"
-    } else {
-        val items = listOf(
-            BottomNavItem.Person,
-            BottomNavItem.Buy,
-            BottomNavItem.Plan,
-        )
-        checkRout<String> { route ->
-            items.find { it.screenRoute == route }?.title ?: "MT 매니저"
+    return checkRout<String> { route ->
+        when (route) {
+            Const.CATEGORY, Const.SETTING_HOME -> {
+                "설정"
+            }
+
+            Const.MT_LIST -> {
+                "MT 리스트"
+            }
+
+            Const.MT_ADJUSTMENT -> {
+                "정산하기"
+            }
+
+            else -> {
+                route?.let {
+                    if (route.startsWith(Const.NEW_PLAN)) {
+                        "계획 추가"
+                    } else if (route.startsWith(Const.EDIT_PLAN)) {
+                        "계획 수정"
+                    } else {
+                        val items = listOf(
+                            BottomNavItem.Person,
+                            BottomNavItem.Buy,
+                            BottomNavItem.Plan,
+                        )
+                        items.find { it.screenRoute == route }?.title ?: "MT 매니저"
+                    }
+                } ?: "MT 매니저"
+            }
         }
     }
 }

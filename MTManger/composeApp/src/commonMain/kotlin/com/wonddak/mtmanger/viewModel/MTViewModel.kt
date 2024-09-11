@@ -223,6 +223,18 @@ class MTViewModel(
         }
     }
 
+    fun getPlanById(planId:Int?) :Plan? {
+        if (planId == null) {
+            return  null
+        }
+        val resource = nowMtDataList.value
+        return if (resource is Resource.Success<MtDataList>) {
+            resource.data?.planList?.find { it.planId == planId }
+        } else {
+            null
+        }
+    }
+
     fun addPlan(title: String, day: String, text: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

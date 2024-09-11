@@ -17,6 +17,6 @@ interface PersonDao {
     @Query("UPDATE Person SET name = :name,paymentFee = :fee,phoneNumber =:number  WHERE personId = :personId")
     suspend fun updatePersonData(name: String, fee: Int, number: String, personId: Int)
 
-    @Query("DELETE FROM person WHERE mtId= :mtid")
-    suspend fun clearPersons(mtid: Int)
+    @Query("DELETE FROM person WHERE mtId= :mtId")
+    suspend fun clearPersons(mtId: Int)
 }

@@ -30,8 +30,7 @@ import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
 import com.wonddak.mtmanger.ui.main.TopAppContent
 import com.wonddak.mtmanger.ui.main.isATT
-import com.wonddak.mtmanger.ui.main.isMTList
-import com.wonddak.mtmanger.ui.main.isSetting
+import com.wonddak.mtmanger.ui.main.showAd
 import com.wonddak.mtmanger.ui.main.showBottomNavigation
 import com.wonddak.mtmanger.ui.theme.AppTheme
 import com.wonddak.mtmanger.ui.theme.match1
@@ -117,7 +116,7 @@ fun HomeScreen() {
                 .navigationBarsPadding()
         ) {
             Column {
-                if (!(navController.isMTList() || navController.isSetting() || navController.isATT()) && !payViewModel.removeAdStatus) {
+                if (navController.showAd() && !payViewModel.removeAdStatus) {
                     AdvertView(Modifier.wrapContentSize().defaultMinSize(minHeight = 50.dp))
                 }
                 NavGraph(

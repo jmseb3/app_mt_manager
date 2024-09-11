@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.serialization)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -60,13 +61,19 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
             implementation(libs.viewmodel.compose)
             implementation(libs.navigation.compose)
+
             implementation(libs.kotlinx.datetime)
+
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
-            implementation(libs.coil.compose)
 
+            implementation(libs.kotlinx.serialization)
+
+
+            implementation(libs.coil.compose)
 
             implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
