@@ -153,6 +153,7 @@ fun PlanCardView(
             Column(
                 Modifier.fillMaxWidth(),
             ) {
+                Text(plan.toString())
                 Text(
                     text = plan.nowPlanTitle,
                     color = match1,

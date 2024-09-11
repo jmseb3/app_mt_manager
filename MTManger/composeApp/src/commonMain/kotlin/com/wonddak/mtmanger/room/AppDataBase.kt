@@ -21,7 +21,7 @@ expect object MyDatabaseCtor : RoomDatabaseConstructor<AppDatabase>
 
 @Database(
     entities = [MtData::class, Person::class, BuyGood::class, categoryList::class, Plan::class],
-    version = 7,
+    version = 8,
     exportSchema = true
 )
 @ConstructedBy(MyDatabaseCtor::class) // NEW
@@ -47,6 +47,11 @@ private val MIGRATION_6_7 = object : Migration(6, 7) {
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_Plan_mtId` ON `Plan` (`mtId`)")
     }
 }
+private val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("ALTER TABLE Plan ADD COLUMN link TEXT NOT NULL DEFAULT ''")
+    }
+}
 
 expect fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase>
 
@@ -54,6 +59,7 @@ fun getRoomDatabase(): AppDatabase {
     return getDatabaseBuilder()
         .addMigrations(MIGRATION_5_6)
         .addMigrations(MIGRATION_6_7)
+        .addMigrations(MIGRATION_7_8)
 //        .fallbackToDestructiveMigrationOnDowngrade()
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)

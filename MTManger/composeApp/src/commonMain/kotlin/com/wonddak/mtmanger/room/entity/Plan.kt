@@ -33,10 +33,12 @@ data class Plan(
     @ColumnInfo(name = "imgsrc")
     val imgSrc: String = "",
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    val imgBytes: ByteArray? = null
+    val imgBytes: ByteArray? = null,
+    @ColumnInfo(name = "link")
+    val link :String = ""
 ) {
     val imageExist :Boolean
-    get() = imgBytes?.isNotEmpty() ?: imgSrc.isNotEmpty()
+     get() = imgBytes?.isNotEmpty() ?: imgSrc.isNotEmpty()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -54,6 +56,7 @@ data class Plan(
             if (other.imgBytes == null) return false
             if (!imgBytes.contentEquals(other.imgBytes)) return false
         } else if (other.imgBytes != null) return false
+        if (link != other.link) return false
 
         return true
     }
@@ -66,15 +69,18 @@ data class Plan(
         result = 31 * result + simpleText.hashCode()
         result = 31 * result + imgSrc.hashCode()
         result = 31 * result + (imgBytes?.contentHashCode() ?: 0)
+        result = 31 * result + link.hashCode()
         return result
     }
+
 }
 
 data class PlanData(
     val nowDay: String = "",
     val nowPlanTitle: String = "",
     val simpleText: String = "",
-    val imgBytes: ByteArray? = null
+    val imgBytes: ByteArray? = null,
+    val link: String = ""
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -89,6 +95,7 @@ data class PlanData(
             if (other.imgBytes == null) return false
             if (!imgBytes.contentEquals(other.imgBytes)) return false
         } else if (other.imgBytes != null) return false
+        if (link != other.link) return false
 
         return true
     }
@@ -98,6 +105,7 @@ data class PlanData(
         result = 31 * result + nowPlanTitle.hashCode()
         result = 31 * result + simpleText.hashCode()
         result = 31 * result + (imgBytes?.contentHashCode() ?: 0)
+        result = 31 * result + link.hashCode()
         return result
     }
 }
