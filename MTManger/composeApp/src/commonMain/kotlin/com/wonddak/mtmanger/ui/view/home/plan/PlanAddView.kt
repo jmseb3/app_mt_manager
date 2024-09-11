@@ -149,9 +149,6 @@ fun PlanAddView(
                 placeHolder = "계획을 입력해 주세요",
                 label = "계획",
                 modifier = Modifier.height(TextFieldDefaults.MinHeight * 2).then(textFiledModifier),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Default
-                ),
                 singleLine = false,
                 color = match2
             ) {

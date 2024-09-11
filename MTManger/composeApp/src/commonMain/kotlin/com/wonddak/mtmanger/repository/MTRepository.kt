@@ -111,10 +111,6 @@ class MTRepository(
         planDao.insertPlan(plan)
     }
 
-    suspend fun updatePlanImgSrcById(planId: Int, imgSrc: String = "") {
-        planDao.updatePlanById(planId, imgSrc)
-    }
-
     suspend fun updatePlanImgBytesById(planId: Int, img: ByteArray) {
         planDao.updateImgBytePlanById(planId, img)
     }
@@ -123,8 +119,8 @@ class MTRepository(
         planDao.clearPlanImgById(planId)
     }
 
-    suspend fun updatePlanById(planId: Int, day: String, title: String, text: String) {
-        planDao.updatePlanDialogById(planId, day, title, text)
+    suspend fun updatePlan(plan: Plan) {
+        planDao.updatePlan(plan)
     }
 
     suspend fun deletePlanById(planId: Int) {

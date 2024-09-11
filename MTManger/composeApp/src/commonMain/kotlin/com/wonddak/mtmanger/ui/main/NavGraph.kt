@@ -170,8 +170,8 @@ fun NavGraphBuilder.homeGraph(
                 backStackEntry.arguments?.getString(Const.PLAN_ARG_START)!!,
                 backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
                 plan
-            ) {
-                mtViewModel.addPlan(it) {
+            ) { data ->
+                mtViewModel.updatePlan(plan, data) {
                     navController.popBackStack()
                 }
             }
@@ -248,21 +248,27 @@ fun NavController.showAd(): Boolean {
 @Composable
 fun NavController.showSettingIcon(): Boolean {
     return !checkRout {
-        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(Const.NEW_PLAN) || it.startsWith(Const.EDIT_PLAN)
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(
+            Const.NEW_PLAN
+        ) || it.startsWith(Const.EDIT_PLAN)
     }
 }
 
 @Composable
 fun NavController.showNavigationIcon(): Boolean {
     return checkRout {
-        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(Const.NEW_PLAN) || it.startsWith(Const.EDIT_PLAN)
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(
+            Const.NEW_PLAN
+        ) || it.startsWith(Const.EDIT_PLAN)
     }
 }
 
 @Composable
 fun NavController.showBottomNavigation(): Boolean {
     return !checkRout {
-        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(Const.NEW_PLAN) || it.startsWith(Const.EDIT_PLAN)
+        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.MT_ADJUSTMENT || it.startsWith(
+            Const.NEW_PLAN
+        ) || it.startsWith(Const.EDIT_PLAN)
     }
 }
 

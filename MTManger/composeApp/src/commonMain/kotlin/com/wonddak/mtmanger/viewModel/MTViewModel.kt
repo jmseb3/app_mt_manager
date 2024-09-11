@@ -235,22 +235,6 @@ class MTViewModel(
         }
     }
 
-    fun addPlan(title: String, day: String, text: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                mtRepository.insertPlan(
-                    Plan(
-                        null,
-                        mainMtId,
-                        nowDay = day,
-                        nowPlanTitle = title,
-                        simpleText = text
-                    )
-                )
-            }
-        }
-    }
-
     fun addPlan(planData: PlanData, onFinish: () -> Unit) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -266,14 +250,6 @@ class MTViewModel(
                 )
             }
             onFinish()
-        }
-    }
-
-    fun updatePlanImgSrc(planId: Int, imgSrc: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                mtRepository.updatePlanImgSrcById(planId, imgSrc)
-            }
         }
     }
 
@@ -293,11 +269,19 @@ class MTViewModel(
         }
     }
 
-    fun updatePlanById(planId: Int, day: String, title: String, text: String) {
+    fun updatePlan(prevPlan: Plan, planData: PlanData,onFinish: () -> Unit) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                mtRepository.updatePlanById(planId, day, title, text)
+                mtRepository.updatePlan(
+                    prevPlan.copy(
+                        nowDay = planData.nowDay,
+                        nowPlanTitle = planData.nowPlanTitle,
+                        simpleText = planData.simpleText,
+                        imgBytes = planData.imgBytes
+                    )
+                )
             }
+            onFinish()
         }
     }
 
