@@ -106,7 +106,7 @@ fun HomeScreen() {
             }
         },
         containerColor = match1,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+        contentWindowInsets = WindowInsets(0)
     ) {
         Box(
             Modifier

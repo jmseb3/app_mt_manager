@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,16 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,9 +45,11 @@ import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.add_photo
+import mtmanger.composeapp.generated.resources.baseline_link_24
 import mtmanger.composeapp.generated.resources.camera_switch
 import mtmanger.composeapp.generated.resources.dialog_delete_image
 import mtmanger.composeapp.generated.resources.no_photography
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -152,28 +159,47 @@ fun PlanCardView(
         ) {
             Column(
                 Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
-                Text(plan.toString())
                 Text(
                     text = plan.nowPlanTitle,
                     color = match1,
                     fontSize = 23.sp,
                     fontFamily = maple()
                 )
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = plan.nowDay,
                     color = match1,
                     fontSize = 15.sp,
                     fontFamily = maple()
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                plan.link.takeIf {
+                    val urlRegex = """(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?""".toRegex()
+                    it.isNotEmpty()&& urlRegex.matches(it)
+                }?.let {url ->
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+
+                        },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = match1
+                        )
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Icon(painter = painterResource(Res.drawable.baseline_link_24),null)
+                            Text(url)
+                        }
+                    }
+                }
                 PlanImageView(
                     Modifier
                         .fillMaxWidth(),
                     plan
                 )
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = plan.simpleText,
                     color = match1,

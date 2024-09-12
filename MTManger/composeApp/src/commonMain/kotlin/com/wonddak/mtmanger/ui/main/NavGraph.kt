@@ -141,7 +141,11 @@ fun NavGraphBuilder.homeGraph(
             backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
         ) {
             mtViewModel.addPlan(it) {
-                navController.popBackStack()
+                navController.navigate(BottomNavItem.Plan.screenRoute) {
+                    popUpTo(Const.navigationNewPlanRout()) {
+                        inclusive = true
+                    }
+                }
             }
         }
     }

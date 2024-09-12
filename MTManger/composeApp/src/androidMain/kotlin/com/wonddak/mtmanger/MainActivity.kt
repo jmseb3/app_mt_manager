@@ -33,12 +33,31 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.onBackPressedDispatcher.addCallback(this, callback)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        this.onBackPressedDispatcher.addCallback(this, callback)
         AppContext.apply { set(this@MainActivity) }
         setContent {
             App()
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                window.insetsController?.hide(WindowInsetsCompat.Type.navigationBars())
+//                window.insetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+//            } else {
+//                window.decorView.systemUiVisibility = (
+//                        // Do not let system steal touches for showing the navigation bar
+//                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                                // Hide the nav bar and status bar
+//                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                                // Keep the app content behind the bars even if user swipes them up
+//                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+//                // make navbar translucent - do this already in hideSystemUI() so that the bar
+//            }
         }
     }
 }

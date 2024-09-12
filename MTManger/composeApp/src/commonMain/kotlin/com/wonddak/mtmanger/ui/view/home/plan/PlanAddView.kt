@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.wonddak.mtmanger.noRippleClickable
 import com.wonddak.mtmanger.room.entity.Plan
@@ -66,7 +68,9 @@ fun PlanAddView(
     var planText by remember {
         mutableStateOf(plan?.simpleText ?: "")
     }
-
+    var link by remember {
+        mutableStateOf(plan?.link ?: "")
+    }
     var imageByte: ByteArray? by remember {
         mutableStateOf(plan?.imgBytes)
     }
@@ -85,6 +89,7 @@ fun PlanAddView(
                 focusManager.clearFocus()
             }
             .padding(10.dp)
+            .imePadding()
     ) {
         Column(
             modifier = Modifier
@@ -143,6 +148,19 @@ fun PlanAddView(
             ) {
                 title = it
             }
+            DialogTextField(
+                value = link,
+                placeHolder = "추가할 url을 입력해 주세요(선택)",
+                label = "링크",
+                modifier = textFiledModifier,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Uri
+                ),
+                color = match2
+            ) {
+                link = it
+            }
 
             DialogTextField(
                 value = planText,
@@ -196,6 +214,7 @@ fun PlanAddView(
                         nowDay = date,
                         nowPlanTitle = title,
                         simpleText = planText,
+                        link = link,
                         imgBytes = imageByte
                     )
                 )

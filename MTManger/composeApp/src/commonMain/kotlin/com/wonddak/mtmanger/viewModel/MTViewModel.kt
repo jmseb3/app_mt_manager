@@ -245,7 +245,8 @@ class MTViewModel(
                         nowDay = planData.nowDay,
                         nowPlanTitle = planData.nowPlanTitle,
                         simpleText = planData.simpleText,
-                        imgBytes = planData.imgBytes
+                        imgBytes = planData.imgBytes,
+                        link = planData.link
                     )
                 )
             }
@@ -277,7 +278,8 @@ class MTViewModel(
                         nowDay = planData.nowDay,
                         nowPlanTitle = planData.nowPlanTitle,
                         simpleText = planData.simpleText,
-                        imgBytes = planData.imgBytes
+                        imgBytes = planData.imgBytes,
+                        link =  planData.link
                     )
                 )
             }
