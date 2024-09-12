@@ -71,6 +71,9 @@ fun PlanView(
     ) {
         if (planResource is Resource.Success) {
             (planResource as Resource.Success<MtDataList>).data?.let { mtDataList ->
+                mtDataList.mtData.getMapDate().also {
+                    println("<>>>> $it")
+                }
                 Column(
                     Modifier.weight(1f)
                 ) {
