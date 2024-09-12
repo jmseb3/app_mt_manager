@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,7 @@ import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
 import com.wonddak.mtmanger.ui.view.sheet.OptionSheetItem
 import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
+import com.wonddak.mtmanger.util.rememberWebLauncher
 import com.wonddak.mtmanger.viewModel.MTViewModel
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.add_photo
@@ -57,7 +59,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun PlanView(
     mtViewModel: MTViewModel = koinViewModel(),
     navigateNew: (start: String, end: String) -> Unit,
-    navigateEdit: (start: String, end: String,plan :Int) -> Unit,
+    navigateEdit: (start: String, end: String, plan: Int) -> Unit,
 ) {
     val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
 
@@ -139,6 +141,7 @@ fun PlanCardView(
             mtViewModel.updatePlanImgByte(plan.planId!!, it)
         }
     )
+    val openWebLauncher = rememberWebLauncher()
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -174,23 +177,23 @@ fun PlanCardView(
                     fontFamily = maple()
                 )
                 plan.link.takeIf {
-                    val urlRegex = """(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?""".toRegex()
-                    it.isNotEmpty()&& urlRegex.matches(it)
-                }?.let {url ->
+                    it.isNotEmpty()
+                }?.let { url ->
                     TextButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
-
+                            openWebLauncher.launchWeb(url)
                         },
                         colors = ButtonDefaults.textButtonColors(
                             contentColor = match1
-                        )
+                        ),
+                        contentPadding = PaddingValues(0.dp)
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(5.dp),
                             verticalAlignment = Alignment.CenterVertically
-                        ){
-                            Icon(painter = painterResource(Res.drawable.baseline_link_24),null)
+                        ) {
+                            Icon(painter = painterResource(Res.drawable.baseline_link_24), null)
                             Text(url)
                         }
                     }

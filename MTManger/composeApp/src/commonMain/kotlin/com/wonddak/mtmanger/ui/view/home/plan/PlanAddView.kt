@@ -4,9 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -81,6 +84,20 @@ fun PlanAddView(
     )
     val textFiledModifier = Modifier.fillMaxWidth()
     val focusManager = LocalFocusManager.current
+    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+
+    val enableLink = if (link.isEmpty()) {
+        true
+    } else {
+        val urlRegex =
+            """(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?""".toRegex()
+        urlRegex.matches(link)
+    }
+    val enabled = date.isNotEmpty()
+            && title.isNotEmpty()
+            && planText.isNotEmpty()
+            && enableLink
+    val color = if (enabled) match2 else match2.copy(0.5f)
 
     Box(
         Modifier
@@ -94,7 +111,7 @@ fun PlanAddView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 60.dp, start = 10.dp, end = 10.dp, top = 10.dp)
+                .padding(bottom = if(isImeVisible) 10.dp else 60.dp, start = 10.dp, end = 10.dp, top = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             DialogTextField(
@@ -204,25 +221,25 @@ fun PlanAddView(
                 ByteArrayImageView(Modifier.fillMaxWidth().wrapContentHeight(), it)
             }
         }
-        val enabled = date.isNotEmpty() && title.isNotEmpty() && planText.isNotEmpty()
-        val color = if (enabled) match2 else match2.copy(0.5f)
-        OutlinedButton(
-            modifier = Modifier.fillMaxWidth().height(50.dp).align(Alignment.BottomCenter),
-            onClick = {
-                onAdd(
-                    PlanData(
-                        nowDay = date,
-                        nowPlanTitle = title,
-                        simpleText = planText,
-                        link = link,
-                        imgBytes = imageByte
+        if (!isImeVisible) {
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth().height(50.dp).align(Alignment.BottomCenter),
+                onClick = {
+                    onAdd(
+                        PlanData(
+                            nowDay = date,
+                            nowPlanTitle = title,
+                            simpleText = planText,
+                            link = link,
+                            imgBytes = imageByte
+                        )
                     )
-                )
-            },
-            enabled = enabled,
-            border = BorderStroke(2.dp, color),
-        ) {
-            DefaultText(text = plan?.let { "수정" } ?: "추가", color = color)
+                },
+                enabled = enabled,
+                border = BorderStroke(2.dp, color),
+            ) {
+                DefaultText(text = plan?.let { "수정" } ?: "추가", color = color)
+            }
         }
     }
 
