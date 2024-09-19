@@ -7,6 +7,7 @@ import androidx.room.Relation
 import kotlinx.datetime.Instant
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DateTimeComponents
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -60,6 +61,7 @@ data class MtData(
         return data
     }
 
+    @OptIn(FormatStringsInDatetimeFormats::class)
     fun getMapDate(): Map<Int, Map<Int, List<Int>>> {
         val result = mutableMapOf<Int, MutableMap<Int, MutableList<Int>>>()
         for (instant in getDateList()) {

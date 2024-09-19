@@ -40,7 +40,6 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 @Composable
 internal fun App() {
@@ -51,7 +50,6 @@ internal fun App() {
     }
 }
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreen() {
     val mtViewModel: MTViewModel = koinViewModel()

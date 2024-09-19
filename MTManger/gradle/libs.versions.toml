@@ -5,20 +5,19 @@ kotlin = "2.0.20"
 compose = "1.6.11"
 
 kotlinxDatetime = "0.6.0"
-room = "2.7.0-alpha07"
-sqlite = "2.5.0-alpha07"
+room = "2.7.0-alpha08"
+sqlite = "2.5.0-alpha08"
 
 billing = "7.0.0"
 datastore = "1.1.1"
-koin = "3.6.0-Beta4"
-koin2 = "1.2.0-Beta4"
+koin = "4.0.0"
 ksp = "2.0.20-1.0.25"
-androidx-uiTest = "1.6.8"
+androidx-uiTest = "1.7.2"
 
 [libraries]
 coil-compose = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
 
-firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.2.0" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.3.0" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
@@ -29,7 +28,7 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.1" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.2" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
 
@@ -42,8 +41,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin2" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin2" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 [plugins]
