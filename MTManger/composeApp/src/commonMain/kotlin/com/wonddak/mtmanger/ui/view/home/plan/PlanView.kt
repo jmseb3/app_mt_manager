@@ -71,9 +71,10 @@ fun PlanView(
     ) {
         if (planResource is Resource.Success) {
             (planResource as Resource.Success<MtDataList>).data?.let { mtDataList ->
-                mtDataList.mtData.getMapDate().also {
+                val dateMap = mtDataList.mtData.getMapDate().also {
                     println("<>>>> $it")
                 }
+                DateWheelPicker(dateMap)
                 Column(
                     Modifier.weight(1f)
                 ) {
@@ -123,6 +124,10 @@ fun PlanView(
     }
 }
 
+
+/**
+ * PlanView에 List에 사용되는 itemView
+ */
 @Composable
 fun PlanCardView(
     modifier: Modifier = Modifier,
