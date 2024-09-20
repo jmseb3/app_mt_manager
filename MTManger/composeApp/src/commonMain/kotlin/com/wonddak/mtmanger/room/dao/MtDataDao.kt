@@ -6,14 +6,18 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.wonddak.mtmanger.room.entity.MtDataList
+import androidx.room.Update
 import com.wonddak.mtmanger.room.entity.MtData
+import com.wonddak.mtmanger.room.entity.MtDataList
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MtDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMtData(mtData: MtData) :Long
+
+    @Update
+    suspend fun updateMtData(mtData: MtData)
 
     @Delete
     suspend fun deleteMtData(mtData: MtData)

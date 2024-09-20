@@ -128,6 +128,12 @@ class MTViewModel(
         }
     }
 
+    fun updateMtData(mtData: MtData) {
+        viewModelScope.launch {
+            mtRepository.updateMtData(mtData)
+        }
+    }
+
     fun deleteMtData(mtData: MtData) {
         viewModelScope.launch {
             mtRepository.deleteMtData(mtData).also {

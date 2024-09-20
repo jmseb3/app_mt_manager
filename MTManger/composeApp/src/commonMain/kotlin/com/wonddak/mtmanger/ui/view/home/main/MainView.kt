@@ -233,7 +233,7 @@ fun MainView(
                                 showEditDialog = false
                             },
                             onAdd = { data ->
-                                mtViewModel.insertMtData(data)
+                                mtViewModel.updateMtData(data)
                                 mtViewModel.showSnackBarMsg("정보를 수정했습니다.")
                                 showEditDialog = false
                             }
