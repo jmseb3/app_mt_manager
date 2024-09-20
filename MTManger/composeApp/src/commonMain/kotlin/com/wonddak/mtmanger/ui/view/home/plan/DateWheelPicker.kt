@@ -1,57 +1,48 @@
 package com.wonddak.mtmanger.ui.view.home.plan
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun DateWheelPicker(dateMap: Map<Int, Map<Int, List<Int>>>) {
-    LazyRow(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top
-    ) {
-        items(dateMap.keys.toList()) { year ->
-            val monthMap = dateMap[year]!!
-            // 연도 Wheel
-            Column {
-                Text(year.toString())
-                MonthDateWheel(monthMap)
-            }
-        }
-    }
-}
-
-@Composable
-fun MonthDateWheel(dateMap: Map<Int, List<Int>>) {
-    val sizeWeight = dateMap.map { it.value.size }
-    val width = 50.dp
+    val width = 70.dp
+    val scroll = rememberScrollState()
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top
-    ) {
-        dateMap.keys.toList().forEachIndexed { index, month ->
-            val dayList = dateMap[month]!!
-            Column {
-                Text(
-                    text = month.toString(),
-                    modifier = Modifier.width(width * sizeWeight[index]),
-                    textAlign = TextAlign.Center
-                )
-                Row {
-                    dayList.forEach {
-                        Text(
-                            text = it.toString(),
-                            modifier = Modifier.width(width)
-                        )
+        modifier = Modifier.fillMaxWidth().horizontalScroll(scroll)
+            .border(1.dp, Color.Red)
+    ){
+        dateMap.keys.forEach { year ->
+            Row(
+                modifier = Modifier.wrapContentSize(),
+                verticalAlignment = Alignment.Top
+            ) {
+                dateMap[year]!!.keys.toList().forEach { month ->
+                    val dayList = dateMap[year]!![month]!!
+                    Row {
+                        dayList.forEach {
+                            TextButton(
+                                onClick = {
+
+                                },
+                                modifier = Modifier.width(width)
+                            ) {
+                                Text(
+                                    text = "$month / $it",
+                                )
+                            }
+                        }
                     }
                 }
             }

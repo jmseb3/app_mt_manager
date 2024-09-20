@@ -71,10 +71,10 @@ fun PlanView(
     ) {
         if (planResource is Resource.Success) {
             (planResource as Resource.Success<MtDataList>).data?.let { mtDataList ->
-                val dateMap = mtDataList.mtData.getMapDate().also {
-                    println("<>>>> $it")
-                }
-                DateWheelPicker(dateMap)
+//                val dateMap = mtDataList.mtData.getMapDate().also {
+//                    println("<>>>> $it")
+//                }
+//                DateWheelPicker(dateMap)
                 Column(
                     Modifier.weight(1f)
                 ) {
