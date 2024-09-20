@@ -291,7 +291,7 @@ fun BuyItemView(
                 showEditDialog = false
             },
             onAdd = { data ->
-                mtViewModel.insertBuyGood(
+                mtViewModel.updateBuyGood(
                     data,
                     buyGood.buyGoodId!!
                 )

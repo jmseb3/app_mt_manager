@@ -54,7 +54,7 @@ class MTViewModel(
 
     var mainMtId by mutableStateOf(0)
 
-    val totalMtList :StateFlow<List<MtData>> =
+    val totalMtList: StateFlow<List<MtData>> =
         mtRepository.getMtTotalList().stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
@@ -179,23 +179,35 @@ class MTViewModel(
 
     fun insertBuyGood(
         simpleBuyGood: SimpleBuyGood,
-        buyGoodId: Int? = null,
-    ) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                mtRepository.insertBuyGood(
-                    BuyGood(
-                        buyGoodId,
-                        mainMtId,
-                        simpleBuyGood.category,
-                        simpleBuyGood.name,
-                        simpleBuyGood.count.toInt(),
-                        simpleBuyGood.price.toInt()
-                    )
+    ) = viewModelScope.launch {
+            mtRepository.insertBuyGood(
+                BuyGood(
+                    null,
+                    mainMtId,
+                    simpleBuyGood.category,
+                    simpleBuyGood.name,
+                    simpleBuyGood.count.toInt(),
+                    simpleBuyGood.price.toInt()
                 )
-            }
+            )
         }
+
+    fun updateBuyGood(
+        simpleBuyGood: SimpleBuyGood,
+        buyGoodId: Int
+    ) = viewModelScope.launch {
+        mtRepository.updateBuyGood(
+            BuyGood(
+                buyGoodId,
+                mainMtId,
+                simpleBuyGood.category,
+                simpleBuyGood.name,
+                simpleBuyGood.count.toInt(),
+                simpleBuyGood.price.toInt()
+            )
+        )
     }
+
 
     fun deletePerson(personId: Int) {
         viewModelScope.launch {
@@ -229,9 +241,9 @@ class MTViewModel(
         }
     }
 
-    fun getPlanById(planId:Int?) :Plan? {
+    fun getPlanById(planId: Int?): Plan? {
         if (planId == null) {
-            return  null
+            return null
         }
         val resource = nowMtDataList.value
         return if (resource is Resource.Success<MtDataList>) {
@@ -276,7 +288,7 @@ class MTViewModel(
         }
     }
 
-    fun updatePlan(prevPlan: Plan, planData: PlanData,onFinish: () -> Unit) {
+    fun updatePlan(prevPlan: Plan, planData: PlanData, onFinish: () -> Unit) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mtRepository.updatePlan(
@@ -285,7 +297,7 @@ class MTViewModel(
                         nowPlanTitle = planData.nowPlanTitle,
                         simpleText = planData.simpleText,
                         imgBytes = planData.imgBytes,
-                        link =  planData.link
+                        link = planData.link
                     )
                 )
             }

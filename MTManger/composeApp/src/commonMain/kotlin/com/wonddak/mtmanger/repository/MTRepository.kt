@@ -103,6 +103,10 @@ class MTRepository(
         buyGoodDao.insertBuyGood(buyGood)
     }
 
+    suspend fun updateBuyGood(buyGood: BuyGood) {
+        buyGoodDao.updateBuyGood(buyGood)
+    }
+
     suspend fun clearBuyGood(mtId: Int) {
         buyGoodDao.clearBuyGoods(mtId)
     }
