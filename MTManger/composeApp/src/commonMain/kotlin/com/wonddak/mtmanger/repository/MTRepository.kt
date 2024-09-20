@@ -52,6 +52,10 @@ class MTRepository(
     suspend fun insertMtData(mtData: MtData): Long {
         return mtDataDao.insertMtData(mtData)
     }
+
+    suspend fun updateMtData(mtData: MtData) {
+        mtDataDao.updateMtData(mtData)
+    }
     suspend fun deleteMtData(mtData: MtData) : Int {
         val preList = mtDataDao.getMtDataData().toList()
         var findIndex  = -1
