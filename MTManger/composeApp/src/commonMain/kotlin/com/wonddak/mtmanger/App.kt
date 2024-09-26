@@ -30,6 +30,7 @@ import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
 import com.wonddak.mtmanger.ui.main.TopAppContent
 import com.wonddak.mtmanger.ui.main.isATT
+import com.wonddak.mtmanger.ui.main.isSetting
 import com.wonddak.mtmanger.ui.main.showAd
 import com.wonddak.mtmanger.ui.main.showBottomNavigation
 import com.wonddak.mtmanger.ui.theme.AppTheme
@@ -88,7 +89,7 @@ fun HomeScreen() {
             }
         },
         topBar = {
-            if (!navController.isATT()) {
+            AnimatedVisibility(!navController.isATT() && !navController.isSetting()) {
                 TopAppContent(navController)
             }
         },

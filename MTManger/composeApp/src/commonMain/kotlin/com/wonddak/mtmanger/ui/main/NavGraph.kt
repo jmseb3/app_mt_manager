@@ -46,8 +46,13 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = Const.HOME) {
         homeGraph(navController, mtViewModel)
 
-        settingGraph(navController, mtViewModel)
+        composable(Const.SETTING_HOME) {
+            SettingView() {
+                if (navController.popBackStack()) {
 
+                }
+            }
+        }
         composable(Const.MT_LIST) {
             MtListView { data ->
                 if (navController.popBackStack()) {
@@ -184,36 +189,6 @@ fun NavGraphBuilder.homeGraph(
 
 }
 
-
-fun NavGraphBuilder.settingGraph(
-    navController: NavHostController,
-    mtViewModel: MTViewModel,
-) {
-    navigation(startDestination = Const.SETTING_HOME, route = Const.SETTING) {
-        composable(Const.SETTING_HOME) {
-            SettingView() {
-                navController.navigate(Const.CATEGORY)
-            }
-        }
-        composable(Const.CATEGORY) {
-            CategoryView(
-                Modifier
-                    .fillMaxSize(),
-                mtViewModel.settingCategoryList,
-                update = { id, input ->
-                    mtViewModel.updateCategory(id, input)
-                },
-                delete = {
-                    mtViewModel.deleteCategoryById(it)
-                },
-                insert = {
-                    mtViewModel.insertCategory(it)
-                }
-            )
-        }
-    }
-}
-
 @Composable
 private inline fun <T> NavController.checkRout(
     route: (String?) -> T
@@ -280,10 +255,6 @@ fun NavController.showBottomNavigation(): Boolean {
 fun NavController.getTitle(): String {
     return checkRout<String> { route ->
         when (route) {
-            Const.CATEGORY, Const.SETTING_HOME -> {
-                "설정"
-            }
-
             Const.MT_LIST -> {
                 "MT 리스트"
             }

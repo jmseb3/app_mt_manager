@@ -13,30 +13,91 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.wonddak.mtmanger.SetBackHandler
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.noRippleClickable
+import com.wonddak.mtmanger.ui.main.BaseTopAppContent
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.util.AppUtil
 import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun SettingView(
+    goToMain :() -> Unit
+) {
+    val navigator = rememberListDetailPaneScaffoldNavigator<String>()
+    SetBackHandler(navigator.canNavigateBack()) {
+        navigator.navigateBack()
+    }
+    Scaffold(
+        topBar = {
+            BaseTopAppContent(
+                "설정",
+                actions = {},
+                onBack = {
+                    if (navigator.canNavigateBack()) {
+                        navigator.navigateBack()
+                    } else {
+                        goToMain()
+                    }
+                }
+            )
+        },
+    ) {
+        ListDetailPaneScaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .background(match1)
+                .noRippleClickable(),
+            directive = navigator.scaffoldDirective,
+            value = navigator.scaffoldValue,
+            listPane = {
+                AnimatedPane {
+                    SettingListContent {
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, Const.CATEGORY)
+                    }
+                }
+            },
+            detailPane = {
+                AnimatedPane {
+                    navigator.currentDestination?.content?.let {
+                        when(it) {
+                            Const.CATEGORY -> {
+                                CategoryView()
+                            }
+                            else -> {
+
+                            }
+                        }
+                    }
+                }
+            },
+        )
+    }
+}
+
+@Composable
+fun SettingListContent(
     payViewModel: PayViewModel = koinViewModel(),
     navigateCategory: () -> Unit
 ) {
     Column(
-        Modifier
-            .fillMaxSize()
-            .background(match1)
-            .padding(10.dp)
-            .noRippleClickable(),
+        modifier = Modifier
+            .padding(10.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         OutlinedButton(

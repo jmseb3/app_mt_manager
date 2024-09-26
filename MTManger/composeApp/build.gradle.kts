@@ -80,6 +80,13 @@ kotlin {
             implementation(libs.datastore.preferences.core)
 
             implementation("network.chaintech:compose-multiplatform-screen-capture:1.0.1")
+
+            implementation(libs.adaptive)
+            implementation(libs.adaptive.layout)
+            implementation(libs.adaptive.navigation)
+
+            implementation(libs.material3.adaptive.navigation)
+            implementation(libs.material3.window.size)
         }
 
         commonTest.dependencies {

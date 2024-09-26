@@ -3,6 +3,7 @@ package com.wonddak.mtmanger.ui.main
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,7 +43,7 @@ fun TopAppContent(
             ) {
                 IconButton(
                     onClick = {
-                        navController.navigate(Const.SETTING) {
+                        navController.navigate(Const.SETTING_HOME) {
                             this.launchSingleTop = true
                         }
                     },
@@ -62,6 +63,42 @@ fun TopAppContent(
                     onClick = {
                         navController.popBackStack()
                     }
+                ) {
+                    Icon(
+                        painter = painterResource(resource = Res.drawable.back_arrow),
+                        contentDescription = null,
+                        tint = match1,
+                    )
+                }
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BaseTopAppContent(
+    title: String? = null,
+    actions: @Composable RowScope.() -> Unit,
+    onBack: (() -> Unit)? = null
+) {
+    TopAppBar(
+        title = {
+            title?.let {
+                DefaultText(
+                    text = it,
+                    color = match1
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = match2,
+        ),
+        actions = actions,
+        navigationIcon = {
+            onBack?.let {
+                IconButton(
+                    onClick = it
                 ) {
                     Icon(
                         painter = painterResource(resource = Res.drawable.back_arrow),

@@ -33,23 +33,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.wonddak.mtmanger.room.entity.categoryList
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import com.wonddak.mtmanger.ui.view.dialog.CategoryDialog
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
+import com.wonddak.mtmanger.viewModel.MTViewModel
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoryView(
-    modifier: Modifier,
-    list: List<categoryList>,
-    update: (Int, String) -> Unit = { _, _ -> },
-    delete: (Int) -> Unit = {},
-    insert: (String) -> Unit = {},
+    mtViewModel: MTViewModel = koinViewModel(),
 ) {
+    val list = mtViewModel.settingCategoryList
     var inputText by remember {
         mutableStateOf("")
     }
@@ -66,7 +64,7 @@ fun CategoryView(
         prevSize = list.size
     }
     Box(
-        modifier
+        Modifier
             .fillMaxSize()
             .imePadding()
             .padding(10.dp)
@@ -125,7 +123,7 @@ fun CategoryView(
                         DeleteDialog(
                             onDismiss = { showDeleteDialog = false },
                             onDelete = {
-                                delete(category.id!!)
+                                mtViewModel.deleteCategoryById(category.id!!)
                                 showDeleteDialog = false
                             }
                         )
@@ -135,7 +133,7 @@ fun CategoryView(
                             category = category,
                             onDismiss = { showEditDialog = false },
                             onAdd = { name ->
-                                update(category.id!!, name)
+                                mtViewModel.updateCategory(category.id!!, name)
                                 showEditDialog = false
                             }
                         )
@@ -159,7 +157,7 @@ fun CategoryView(
                 onDone = {
                     if (inputText.isNotEmpty()) {
                         scope.launch {
-                            insert(inputText)
+                            mtViewModel.insertCategory(inputText)
                             listState.scrollToItem(list.size - 1)
                             inputText = ""
                         }

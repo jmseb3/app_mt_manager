@@ -28,10 +28,7 @@ object Const {
 
 
     //depth2 from main
-    const val SETTING = "host_setting"
     const val SETTING_HOME = "nav_setting"
-
-    //depth3 form setting
     const val CATEGORY = "nav_category"
 
     //depth2 from main
