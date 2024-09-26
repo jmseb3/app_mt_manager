@@ -1,11 +1,9 @@
 package com.wonddak.mtmanger.ui.main
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -16,7 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.wonddak.mtmanger.core.Const
-import com.wonddak.mtmanger.model.BottomNavItem
+import com.wonddak.mtmanger.model.NavItem
 import com.wonddak.mtmanger.ui.view.ADTrackingView
 import com.wonddak.mtmanger.ui.view.common.InsertDataView
 import com.wonddak.mtmanger.ui.view.home.buy.BuyView
@@ -26,7 +24,6 @@ import com.wonddak.mtmanger.ui.view.home.main.MtListView
 import com.wonddak.mtmanger.ui.view.home.person.PersonView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanAddView
 import com.wonddak.mtmanger.ui.view.home.plan.PlanView
-import com.wonddak.mtmanger.ui.view.setting.CategoryView
 import com.wonddak.mtmanger.ui.view.setting.SettingView
 import com.wonddak.mtmanger.ui.view.useADT
 import com.wonddak.mtmanger.viewModel.MTViewModel
@@ -47,11 +44,7 @@ fun NavGraph(
         homeGraph(navController, mtViewModel)
 
         composable(Const.SETTING_HOME) {
-            SettingView() {
-                if (navController.popBackStack()) {
-
-                }
-            }
+            SettingView()
         }
         composable(Const.MT_LIST) {
             MtListView { data ->
@@ -76,8 +69,8 @@ fun NavGraph(
 fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
     mtViewModel: MTViewModel,
-) = navigation(startDestination = BottomNavItem.Main.screenRoute, route = Const.HOME) {
-    composable(BottomNavItem.Main.screenRoute) {
+) = navigation(startDestination = NavItem.Main.screenRoute, route = Const.HOME) {
+    composable(NavItem.Main.screenRoute) {
         InsertDataView(
             mtViewModel, navController
         ) {
@@ -96,7 +89,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
     }
-    composable(BottomNavItem.Person.screenRoute) {
+    composable(NavItem.Person.screenRoute) {
         InsertDataView(
             mtViewModel, navController
         ) {
@@ -105,7 +98,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
     }
-    composable(BottomNavItem.Buy.screenRoute) {
+    composable(NavItem.Buy.screenRoute) {
         InsertDataView(
             mtViewModel, navController
         ) {
@@ -114,7 +107,7 @@ fun NavGraphBuilder.homeGraph(
             )
         }
     }
-    composable(BottomNavItem.Plan.screenRoute) {
+    composable(NavItem.Plan.screenRoute) {
         InsertDataView(
             mtViewModel, navController
         ) {
@@ -146,7 +139,7 @@ fun NavGraphBuilder.homeGraph(
             backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
         ) {
             mtViewModel.addPlan(it) {
-                navController.navigate(BottomNavItem.Plan.screenRoute) {
+                navController.navigate(NavItem.Plan.screenRoute) {
                     popUpTo(Const.navigationNewPlanRout()) {
                         inclusive = true
                     }
@@ -271,9 +264,9 @@ fun NavController.getTitle(): String {
                         "계획 수정"
                     } else {
                         val items = listOf(
-                            BottomNavItem.Person,
-                            BottomNavItem.Buy,
-                            BottomNavItem.Plan,
+                            NavItem.Person,
+                            NavItem.Buy,
+                            NavItem.Plan,
                         )
                         items.find { it.screenRoute == route }?.title ?: "MT 매니저"
                     }

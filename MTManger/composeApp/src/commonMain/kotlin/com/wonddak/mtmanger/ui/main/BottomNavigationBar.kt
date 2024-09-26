@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.wonddak.mtmanger.model.BottomNavItem
+import com.wonddak.mtmanger.model.NavItem
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
@@ -18,10 +18,10 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        BottomNavItem.Main,
-        BottomNavItem.Person,
-        BottomNavItem.Buy,
-        BottomNavItem.Plan,
+        NavItem.Main,
+        NavItem.Person,
+        NavItem.Buy,
+        NavItem.Plan,
     )
 
     NavigationBar(

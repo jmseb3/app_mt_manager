@@ -35,26 +35,24 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun SettingView(
-    goToMain :() -> Unit
-) {
+fun SettingView() {
     val navigator = rememberListDetailPaneScaffoldNavigator<String>()
     SetBackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()
     }
     Scaffold(
         topBar = {
-            BaseTopAppContent(
-                "설정",
-                actions = {},
-                onBack = {
-                    if (navigator.canNavigateBack()) {
-                        navigator.navigateBack()
-                    } else {
-                        goToMain()
+            if (navigator.currentDestination?.content == Const.CATEGORY) {
+                BaseTopAppContent(
+                    "설정",
+                    actions = {},
+                    onBack = {
+                        if (navigator.canNavigateBack()) {
+                            navigator.navigateBack()
+                        }
                     }
-                }
-            )
+                )
+            }
         },
     ) {
         ListDetailPaneScaffold(
