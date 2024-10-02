@@ -1,8 +1,8 @@
 [versions]
-agp = "8.3.2"
+agp = "8.4.2"
 coilCompose = "3.0.0-alpha10"
-kotlin = "2.0.20"
-compose = "1.6.11"
+kotlin = "2.0.21-RC"
+compose = "1.7.0-rc01"
 
 kotlinxDatetime = "0.6.0"
 room = "2.7.0-alpha08"
@@ -11,7 +11,7 @@ sqlite = "2.5.0-alpha08"
 billing = "7.0.0"
 datastore = "1.1.1"
 koin = "4.0.0"
-ksp = "2.0.20-1.0.25"
+ksp = "2.0.21-RC-1.0.25"
 androidx-uiTest = "1.7.2"
 
 [libraries]

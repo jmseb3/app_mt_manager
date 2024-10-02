@@ -86,7 +86,9 @@ fun OptionSheet(
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         containerColor = match1,
-        windowInsets = WindowInsets(0.dp,0.dp,0.dp,0.dp)
+        contentWindowInsets = {
+            WindowInsets(0.dp)
+        }
     ) {
         Column(
             modifier = Modifier.padding(top = 0.dp, bottom = bottomPadding, start = 10.dp, end = 10.dp)
