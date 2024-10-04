@@ -23,8 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.wonddak.mtmanger.ui.theme.match1
-import com.wonddak.mtmanger.ui.theme.match2
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -75,7 +73,10 @@ fun DateRangePickerDialog(
             }) {
                 Text(text = "닫기")
             }
-        }
+        },
+//        colors = DatePickerDefaults.colors(
+//            containerColor = match1
+//        )
     ) {
         DateRangePicker(
             state = datePickerState,
@@ -126,12 +127,12 @@ fun DateRangePickerDialog(
                 }
             },
             showModeToggle = true,
-            colors = DatePickerDefaults.colors(
-                containerColor = match2,
-                dayInSelectionRangeContainerColor = match1.copy(alpha = 0.5f),
-                dayInSelectionRangeContentColor = match2,
-                selectedDayContainerColor = match1
-            )
+//            colors = DatePickerDefaults.colors(
+//                containerColor = match2,
+//                dayInSelectionRangeContainerColor = match1.copy(alpha = 0.5f),
+//                dayInSelectionRangeContentColor = match2,
+//                selectedDayContainerColor = match1
+//            )
         )
     }
 }
@@ -216,12 +217,12 @@ fun OneDatePickerDialog(
                 }
             },
             showModeToggle = true,
-            colors = DatePickerDefaults.colors(
-                containerColor = match2,
-                dayInSelectionRangeContainerColor = match1.copy(alpha = 0.5f),
-                dayInSelectionRangeContentColor = match2,
-                selectedDayContainerColor = match1
-            )
+//            colors = DatePickerDefaults.colors(
+//                containerColor = match2,
+//                dayInSelectionRangeContainerColor = match1.copy(alpha = 0.5f),
+//                dayInSelectionRangeContentColor = match2,
+//                selectedDayContainerColor = match1
+//            )
         )
     }
 }
