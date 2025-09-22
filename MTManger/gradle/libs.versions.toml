@@ -1,29 +1,30 @@
 [versions]
-agp = "8.4.2"
-coilCompose = "3.0.0-alpha10"
-kotlin = "2.0.21-RC"
-compose = "1.7.0-rc01"
+agp = "8.9.1"
+coil = "3.3.0"
+kotlin = "2.2.20"
+compose = "1.9.0"
 
-kotlinxDatetime = "0.6.0"
-room = "2.7.0-alpha08"
-sqlite = "2.5.0-alpha08"
+kotlinxDatetime = "0.7.1"
+room = "2.8.0"
+sqlite = "2.6.0"
 
 billing = "7.0.0"
-datastore = "1.1.1"
-koin = "4.0.0"
-ksp = "2.0.21-RC-1.0.25"
+datastore = "1.1.7"
+koin = "4.1.1"
+ksp = "2.2.20-2.0.2"
 androidx-uiTest = "1.7.2"
+capturable = "2.0.0"
 
 [libraries]
-coil-compose = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
-firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.3.0" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "34.3.0" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha10" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.0" }
 
 billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
@@ -44,6 +45,9 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
+capturable = { module = "io.github.jmseb3:capturable", version.ref = "capturable" }
+capturable-extension = { module = "io.github.jmseb3:capturableExtension", version.ref = "capturable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

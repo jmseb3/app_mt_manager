@@ -10,6 +10,7 @@ import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlin.time.DurationUnit
+import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
 @Entity
@@ -31,15 +32,16 @@ data class MtData(
     val simpleTitle: String
         get() = "$mtTitle\n$mtStart ~ $mtEnd"
 
-    fun getDateList(): List<Instant> {
-        val startDate = Instant.parse(
+    @OptIn(ExperimentalTime::class)
+    fun getDateList(): List<kotlin.time.Instant> {
+        val startDate = kotlin.time.Instant.parse(
             mtStart.replace(
                 ".",
                 "-"
             ) + "T00:00:00Z"
         )
 
-        val endDate = Instant.parse(
+        val endDate = kotlin.time.Instant.parse(
             mtEnd.replace(
                 ".",
                 "-"
@@ -48,7 +50,7 @@ data class MtData(
         if (startDate == endDate) {
             return listOf(startDate)
         }
-        val data = mutableListOf<Instant>(startDate)
+        val data = mutableListOf<kotlin.time.Instant>(startDate)
         var nextDate = startDate.plus(1.toDuration(DurationUnit.DAYS))
         while (true) {
             data.add(nextDate)
@@ -61,7 +63,7 @@ data class MtData(
         return data
     }
 
-    @OptIn(FormatStringsInDatetimeFormats::class)
+    @OptIn(FormatStringsInDatetimeFormats::class, ExperimentalTime::class)
     fun getMapDate(): Map<Int, Map<Int, List<Int>>> {
         val result = mutableMapOf<Int, MutableMap<Int, MutableList<Int>>>()
         for (instant in getDateList()) {

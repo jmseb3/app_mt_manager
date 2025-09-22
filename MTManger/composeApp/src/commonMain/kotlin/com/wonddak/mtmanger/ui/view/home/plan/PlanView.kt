@@ -207,9 +207,9 @@ fun PlanCardView(
                     }
                 }
                 PlanImageView(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth(),
-                    plan
+                    plan = plan
                 )
                 Text(
                     text = plan.simpleText,

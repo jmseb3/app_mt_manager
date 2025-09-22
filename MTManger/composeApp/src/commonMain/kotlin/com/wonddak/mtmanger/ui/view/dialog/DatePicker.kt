@@ -30,12 +30,13 @@ import kotlinx.datetime.format
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
-@OptIn(FormatStringsInDatetimeFormats::class)
+@OptIn(ExperimentalTime::class)
 private fun Long?.toDateString(): String {
     this ?: return ""
     val date =
-        Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.of("Asia/Seoul")).date
+        kotlin.time.Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.of("Asia/Seoul")).date
     val formatPattern = "yyyy.MM.dd"
     val dateTimeFormat = LocalDate.Format {
         byUnicodePattern(formatPattern)
@@ -73,10 +74,7 @@ fun DateRangePickerDialog(
             }) {
                 Text(text = "닫기")
             }
-        },
-//        colors = DatePickerDefaults.colors(
-//            containerColor = match1
-//        )
+        }
     ) {
         DateRangePicker(
             state = datePickerState,
@@ -126,13 +124,7 @@ fun DateRangePickerDialog(
                     }
                 }
             },
-            showModeToggle = true,
-//            colors = DatePickerDefaults.colors(
-//                containerColor = match2,
-//                dayInSelectionRangeContainerColor = match1.copy(alpha = 0.5f),
-//                dayInSelectionRangeContentColor = match2,
-//                selectedDayContainerColor = match1
-//            )
+            showModeToggle = true
         )
     }
 }

@@ -40,13 +40,12 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.context.startKoin
 
 @Composable
 internal fun App() {
-    KoinContext() {
-        AppTheme {
-            HomeScreen()
-        }
+    AppTheme {
+        HomeScreen()
     }
 }
 

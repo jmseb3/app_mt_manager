@@ -19,5 +19,5 @@ actual fun getVersion(): String {
                 packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
             }
         }
-    return packageInfo.versionName
+    return packageInfo.versionName ?: "0.0.0"
 }
