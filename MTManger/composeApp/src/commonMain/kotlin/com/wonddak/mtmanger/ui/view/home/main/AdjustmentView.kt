@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -79,6 +80,7 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
 
     Column(
         modifier = Modifier.fillMaxSize()
+            .imePadding()
     ) {
         if (resource is Resource.Success) {
             (resource as Resource.Success<MtDataList>).data?.let { mtData ->
@@ -214,9 +216,12 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
                     }
                     if (editMessage) {
                         TextField(
-                            addMessage,
-                            {
+                            value = addMessage,
+                            onValueChange = {
                                 addMessage = it
+                            },
+                            placeholder = {
+                                Text("추가 메시지를 작성하세요.")
                             },
                             trailingIcon = {
                                 if (addMessage.isNotEmpty()) {

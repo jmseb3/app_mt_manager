@@ -17,7 +17,10 @@ import com.wonddak.mtmanger.room.entity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-expect object MyDatabaseCtor : RoomDatabaseConstructor<AppDatabase>
+@Suppress("KotlinNoActualForExpect")
+expect object MyDatabaseCtor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
+}
 
 @Database(
     entities = [MtData::class, Person::class, BuyGood::class, categoryList::class, Plan::class],
