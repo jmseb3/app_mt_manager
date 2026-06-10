@@ -50,7 +50,7 @@ fun TopAppContent(
                 ) {
                     Icon(
                         painter = painterResource(resource = Res.drawable.ic_baseline_settings_24),
-                        contentDescription = null,
+                        contentDescription = "설정",
                         tint = match1,
                     )
                 }
@@ -65,7 +65,7 @@ fun TopAppContent(
                 ) {
                     Icon(
                         painter = painterResource(resource = Res.drawable.back_arrow),
-                        contentDescription = null,
+                        contentDescription = "뒤로 가기",
                         tint = match1,
                     )
                 }
