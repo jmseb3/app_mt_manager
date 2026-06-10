@@ -4,11 +4,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import kotlinx.datetime.Instant
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeComponents
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
@@ -63,14 +61,14 @@ data class MtData(
         return data
     }
 
-    @OptIn(FormatStringsInDatetimeFormats::class, ExperimentalTime::class)
+    @OptIn(ExperimentalTime::class)
     fun getMapDate(): Map<Int, Map<Int, List<Int>>> {
         val result = mutableMapOf<Int, MutableMap<Int, MutableList<Int>>>()
         for (instant in getDateList()) {
-            val date = instant.format(DateTimeComponents.Format {
-                byUnicodePattern("yyyy-MM-dd")
-            })
-            val (yyyy, mm, dd) = date.split("-").map { it.toInt() }
+            val date = instant.toLocalDateTime(TimeZone.UTC).date
+            val yyyy = date.year
+            val mm = date.month.number
+            val dd = date.day
             if (result.containsKey(yyyy)) {
                 val yearMap = result[yyyy]!!
                 if (yearMap.containsKey(mm)) {

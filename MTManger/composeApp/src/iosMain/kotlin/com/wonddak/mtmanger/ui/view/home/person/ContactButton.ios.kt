@@ -64,7 +64,7 @@ class ContactDelegate(
     private fun handleContact(picker: CNContactPickerViewController, contact: CNContact) {
         println(">> $contact")
         val name = contact.givenName + " " + contact.familyName
-        val numbers = contact.phoneNumbers as List<CNLabeledValue>
+        val numbers = contact.phoneNumbers.filterIsInstance<CNLabeledValue>()
         println(">> $name : [${numbers.size == 1}] ${numbers.joinToString("/")}")
         if (numbers.size == 1) {
             val number = (numbers.first().value) as CNPhoneNumber

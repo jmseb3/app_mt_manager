@@ -12,7 +12,6 @@
         android:label="MT 매니저"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        tools:replace="android:icon"
         android:theme="@android:style/Theme.Material.NoActionBar">
 
         <meta-data

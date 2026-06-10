@@ -23,12 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
 
@@ -37,11 +33,11 @@ private fun Long?.toDateString(): String {
     this ?: return ""
     val date =
         kotlin.time.Instant.fromEpochMilliseconds(this).toLocalDateTime(TimeZone.of("Asia/Seoul")).date
-    val formatPattern = "yyyy.MM.dd"
-    val dateTimeFormat = LocalDate.Format {
-        byUnicodePattern(formatPattern)
-    }
-    return date.format(dateTimeFormat)
+    return listOf(
+        date.year.toString().padStart(4, '0'),
+        date.month.number.toString().padStart(2, '0'),
+        date.day.toString().padStart(2, '0')
+    ).joinToString(".")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

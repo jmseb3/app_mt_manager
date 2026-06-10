@@ -45,7 +45,6 @@ import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import com.wonddak.mtmanger.ui.view.dialog.OneDatePickerDialog
 import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
-import kotlinx.datetime.Instant
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.add_photo
 import mtmanger.composeapp.generated.resources.calendar

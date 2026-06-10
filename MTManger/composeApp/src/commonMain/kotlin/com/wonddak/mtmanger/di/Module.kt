@@ -13,8 +13,8 @@ import com.wonddak.mtmanger.util.DataStoreProvider
 import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.util.Storage
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 
