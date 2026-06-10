@@ -8,7 +8,6 @@ kotlinxDatetime = "0.7.1"
 room = "2.8.0"
 sqlite = "2.6.0"
 
-billing = "7.0.0"
 datastore = "1.1.7"
 koin = "4.1.1"
 ksp = "2.2.20-2.0.2"
@@ -25,9 +24,6 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.0" }
-
-billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
-billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.2" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }

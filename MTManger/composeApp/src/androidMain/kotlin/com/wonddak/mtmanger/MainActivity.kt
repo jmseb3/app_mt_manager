@@ -9,14 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import com.wonddak.mtmanger.ui.view.home.main.AppContext
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
     private var backKeyPressedTime: Long = 0
 
     private val mtViewModel: MTViewModel by viewModel()
-    private val payViewModel: PayViewModel by viewModel()
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -62,6 +60,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 

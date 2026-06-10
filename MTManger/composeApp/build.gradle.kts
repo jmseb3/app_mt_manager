@@ -78,8 +78,6 @@ kotlin {
             implementation(compose.uiTooling)
             implementation(libs.androidx.activity.compose)
             implementation("com.google.android.gms:play-services-ads:23.2.0")
-            implementation(libs.billing)
-            implementation(libs.billing.ktx)
 
             implementation(libs.bundles.koin.android)
             implementation(libs.datastore.preferences)

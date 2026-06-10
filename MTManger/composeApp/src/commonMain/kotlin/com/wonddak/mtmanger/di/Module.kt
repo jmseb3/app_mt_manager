@@ -9,12 +9,10 @@ import com.wonddak.mtmanger.room.dao.MtDataDao
 import com.wonddak.mtmanger.room.dao.PersonDao
 import com.wonddak.mtmanger.room.dao.PlanDao
 import com.wonddak.mtmanger.room.getRoomDatabase
-import com.wonddak.mtmanger.util.BillingModule
 import com.wonddak.mtmanger.util.DataStoreProvider
 import com.wonddak.mtmanger.util.DeviceActionHelper
 import com.wonddak.mtmanger.util.Storage
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -64,14 +62,10 @@ val deviceModule = module {
     single<DeviceActionHelper> {
         DeviceActionHelper()
     }
-    single<BillingModule> {
-        BillingModule()
-    }
 }
 
 val viewmodelModule = module {
     viewModelOf(::MTViewModel)
-    viewModelOf(::PayViewModel)
 }
 
 fun sharedModule() = dataBaseModule + repositoryModule + viewmodelModule + configModule + deviceModule

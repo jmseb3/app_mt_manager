@@ -21,14 +21,9 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.util.AppUtil
-import com.wonddak.mtmanger.viewModel.PayViewModel
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun SettingView(
-    payViewModel: PayViewModel = koinViewModel(),
     navigateCategory: () -> Unit
 ) {
     Column(
@@ -57,8 +52,6 @@ fun SettingView(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Column {
-                val removeAdStatus = payViewModel.removeAdStatus
-                SettingAdFooter(removeAdStatus)
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {

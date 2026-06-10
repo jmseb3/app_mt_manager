@@ -37,7 +37,6 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.view.AdvertView
 import com.wonddak.mtmanger.ui.view.SplashView
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import com.wonddak.mtmanger.viewModel.PayViewModel
 import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.context.startKoin
@@ -52,7 +51,6 @@ internal fun App() {
 @Composable
 fun HomeScreen() {
     val mtViewModel: MTViewModel = koinViewModel()
-    val payViewModel: PayViewModel = koinViewModel()
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -113,7 +111,7 @@ fun HomeScreen() {
                 .navigationBarsPadding()
         ) {
             Column {
-                if (navController.showAd() && !payViewModel.removeAdStatus) {
+                if (navController.showAd()) {
                     AdvertView(Modifier.wrapContentSize().defaultMinSize(minHeight = 50.dp))
                 }
                 NavGraph(
