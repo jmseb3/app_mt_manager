@@ -64,7 +64,7 @@ class MTRepository(
     }
     suspend fun insertMtData(mtData: MtData): Long {
         if (Const.USE_SCREENSHOT_MOCK_DATA) {
-            return ScreenshotMockData.selectedMtId.toLong()
+            return Const.SCREENSHOT_MOCK_MT_ID.toLong()
         }
         return mtDataDao.insertMtData(mtData)
     }
@@ -77,7 +77,7 @@ class MTRepository(
     }
     suspend fun deleteMtData(mtData: MtData) : Int {
         if (Const.USE_SCREENSHOT_MOCK_DATA) {
-            return ScreenshotMockData.selectedMtId
+            return Const.SCREENSHOT_MOCK_MT_ID
         }
         val preList = mtDataDao.getMtDataData().toList()
         var findIndex  = -1

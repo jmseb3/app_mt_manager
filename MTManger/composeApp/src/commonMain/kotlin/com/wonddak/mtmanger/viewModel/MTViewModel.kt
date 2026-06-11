@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.model.SnackBarMsg
 import com.wonddak.mtmanger.repository.MTRepository
@@ -77,10 +78,15 @@ class MTViewModel(
             launch {
                 storage.id.collectLatest {
                     initId = true
-                    mainMtId = it
+                    val selectedMtId = if (Const.USE_SCREENSHOT_MOCK_DATA) {
+                        Const.SCREENSHOT_MOCK_MT_ID
+                    } else {
+                        it
+                    }
+                    mainMtId = selectedMtId
                     observeJob?.cancel()
                     observeJob = launch {
-                        mtRepository.getMtDataList(it).collect { mtDataList ->
+                        mtRepository.getMtDataList(selectedMtId).collect { mtDataList ->
                             _nowMtDataList.value = mtDataList
                         }
                     }
@@ -115,6 +121,10 @@ class MTViewModel(
     fun setMtId(id: Int) {
         viewModelScope.launch {
             println("setMt Id :$id")
+            if (Const.USE_SCREENSHOT_MOCK_DATA) {
+                mainMtId = Const.SCREENSHOT_MOCK_MT_ID
+                return@launch
+            }
             storage.updateId(id)
         }
     }

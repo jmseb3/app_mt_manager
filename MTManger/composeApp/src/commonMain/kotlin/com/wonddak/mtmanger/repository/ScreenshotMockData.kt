@@ -1,5 +1,6 @@
 package com.wonddak.mtmanger.repository
 
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.room.entity.BuyGood
 import com.wonddak.mtmanger.room.entity.MtData
 import com.wonddak.mtmanger.room.entity.MtDataList
@@ -8,9 +9,8 @@ import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.room.entity.categoryList
 
 object ScreenshotMockData {
-    private const val MAIN_MT_ID = 1
+    private const val MAIN_MT_ID = Const.SCREENSHOT_MOCK_MT_ID
     private const val SUB_MT_ID = 2
-    const val selectedMtId = MAIN_MT_ID
 
     val mtData = MtData(
         mtDataId = MAIN_MT_ID,
