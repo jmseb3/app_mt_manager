@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use Firebase library to configure APIs.
         FirebaseApp.configure()
         // Initialize the Google Mobile Ads SDK.
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        MobileAds.shared.start()
         
         initAdView()
         
@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func initAdView() {
         AdMobHelper.shared.doInit {
             return UIHostingController(rootView: BannerView()
-                .frame(width: GADAdSizeBanner.size.width,height: GADAdSizeBanner.size.height)
+                .frame(width: AdSizeBanner.size.width,height: AdSizeBanner.size.height)
             )
         }
     }
