@@ -305,9 +305,7 @@ fun NavController.isSetting(): Boolean {
 
 @Composable
 fun NavController.showAd(): Boolean {
-    return !checkRout {
-        it == Const.CATEGORY || it == Const.SETTING_HOME || it == Const.MT_LIST || it == Const.ATT
-    }
+    return checkRout { it == BottomNavItem.Main.screenRoute }
 }
 
 @Composable
