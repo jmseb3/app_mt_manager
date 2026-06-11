@@ -48,7 +48,7 @@ fun MTDialog(
     }
 
     var endDate by remember {
-        mutableStateOf(mtData?.mtEnd ?: "")
+        mutableStateOf(mtData?.mtStart ?: "")
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -139,8 +139,6 @@ fun MTDialog(
     }
     if (showDatePicker) {
         DateRangePickerDialog(
-            initialStartDate = startDate,
-            initialEndDate = endDate,
             onDismiss = {
                 showDatePicker = false
             },
