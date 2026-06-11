@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.ui.main.BottomNavigationBar
 import com.wonddak.mtmanger.ui.main.NavGraph
 import com.wonddak.mtmanger.ui.main.TopAppContent
@@ -111,7 +112,7 @@ fun HomeScreen() {
                 .navigationBarsPadding()
         ) {
             Column {
-                if (navController.showAd()) {
+                if (!Const.USE_SCREENSHOT_MOCK_DATA && navController.showAd()) {
                     AdvertView(Modifier.wrapContentSize().defaultMinSize(minHeight = 50.dp))
                 }
                 NavGraph(
