@@ -110,3 +110,6 @@ hs_err_pid*
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+
+# Xcode local build output
+.xcode-derived/
