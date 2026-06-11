@@ -4,12 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import kotlinx.datetime.Instant
-import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeComponents
-import kotlinx.datetime.format.FormatStringsInDatetimeFormats
-import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
+import kotlinx.datetime.toLocalDateTime
 import kotlin.time.DurationUnit
+import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
 @Entity
@@ -31,15 +30,16 @@ data class MtData(
     val simpleTitle: String
         get() = "$mtTitle\n$mtStart ~ $mtEnd"
 
-    fun getDateList(): List<Instant> {
-        val startDate = Instant.parse(
+    @OptIn(ExperimentalTime::class)
+    fun getDateList(): List<kotlin.time.Instant> {
+        val startDate = kotlin.time.Instant.parse(
             mtStart.replace(
                 ".",
                 "-"
             ) + "T00:00:00Z"
         )
 
-        val endDate = Instant.parse(
+        val endDate = kotlin.time.Instant.parse(
             mtEnd.replace(
                 ".",
                 "-"
@@ -48,7 +48,7 @@ data class MtData(
         if (startDate == endDate) {
             return listOf(startDate)
         }
-        val data = mutableListOf<Instant>(startDate)
+        val data = mutableListOf<kotlin.time.Instant>(startDate)
         var nextDate = startDate.plus(1.toDuration(DurationUnit.DAYS))
         while (true) {
             data.add(nextDate)
@@ -61,14 +61,14 @@ data class MtData(
         return data
     }
 
-    @OptIn(FormatStringsInDatetimeFormats::class)
+    @OptIn(ExperimentalTime::class)
     fun getMapDate(): Map<Int, Map<Int, List<Int>>> {
         val result = mutableMapOf<Int, MutableMap<Int, MutableList<Int>>>()
         for (instant in getDateList()) {
-            val date = instant.format(DateTimeComponents.Format {
-                byUnicodePattern("yyyy-MM-dd")
-            })
-            val (yyyy, mm, dd) = date.split("-").map { it.toInt() }
+            val date = instant.toLocalDateTime(TimeZone.UTC).date
+            val yyyy = date.year
+            val mm = date.month.number
+            val dd = date.day
             if (result.containsKey(yyyy)) {
                 val yearMap = result[yyyy]!!
                 if (yearMap.containsKey(mm)) {

@@ -1,38 +1,44 @@
 [versions]
-agp = "8.4.2"
-coilCompose = "3.0.0-alpha10"
-kotlin = "2.0.21-RC"
-compose = "1.7.0-rc01"
+agp = "9.0.0"
+coil = "3.5.0"
+kotlin = "2.4.0"
+compose = "1.10.2"
+composeMaterial3 = "1.9.0"
 
-kotlinxDatetime = "0.6.0"
-room = "2.7.0-alpha08"
-sqlite = "2.5.0-alpha08"
+kotlinxDatetime = "0.8.0"
+room = "2.8.4"
+sqlite = "2.6.2"
 
-billing = "7.0.0"
-datastore = "1.1.1"
-koin = "4.0.0"
-ksp = "2.0.21-RC-1.0.25"
-androidx-uiTest = "1.7.2"
+datastore = "1.2.1"
+koin = "4.2.1"
+ksp = "2.3.9"
+androidx-uiTest = "1.11.2"
+capturable = "2.0.2"
 
 [libraries]
-coil-compose = { module = "io.coil-kt.coil3:coil", version.ref = "coilCompose" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMaterial3" }
+compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "compose" }
+compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version = "1.7.3" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
-firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.3.0" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "34.14.1" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha10" }
+viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.10.0" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.2" }
 
-billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
-billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
-
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.2" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
 androidx-testManifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-uiTest" }
 androidx-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-uiTest" }
 
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.2" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.11.0" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 
@@ -45,8 +51,12 @@ koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
+capturable = { module = "io.github.jmseb3:capturable", version.ref = "capturable" }
+capturable-extension = { module = "io.github.jmseb3:capturableExtension", version.ref = "capturable" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

@@ -1,42 +1,32 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.multiplatform.library)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.serialization)
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
 }
 kotlin {
-    androidTarget {
-        compilations.all {
-            compileTaskProvider {
-                compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_1_8)
-                    freeCompilerArgs.add("-Xjdk-release=${JavaVersion.VERSION_1_8}")
-                }
-            }
+    jvmToolchain(11)
+
+    android {
+        namespace = "com.wonddak.mtmanger.shared"
+        compileSdk = 36
+        minSdk = 24
+
+        androidResources {
+            enable = true
         }
-        //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        instrumentedTestVariant {
-            sourceSetTree.set(KotlinSourceSetTree.test)
-            dependencies {
-                debugImplementation(libs.androidx.testManifest)
-                implementation(libs.androidx.junit4)
-            }
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -56,11 +46,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.resources)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.material.icons.extended)
 
             implementation(libs.viewmodel.compose)
             implementation(libs.navigation.compose)
@@ -72,76 +63,35 @@ kotlin {
 
             implementation(libs.kotlinx.serialization)
 
-
             implementation(libs.coil.compose)
-
-            implementation("co.touchlab:stately-concurrent-collections:2.0.6")
             implementation(libs.bundles.koin.shared)
             implementation(libs.datastore.preferences.core)
 
-            implementation("network.chaintech:compose-multiplatform-screen-capture:1.0.1")
+            implementation(libs.capturable)
+            implementation(libs.capturable.extension)
         }
 
         commonTest.dependencies {
             implementation(kotlin("test"))
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
         }
 
         androidMain.dependencies {
-            implementation(compose.uiTooling)
+            implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
             implementation("com.google.android.gms:play-services-ads:23.2.0")
-            implementation(libs.billing)
-            implementation(libs.billing.ktx)
 
             implementation(libs.bundles.koin.android)
             implementation(libs.datastore.preferences)
-            implementation("io.coil-kt:coil-compose:2.6.0")
 
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.bundles.firebase)
         }
 
         iosMain.dependencies {
+
         }
 
-    }
-}
-
-apply("../keystore/signing.gradle")
-android {
-    namespace = "com.wonddak.mtmanger"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.wonddak.mtmanger"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 22
-        versionName = "3.1.4"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        compose = true
-    }
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-            signingConfig = signingConfigs.getByName("mtManagerSigining")
-        }
-        debug { }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
@@ -152,7 +102,6 @@ room {
 dependencies {
     with(libs.room.compiler) {
         add("kspAndroid", this)
-        add("kspIosX64", this)
         add("kspIosArm64", this)
         add("kspIosSimulatorArm64", this)
     }

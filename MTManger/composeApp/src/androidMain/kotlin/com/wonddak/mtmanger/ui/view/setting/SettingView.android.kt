@@ -13,11 +13,15 @@ actual fun getVersion(): String {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 packageManager.getPackageInfo(
                     packageName,
-                    PackageManager.PackageInfoFlags.of(PackageManager.GET_SIGNING_CERTIFICATES.toLong())
+                    PackageInfoFlagsCompat.empty()
                 )
             } else {
-                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+                packageManager.getPackageInfo(packageName, 0)
             }
         }
-    return packageInfo.versionName
+    return packageInfo.versionName ?: "0.0.0"
+}
+
+private object PackageInfoFlagsCompat {
+    fun empty(): PackageManager.PackageInfoFlags = PackageManager.PackageInfoFlags.of(0)
 }

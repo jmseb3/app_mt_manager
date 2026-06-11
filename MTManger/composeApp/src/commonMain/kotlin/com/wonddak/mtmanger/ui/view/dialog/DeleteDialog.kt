@@ -9,7 +9,6 @@ import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun DeleteDialog(
@@ -49,7 +48,6 @@ fun DeleteDialog(
 }
 
 @Composable
-@Preview
 fun DeleteDialogPreView() {
     DeleteDialog(msg = "정말 삭제하시겠습니까?")
 }

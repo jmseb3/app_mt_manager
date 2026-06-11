@@ -39,6 +39,7 @@ import com.wonddak.mtmanger.room.entity.MtDataList
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
+import com.wonddak.mtmanger.ui.view.common.EmptyListMessage
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.sheet.DefaultOptionSheet
@@ -217,17 +218,24 @@ fun BuyItemList(
                 if (resource is Resource.Success) {
                     (resource as Resource.Success<MtDataList>).data?.let {
                         val buyGoodList = it.buyGoodList
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 5.dp)
-                        ) {
-                            itemsIndexed(buyGoodList) { index, buyGood ->
-                                BuyItemView(buyGood, mtViewModel)
-                                if (index != buyGoodList.size - 1) {
-                                    HorizontalDivider(
-                                        color = match2
-                                    )
+                        if (buyGoodList.isEmpty()) {
+                            EmptyListMessage(
+                                title = "구매 내역이 없어요",
+                                description = "아래의 내역 추가 버튼으로 MT 지출을 기록해 보세요."
+                            )
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 5.dp)
+                            ) {
+                                itemsIndexed(buyGoodList) { index, buyGood ->
+                                    BuyItemView(buyGood, mtViewModel)
+                                    if (index != buyGoodList.size - 1) {
+                                        HorizontalDivider(
+                                            color = match2
+                                        )
+                                    }
                                 }
                             }
                         }

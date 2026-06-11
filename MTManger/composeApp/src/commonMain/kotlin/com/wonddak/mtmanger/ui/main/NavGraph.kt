@@ -1,11 +1,18 @@
 package com.wonddak.mtmanger.ui.main
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -29,10 +36,13 @@ import com.wonddak.mtmanger.ui.view.home.plan.PlanView
 import com.wonddak.mtmanger.ui.view.setting.CategoryView
 import com.wonddak.mtmanger.ui.view.setting.SettingView
 import com.wonddak.mtmanger.ui.view.useADT
+import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable
 fun NavGraph(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     mtViewModel: MTViewModel,
 ) {
@@ -43,7 +53,11 @@ fun NavGraph(
             }
         }
     }
-    NavHost(navController = navController, startDestination = Const.HOME) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Const.HOME
+    ) {
         homeGraph(navController, mtViewModel)
 
         settingGraph(navController, mtViewModel)
@@ -136,9 +150,15 @@ fun NavGraphBuilder.homeGraph(
             }
         )
     ) { backStackEntry ->
+        val startDate = backStackEntry.arguments?.let {
+            NavType.StringType[it, Const.PLAN_ARG_START]
+        }.orEmpty()
+        val endDate = backStackEntry.arguments?.let {
+            NavType.StringType[it, Const.PLAN_ARG_END]
+        }.orEmpty()
         PlanAddView(
-            backStackEntry.arguments?.getString(Const.PLAN_ARG_START)!!,
-            backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
+            startDate,
+            endDate,
         ) {
             mtViewModel.addPlan(it) {
                 navController.navigate(BottomNavItem.Plan.screenRoute) {
@@ -165,14 +185,28 @@ fun NavGraphBuilder.homeGraph(
             }
         )
     ) { backStackEntry ->
-        val planId = backStackEntry.arguments?.getInt(Const.PLAN_ARG_ID)
+        val startDate = backStackEntry.arguments?.let {
+            NavType.StringType[it, Const.PLAN_ARG_START]
+        }.orEmpty()
+        val endDate = backStackEntry.arguments?.let {
+            NavType.StringType[it, Const.PLAN_ARG_END]
+        }.orEmpty()
+        val planId = backStackEntry.arguments?.let {
+            NavType.IntType[it, Const.PLAN_ARG_ID]
+        }
         val plan = mtViewModel.getPlanById(planId)
         if (plan == null) {
-            Text("Error")
+            RouteErrorView(
+                message = "계획 정보를 불러오지 못했어요.",
+                actionText = "계획 목록으로 돌아가기",
+                onAction = {
+                    navController.popBackStack()
+                }
+            )
         } else {
             PlanAddView(
-                backStackEntry.arguments?.getString(Const.PLAN_ARG_START)!!,
-                backStackEntry.arguments?.getString(Const.PLAN_ARG_END)!!,
+                startDate,
+                endDate,
                 plan
             ) { data ->
                 mtViewModel.updatePlan(plan, data) {
@@ -182,6 +216,33 @@ fun NavGraphBuilder.homeGraph(
         }
     }
 
+}
+
+@Composable
+private fun RouteErrorView(
+    message: String,
+    actionText: String,
+    onAction: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DefaultText(
+            modifier = Modifier.fillMaxWidth(),
+            text = message
+        )
+        OutlinedButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onAction,
+            border = BorderStroke(2.dp, match2)
+        ) {
+            DefaultText(text = actionText)
+        }
+    }
 }
 
 

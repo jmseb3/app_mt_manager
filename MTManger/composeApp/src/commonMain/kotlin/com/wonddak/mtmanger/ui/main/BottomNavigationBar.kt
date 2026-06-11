@@ -30,9 +30,11 @@ fun BottomNavigationBar(navController: NavController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
+            val selected = currentRoute == item.screenRoute
             NavigationBarItem(
-                selected = currentRoute == item.screenRoute,
+                selected = selected,
                 onClick = {
+                    if (selected) return@NavigationBarItem
                     navController.navigate(item.screenRoute) {
                         navController.graph.startDestinationRoute?.let { screen_route ->
                             popUpTo(screen_route) {
@@ -46,13 +48,13 @@ fun BottomNavigationBar(navController: NavController) {
                 icon = {
                     Icon(
                         painter = painterResource(resource = item.icon),
-                        contentDescription = null
+                        contentDescription = "${item.title} 탭"
                     )
                 },
                 label = {
                     DefaultText(
                         text = item.title,
-                        color = if (currentRoute == item.screenRoute) match1 else Color.White
+                        color = if (selected) match1 else Color.White
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(

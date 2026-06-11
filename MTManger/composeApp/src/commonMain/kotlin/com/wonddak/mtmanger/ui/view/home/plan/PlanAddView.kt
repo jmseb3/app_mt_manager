@@ -45,13 +45,13 @@ import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.ui.view.common.DialogTextField
 import com.wonddak.mtmanger.ui.view.dialog.OneDatePickerDialog
 import com.wonddak.mtmanger.util.rememberPhotoPickerLauncher
-import kotlinx.datetime.Instant
 import mtmanger.composeapp.generated.resources.Res
 import mtmanger.composeapp.generated.resources.add_photo
 import mtmanger.composeapp.generated.resources.calendar
 import org.jetbrains.compose.resources.painterResource
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun PlanAddView(
     startDate: String,
@@ -245,13 +245,13 @@ fun PlanAddView(
 
 
     if (showDatePicker) {
-        val start = Instant.parse(
+        val start = kotlin.time.Instant.parse(
             startDate.replace(
                 ".",
                 "-"
             ) + "T00:00:00Z"
         ).toEpochMilliseconds()
-        val end = Instant.parse(
+        val end = kotlin.time.Instant.parse(
             endDate.replace(
                 ".",
                 "-"

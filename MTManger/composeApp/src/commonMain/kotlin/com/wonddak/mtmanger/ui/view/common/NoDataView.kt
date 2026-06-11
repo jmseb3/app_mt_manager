@@ -3,9 +3,16 @@ package com.wonddak.mtmanger.ui.view.common
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +45,9 @@ inline fun InsertDataView(
     content: @Composable (MtDataList) -> Unit
 ) {
     val planResource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState(Resource.Loading)
+    var showAddDialog by remember {
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -51,27 +62,47 @@ inline fun InsertDataView(
             if (planResource is Resource.Success) {
                 val mtDataList = (planResource as Resource.Success<MtDataList>).data
                 if (mtDataList == null) {
-                    Column {
-                        Text("현재 설정된 데이터가 유효하지 않아요.. 확인부탁드립니다.")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 24.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "현재 선택된 MT 정보를 불러올 수 없어요.\n목록에서 다시 선택해 주세요.",
+                            color = match2,
+                            fontSize = 18.sp,
+                            fontFamily = maple(),
+                            textAlign = TextAlign.Center,
+                            lineHeight = 26.sp,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
                         OutlinedButton(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp),
                             onClick = {
                                 navController.navigate(Const.MT_LIST) {
                                     launchSingleTop = true
                                 }
                             },
                             border = BorderStroke(2.dp, match2),
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             DefaultText(text = "MT 목록")
                         }
+                        Spacer(modifier = Modifier.height(8.dp))
                         OutlinedButton(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp),
                             onClick = {
-                                navController.navigate(Const.MT_ADJUSTMENT) {
-                                    launchSingleTop = true
-                                }
+                                showAddDialog = true
                             },
                             border = BorderStroke(2.dp, match2),
+                            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                         ) {
                             DefaultText(text = "다른 여행 떠나기")
                         }
@@ -81,6 +112,16 @@ inline fun InsertDataView(
                 }
             }
         }
+    }
+    if (showAddDialog) {
+        MTDialog(
+            null,
+            onDismiss = { showAddDialog = false },
+            onAdd = { data ->
+                mtViewModel.insertMtData(data)
+                showAddDialog = false
+            }
+        )
     }
 }
 
@@ -92,23 +133,41 @@ fun NoDataView(
         mutableStateOf(false)
     }
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "현재 떠나는 MT가 없어요\n아래버튼을 눌러 추가해주세요",
+            text = "아직 떠나는 MT가 없어요",
             color = match2,
-            fontSize = 20.sp,
+            fontSize = 22.sp,
             fontFamily = maple(),
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "첫 MT를 만들고 참가자, 구매 내역, 계획을 관리해 보세요.",
+            color = match2,
+            fontSize = 16.sp,
+            fontFamily = maple(),
+            textAlign = TextAlign.Center,
+            lineHeight = 24.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(24.dp))
         OutlinedButton(
+            modifier = Modifier
+                .widthIn(min = 160.dp)
+                .heightIn(min = 48.dp),
             onClick = { showAddDialog = true },
             border = BorderStroke(2.dp, match2),
+            contentPadding = ButtonDefaults.ButtonWithIconContentPadding
         ) {
-            DefaultText(text = "MT 떠나기")
+            DefaultText(text = "MT 만들기")
         }
     }
     if (showAddDialog) {
@@ -120,5 +179,43 @@ fun NoDataView(
                 showAddDialog = false
             }
         )
+    }
+}
+
+@Composable
+fun EmptyListMessage(
+    title: String,
+    description: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = title,
+                color = match2,
+                fontSize = 18.sp,
+                fontFamily = maple(),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = description,
+                color = match2,
+                fontSize = 14.sp,
+                fontFamily = maple(),
+                textAlign = TextAlign.Center,
+                lineHeight = 21.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }

@@ -39,6 +39,7 @@ import com.wonddak.mtmanger.room.entity.Plan
 import com.wonddak.mtmanger.ui.theme.maple
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.common.EmptyListMessage
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.sheet.OptionSheet
 import com.wonddak.mtmanger.ui.view.sheet.OptionSheetItem
@@ -79,22 +80,29 @@ fun PlanView(
                     Modifier.weight(1f)
                 ) {
                     mtDataList.planList.let { planList ->
-                        LazyColumn(
-                            modifier = Modifier.padding(10.dp)
-                        ) {
-                            items(planList) { plan ->
-                                PlanCardView(
-                                    plan = plan,
-                                    mtViewModel = mtViewModel,
-                                    navigateEdit = {
-                                        navigateEdit(
-                                            mtDataList.mtData.mtStart,
-                                            mtDataList.mtData.mtEnd,
-                                            plan.planId!!
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(5.dp))
+                        if (planList.isEmpty()) {
+                            EmptyListMessage(
+                                title = "계획이 없어요",
+                                description = "아래의 계획 추가하기 버튼으로 일정과 링크, 사진을 기록해 보세요."
+                            )
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier.padding(10.dp)
+                            ) {
+                                items(planList) { plan ->
+                                    PlanCardView(
+                                        plan = plan,
+                                        mtViewModel = mtViewModel,
+                                        navigateEdit = {
+                                            navigateEdit(
+                                                mtDataList.mtData.mtStart,
+                                                mtDataList.mtData.mtEnd,
+                                                plan.planId!!
+                                            )
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(5.dp))
+                                }
                             }
                         }
                     }
@@ -207,9 +215,9 @@ fun PlanCardView(
                     }
                 }
                 PlanImageView(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth(),
-                    plan
+                    plan = plan
                 )
                 Text(
                     text = plan.simpleText,

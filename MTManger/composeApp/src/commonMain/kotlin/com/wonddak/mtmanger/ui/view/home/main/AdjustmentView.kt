@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
@@ -29,8 +30,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -49,13 +52,16 @@ import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
 import com.wonddak.mtmanger.ui.view.common.DefaultText
 import com.wonddak.mtmanger.viewModel.MTViewModel
-import network.chaintech.composeMultiplatformScreenCapture.ScreenCaptureComposable
-import network.chaintech.composeMultiplatformScreenCapture.rememberScreenCaptureController
+import dev.wonddak.capturable.capturable
+import dev.wonddak.capturable.controller.rememberCaptureController
+import dev.wonddak.capturable.extension.captureAsyncAndShare
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 expect val useShare: Boolean
 expect fun shareImage(bitmap: ImageBitmap?)
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AdjustmentView(mtViewModel: MTViewModel) {
     val resource: Resource<MtDataList> by mtViewModel.nowMtDataList.collectAsState()
@@ -69,21 +75,16 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
     var editMessage by remember { mutableStateOf(false) }
     var addMessage by remember { mutableStateOf("") }
 
-    val captureController = rememberScreenCaptureController()
+    val captureController = rememberCaptureController()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier.fillMaxSize()
+            .imePadding()
     ) {
         if (resource is Resource.Success) {
             (resource as Resource.Success<MtDataList>).data?.let { mtData ->
-                ScreenCaptureComposable(
-                    modifier = Modifier,
-                    screenCaptureController = captureController,
-                    shareImage = useShare,
-                    onCaptured = { img, throwable ->
-                        shareImage(img)
-                    }
-                ) {
+                Column(modifier = Modifier.capturable(captureController)) {
                     ResultContent(
                         Modifier
                             .fillMaxWidth()
@@ -110,7 +111,13 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        captureController.capture()
+                        scope.launch {
+                            try {
+                                captureController.captureAsyncAndShare()
+                            } catch (error: Throwable) {
+                                error.printStackTrace()
+                            }
+                        }
                     },
                     border = BorderStroke(2.dp, match2),
                     enabled = enabled
@@ -209,9 +216,12 @@ fun AdjustmentView(mtViewModel: MTViewModel) {
                     }
                     if (editMessage) {
                         TextField(
-                            addMessage,
-                            {
+                            value = addMessage,
+                            onValueChange = {
                                 addMessage = it
+                            },
+                            placeholder = {
+                                Text("추가 메시지를 작성하세요.")
                             },
                             trailingIcon = {
                                 if (addMessage.isNotEmpty()) {
