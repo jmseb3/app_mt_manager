@@ -16,16 +16,20 @@ import android.content.pm.ApplicationInfo
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.wonddak.mtmanger.core.Const
+
+private const val TEST_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/2934735716"
+private const val PROD_BANNER_AD_UNIT_ID = "ca-app-pub-2369897242309575/1756100845"
 
 @Composable
 actual fun AdvertView(modifier: Modifier) {
     val isInEditMode = LocalInspectionMode.current
     val context = LocalContext.current
     val isDebuggable = (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
-    val id = if (isDebuggable) {
-        "ca-app-pub-3940256099942544/2934735716"
+    val id = if (Const.USE_SCREENSHOT_MOCK_DATA || !isDebuggable) {
+        PROD_BANNER_AD_UNIT_ID
     } else {
-        "ca-app-pub-2369897242309575/1756100845"
+        TEST_BANNER_AD_UNIT_ID
     }
     if (isInEditMode) {
         Text(

@@ -11,8 +11,8 @@ import ComposeApp
 import FirebaseCore
 import GoogleMobileAds
 
-import SwiftUI
-import GoogleMobileAds
+private let testBannerAdUnitId = "ca-app-pub-3940256099942544/2934735716"
+private let prodBannerAdUnitId = "ca-app-pub-2369897242309575/2080103235"
 
 struct BannerView: UIViewControllerRepresentable {
     
@@ -21,11 +21,11 @@ struct BannerView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         
         let viewController = UIViewController()
-        #if DEBUG
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
-        #else
-        bannerView.adUnitID = "ca-app-pub-2369897242309575/2080103235"
-        #endif
+        if Const.shared.USE_SCREENSHOT_MOCK_DATA || !_isDebugAssertConfiguration() {
+            bannerView.adUnitID = prodBannerAdUnitId
+        } else {
+            bannerView.adUnitID = testBannerAdUnitId
+        }
         bannerView.rootViewController = viewController
         bannerView.delegate = context.coordinator
 
@@ -82,5 +82,3 @@ struct BannerView: UIViewControllerRepresentable {
         .frame(width: AdSizeBanner.size.width,height: AdSizeBanner.size.height)
 
 }
-
-
