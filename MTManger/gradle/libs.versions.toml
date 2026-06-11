@@ -1,8 +1,8 @@
 [versions]
-agp = "9.0.0"
+agp = "9.1.0"
 coil = "3.5.0"
 kotlin = "2.4.0"
-compose = "1.10.2"
+compose = "1.11.1"
 composeMaterial3 = "1.9.0"
 
 kotlinxDatetime = "0.8.0"

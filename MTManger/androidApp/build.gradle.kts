@@ -8,7 +8,7 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
-apply("../keystore/signing.gradle")
+apply(from = "../keystore/signing.gradle")
 
 android {
     namespace = "com.wonddak.mtmanger"
@@ -32,7 +32,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "../composeApp/proguard-rules.pro",
             )
-            signingConfig = signingConfigs.getByName("mtManagerSigining")
+//            signingConfig = signingConfigs.getByName("mtManagerSigning")
         }
         debug {
 
