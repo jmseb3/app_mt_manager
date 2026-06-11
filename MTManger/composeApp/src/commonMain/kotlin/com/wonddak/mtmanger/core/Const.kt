@@ -1,6 +1,7 @@
 package com.wonddak.mtmanger.core
 
 object Const {
+    const val USE_SCREENSHOT_MOCK_DATA = true
 
     //depth 1
     const val HOME = "host_home"

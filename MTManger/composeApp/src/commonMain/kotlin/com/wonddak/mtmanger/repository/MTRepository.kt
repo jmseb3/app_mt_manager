@@ -1,5 +1,6 @@
 package com.wonddak.mtmanger.repository
 
+import com.wonddak.mtmanger.core.Const
 import com.wonddak.mtmanger.model.Resource
 import com.wonddak.mtmanger.room.dao.BuyGoodDao
 import com.wonddak.mtmanger.room.dao.CategoryListDao
@@ -14,6 +15,7 @@ import com.wonddak.mtmanger.room.entity.SimplePerson
 import com.wonddak.mtmanger.room.entity.categoryList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 class MTRepository(
     private val mtDataDao: MtDataDao,
@@ -24,6 +26,10 @@ class MTRepository(
 ) {
 
     fun getMtDataList(id: Int) = flow {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            emit(Resource.Success(ScreenshotMockData.mtDataList))
+            return@flow
+        }
         emit(Resource.Loading)
         mtDataDao.getMtDataList(id).collect {
             emit(Resource.Success(it))
@@ -31,6 +37,10 @@ class MTRepository(
     }
 
     fun getCategoryList() : Flow<List<categoryList>> = flow {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            emit(ScreenshotMockData.categoryList)
+            return@flow
+        }
         categoryListDao.getCategoryDataList().collect { categoryList ->
             if(categoryList.isEmpty()) {
                 val default = listOf(
@@ -47,16 +57,28 @@ class MTRepository(
         }
     }
     suspend fun checkMtDataOver2() :Boolean {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return ScreenshotMockData.mtTotalList.size >= 2
+        }
         return mtDataDao.getMtDataData().size >=2
     }
     suspend fun insertMtData(mtData: MtData): Long {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return ScreenshotMockData.selectedMtId.toLong()
+        }
         return mtDataDao.insertMtData(mtData)
     }
 
     suspend fun updateMtData(mtData: MtData) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         mtDataDao.updateMtData(mtData)
     }
     suspend fun deleteMtData(mtData: MtData) : Int {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return ScreenshotMockData.selectedMtId
+        }
         val preList = mtDataDao.getMtDataData().toList()
         var findIndex  = -1
         for (idx in preList.indices){
@@ -79,6 +101,9 @@ class MTRepository(
     }
 
     suspend fun updatePerson(personId: Int, simplePerson: SimplePerson) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         personDao.updatePersonData(
             simplePerson.name,
             simplePerson.paymentFee.toInt(),
@@ -88,62 +113,107 @@ class MTRepository(
     }
 
     suspend fun insertPerson(person: Person) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         personDao.insertPerson(person)
     }
 
     suspend fun clearPerson(mtId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         personDao.clearPersons(mtId)
     }
 
     suspend fun deletePersonById(personId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         personDao.deletePersonById(personId)
     }
 
     suspend fun insertBuyGood(buyGood: BuyGood) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         buyGoodDao.insertBuyGood(buyGood)
     }
 
     suspend fun updateBuyGood(buyGood: BuyGood) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         buyGoodDao.updateBuyGood(buyGood)
     }
 
     suspend fun clearBuyGood(mtId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         buyGoodDao.clearBuyGoods(mtId)
     }
 
     suspend fun deleteBuyGoodById(buyGoodId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         buyGoodDao.deleteBuyGoodById(buyGoodId)
     }
 
     suspend fun insertPlan(plan: Plan) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         planDao.insertPlan(plan)
     }
 
     suspend fun updatePlanImgBytesById(planId: Int, img: ByteArray) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         planDao.updateImgBytePlanById(planId, img)
     }
 
     suspend fun clearPlanImgById(planId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         planDao.clearPlanImgById(planId)
     }
 
     suspend fun updatePlan(plan: Plan) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         planDao.updatePlan(plan)
     }
 
     suspend fun deletePlanById(planId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         planDao.deletePlanById(planId)
     }
 
     suspend fun insertCategory(categoryList: categoryList) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         categoryListDao.insertCategory(categoryList)
     }
 
     suspend fun deleteCategoryById(categoryId: Int) {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return
+        }
         categoryListDao.deleteCategoryById(categoryId)
     }
 
     fun getMtTotalList(): Flow<List<MtData>> {
+        if (Const.USE_SCREENSHOT_MOCK_DATA) {
+            return flowOf(ScreenshotMockData.mtTotalList)
+        }
         return mtDataDao.getMtData()
     }
 
