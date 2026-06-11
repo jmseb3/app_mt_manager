@@ -42,6 +42,7 @@ import com.wonddak.mtmanger.viewModel.MTViewModel
 
 @Composable
 fun NavGraph(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     mtViewModel: MTViewModel,
 ) {
@@ -52,7 +53,11 @@ fun NavGraph(
             }
         }
     }
-    NavHost(navController = navController, startDestination = Const.HOME) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Const.HOME
+    ) {
         homeGraph(navController, mtViewModel)
 
         settingGraph(navController, mtViewModel)

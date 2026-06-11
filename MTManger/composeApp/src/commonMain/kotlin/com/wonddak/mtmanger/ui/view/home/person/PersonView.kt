@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,6 +39,7 @@ import com.wonddak.mtmanger.room.entity.Person
 import com.wonddak.mtmanger.toPriceString
 import com.wonddak.mtmanger.ui.theme.match1
 import com.wonddak.mtmanger.ui.theme.match2
+import com.wonddak.mtmanger.ui.view.common.EmptyListMessage
 import com.wonddak.mtmanger.ui.view.common.FeeInfo
 import com.wonddak.mtmanger.ui.view.dialog.DeleteDialog
 import com.wonddak.mtmanger.ui.view.home.buy.BuyGoodItemText
@@ -218,17 +220,24 @@ fun PersonItemList(
                 if (resource is Resource.Success) {
                     (resource as Resource.Success<MtDataList>).data?.let {
                         val personList = it.personList
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 5.dp)
-                        ) {
-                            itemsIndexed(personList) { index, person ->
-                                PersonItemView(person, mtViewModel)
-                                if (index != personList.size - 1) {
-                                    HorizontalDivider(
-                                        color = match2
-                                    )
+                        if (personList.isEmpty()) {
+                            EmptyListMessage(
+                                title = "참여자가 없어요",
+                                description = "아래의 참여자 추가 버튼으로 함께 가는 사람을 등록해 보세요."
+                            )
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 5.dp)
+                            ) {
+                                itemsIndexed(personList) { index, person ->
+                                    PersonItemView(person, mtViewModel)
+                                    if (index != personList.size - 1) {
+                                        HorizontalDivider(
+                                            color = match2
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -261,7 +270,7 @@ fun PersonItemView(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(25.dp), verticalAlignment = Alignment.CenterVertically
+                .heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically
         ) {
             val weight1 = Modifier.weight(1f)
             BuyGoodItemText(
@@ -278,7 +287,7 @@ fun PersonItemView(
             ) {
                 Icon(
                     painter = painterResource(resource = Res.drawable.ic_baseline_phone_24),
-                    contentDescription = null,
+                    contentDescription = "${person.name}에게 전화하기",
                     tint = match2
                 )
             }

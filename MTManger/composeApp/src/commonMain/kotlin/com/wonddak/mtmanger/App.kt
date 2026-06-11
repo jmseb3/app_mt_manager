@@ -115,6 +115,7 @@ fun HomeScreen() {
                     AdvertView(Modifier.wrapContentSize().defaultMinSize(minHeight = 50.dp))
                 }
                 NavGraph(
+                    modifier = Modifier.weight(1f),
                     navController = navController,
                     mtViewModel,
                 )

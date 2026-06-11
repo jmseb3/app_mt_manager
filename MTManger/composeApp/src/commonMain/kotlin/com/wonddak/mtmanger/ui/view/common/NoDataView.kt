@@ -3,6 +3,7 @@ package com.wonddak.mtmanger.ui.view.common
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -178,5 +179,43 @@ fun NoDataView(
                 showAddDialog = false
             }
         )
+    }
+}
+
+@Composable
+fun EmptyListMessage(
+    title: String,
+    description: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = title,
+                color = match2,
+                fontSize = 18.sp,
+                fontFamily = maple(),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = description,
+                color = match2,
+                fontSize = 14.sp,
+                fontFamily = maple(),
+                textAlign = TextAlign.Center,
+                lineHeight = 21.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
