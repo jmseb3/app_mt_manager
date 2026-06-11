@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-                backKeyPressedTime = System.currentTimeMillis();
+                backKeyPressedTime = System.currentTimeMillis()
                 Toast.makeText(this@MainActivity, "한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
                 return
             }
@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
@@ -60,5 +59,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-

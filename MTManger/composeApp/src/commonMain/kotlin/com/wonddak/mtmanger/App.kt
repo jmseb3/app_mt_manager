@@ -42,7 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.context.startKoin
 
 @Composable
-internal fun App() {
+fun App() {
     AppTheme {
         HomeScreen()
     }

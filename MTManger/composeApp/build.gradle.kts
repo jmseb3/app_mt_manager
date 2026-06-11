@@ -1,25 +1,29 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose)
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.multiplatform.library)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
     alias(libs.plugins.serialization)
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
 }
 kotlin {
     jvmToolchain(11)
 
-    androidTarget {
-        // https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
+    android {
+        namespace = "com.wonddak.mtmanger.shared"
+        compileSdk = 36
+        minSdk = 24
+
+        androidResources {
+            enable = true
+        }
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
 
     listOf(
@@ -42,12 +46,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.materialIconsExtended)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.resources)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.material.icons.extended)
 
             implementation(libs.viewmodel.compose)
             implementation(libs.navigation.compose)
@@ -69,12 +73,11 @@ kotlin {
 
         commonTest.dependencies {
             implementation(kotlin("test"))
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
         }
 
         androidMain.dependencies {
-            implementation(compose.uiTooling)
+            implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
             implementation("com.google.android.gms:play-services-ads:23.2.0")
 
@@ -90,52 +93,6 @@ kotlin {
         }
 
     }
-}
-
-apply("../keystore/signing.gradle")
-android {
-    namespace = "com.wonddak.mtmanger"
-    compileSdk = 36
-
-    defaultConfig {
-        applicationId = "com.wonddak.mtmanger"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 23
-        versionName = "3.2.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-            signingConfig = signingConfigs.getByName("mtManagerSigining")
-        }
-        debug {
-
-        }
-    }
-
-    buildFeatures {
-        buildConfig = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-//https://developer.android.com/develop/ui/compose/testing#setup
-dependencies {
-    androidTestImplementation(libs.androidx.junit4)
-    debugImplementation(libs.androidx.testManifest)
 }
 
 room {

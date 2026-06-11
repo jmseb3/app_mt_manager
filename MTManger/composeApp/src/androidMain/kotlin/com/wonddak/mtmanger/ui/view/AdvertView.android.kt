@@ -7,19 +7,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import android.content.pm.ApplicationInfo
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import com.wonddak.mtmanger.BuildConfig
 
 @Composable
 actual fun AdvertView(modifier: Modifier) {
     val isInEditMode = LocalInspectionMode.current
-    val id = if (BuildConfig.DEBUG) {
+    val context = LocalContext.current
+    val isDebuggable = (context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+    val id = if (isDebuggable) {
         "ca-app-pub-3940256099942544/2934735716"
     } else {
         "ca-app-pub-2369897242309575/1756100845"

@@ -10,12 +10,9 @@ class MtManagerApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        startKoin{
-            // Log Koin into Android logger
+        startKoin {
             androidLogger()
-            // Reference Android context
             androidContext(this@MtManagerApplication)
-            // Load modules
             modules(sharedModule())
         }
     }
